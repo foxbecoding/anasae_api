@@ -84,18 +84,20 @@ class CreateUserSerializer(serializers.ModelSerializer):
         stripe_customer_id = stripe_customer.id
 
         # Save User in database
-        user = User(
+        User_Instance = User.objects.create(
             uid = uid,
             first_name = attrs.get('first_name'),
             last_name = attrs.get('last_name'),
             email = attrs.get('email').lower(),
+            username = attrs.get('username'),
             password = make_password(attrs.get('password')),
             agreed_to_toa = attrs.get('agreed_to_toa'), 
             date_of_birth = attrs.get('date_of_birth'), 
             stripe_customer_id = stripe_customer_id
         )
-        user.save()
-        attrs['user'] = user
+        
+        User_Instance.save()
+        attrs['user'] = User_Instance
         return attrs  
 
 class UserAuthSerializer(serializers.ModelSerializer):
