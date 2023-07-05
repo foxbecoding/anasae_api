@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import *
     
-class AccountLogInViewSet(viewsets.ViewSet):
+class UserAuthLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
@@ -28,7 +28,7 @@ class AccountLogInViewSet(viewsets.ViewSet):
         
         return Response(User_Serializer.data, status=status.HTTP_202_ACCEPTED)
     
-class AccountLogOutViewSet(viewsets.ViewSet):
+class UserAuthLogOutViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
