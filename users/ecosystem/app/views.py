@@ -25,8 +25,8 @@ class UserViewSet(viewsets.ViewSet):
             return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
         User_Instance = Create_User_Serializer.validated_data['user']
-        get_user_Data(User_Instance)
-        return Response(None, status=status.HTTP_201_CREATED)
+        data = get_user_Data(User_Instance)
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={'user_pk': pk})
