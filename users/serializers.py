@@ -18,13 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'username',
+            'display_name',
             'date_of_birth',
             'agreed_to_toa',
             'is_active',
             'stripe_customer_id',
             'addresses',
             'logins',
-            'profiles',
             'gender_choice'
         ]
 
@@ -34,6 +34,7 @@ class EditUserSerializer(serializers.ModelSerializer):
         fields = [
             'first_name',
             'last_name',
+            'display_name'
         ]
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -106,13 +107,13 @@ class AuthenticationSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             'password': {'write_only': True},
-            'email': {'write_only': True},
+            'username': {'write_only': True},
         }
 
-    email = serializers.CharField(
-        label="Email",
-        write_only=True
-    )
+    # username = serializers.CharField(
+    #     label="Username",
+    #     write_only=True
+    # )
     
     password = serializers.CharField(
         label="Password",
@@ -124,13 +125,13 @@ class AuthenticationSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         # Set username and password from attrs
-        email = attrs.get('email')
+        username = attrs.get('username')
         password = attrs.get('password')
         
-        if email and password:
+        if username and password:
 
             # Find user with username/email and password combination
-            user = self.authenticate(email, password)
+            user = self.authenticate(username, password)
     
             if not user:
                 # If we don't have a regular user, raise a ValidationError
@@ -182,7 +183,7 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
 
 class UserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfileImage
+        model = UserImage
         fields = [
             'pk',
             'user_profile',
@@ -191,7 +192,7 @@ class UserProfileImageSerializer(serializers.ModelSerializer):
 
 class CreateUserProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfileImage
+        model = UserImage
         fields = [
             'user_profile'
         ]
@@ -234,13 +235,13 @@ class CreateUserProfileImageSerializer(serializers.ModelSerializer):
             msg = 'Please try again'
             raise serializers.ValidationError({"image": msg}, code='authorization')
 
-        user_profile_image = UserProfileImage.objects.create(
+        User_Image_Instance = UserImage.objects.create(
             user_profile = user_profile,
             image = image_path
         )
 
-        user_profile_image.save()
-        attrs['user_profile_image'] = user_profile_image
+        User_Image_Instance.save()
+        attrs['user_image'] = User_Image_Instance
         return attrs
     
 class UserAddressSerializer(serializers.ModelSerializer):
