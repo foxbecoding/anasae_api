@@ -23,7 +23,7 @@ class TestUserViewSet(TestCase):
             'first_name': "Desmond",
             'last_name': 'Fox',
             'email': 'fox@foxbecoding.com',
-            'username': 'foxbecoding.com',
+            'username': 'foxbecoding',
             'password': '123456',
             'confirm_password': '123456',
             'date_of_birth': date_time_obj.date(),
@@ -31,12 +31,11 @@ class TestUserViewSet(TestCase):
             'gender': self.User_Gender_Instance.id
         }
 
-        print(request_data)
-        # res = self.client.post(
-        #     reverse('user-list'), 
-        #     request_data, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
+        res = self.client.post(
+            reverse('user-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
   
         #check if data is correct
         # self.assertEqual(res.data['gender_choice'], 1)
