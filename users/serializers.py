@@ -98,7 +98,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         return attrs  
 
-class AuthenticationSerializer(serializers.ModelSerializer):
+class UserAuthSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
