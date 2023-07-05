@@ -37,6 +37,8 @@ class TestUserViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
   
+        print(res.data)
+
         #check if data is correct
         # self.assertEqual(res.data['gender_choice'], 1)
         # self.assertGreater(len(res.data['profiles']), 0)

@@ -95,8 +95,17 @@ class CreateUserSerializer(serializers.ModelSerializer):
             date_of_birth = attrs.get('date_of_birth'), 
             stripe_customer_id = stripe_customer_id
         )
-
         User_Instance.save()
+
+        gender_pk = self.context['request'].data['gender']
+        if not UserGender.objects.filter(pk=gender_pk).exists():
+
+        User_Gender_Choice_Instance = UserGenderChoice.objects.create(
+            user_gender = self.context['request'].data['gender'],
+            user = User_Instance.id
+        )
+        User_Gender_Choice_Instance.save()
+
         attrs['user'] = User_Instance
         return attrs  
 

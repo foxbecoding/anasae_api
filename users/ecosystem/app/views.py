@@ -8,17 +8,19 @@ from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
 from users.ecosystem.methods import get_user_Data
-import os, requests
 
 class UserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated, UserPermission]
+        if self.action == 'create':
+            permission_classes = [UserPermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
     def create(self, request):
         Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
         if not Create_User_Serializer.is_valid():
+            print(Create_User_Serializer.errors)
             return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
         User_Instance = Create_User_Serializer.validated_data['user']

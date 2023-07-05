@@ -6,9 +6,14 @@ class UserPermission(BasePermission):
     message = "Access Denied!"   
 
     def has_object_permission(self, request, view, obj) -> bool:
-        pk = str(obj['user_pk'])
-        if str(request.user.id) != pk:
-            return False    
+        if request.method == 'POST':
+            request_data = self.context['request'].data
+            if 'gender' not in request_data:
+                return False
+            
+            gender_pk = self.context['request'].data['gender']
+            if not UserGender.objects.filter(pk=gender_pk).exists():  
+                return False
         return True
 
 # class UserImagePermission(BasePermission):
