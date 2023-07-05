@@ -11,28 +11,24 @@ class User(AbstractUser):
     stripe_customer_id = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
 
 class UserImage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="image")
     image = models.CharField(max_length=200, blank=False, null=False, default='')
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
 
 class UserGender(models.Model):
     gender = models.CharField(max_length=100, blank=False)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
 
 class UserGenderChoice(models.Model):
     user_gender = models.ForeignKey(UserGender, on_delete=models.CASCADE, related_name="choices", default="")
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="gender_choice", default="")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
 
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
@@ -47,7 +43,6 @@ class UserAddress(models.Model):
     is_default = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
 
 class UserLogin(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="logins")
@@ -61,4 +56,3 @@ class UserLogin(models.Model):
     device = models.CharField(max_length=200, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
-    deleted = models.DateTimeField(null=True)
