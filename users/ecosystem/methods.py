@@ -15,8 +15,6 @@ def get_user_Data(instance: User):
         for login in User_Account_Login_Serializer.data
     ]
 
- 
-
     User_Address_Instance = UserAddress.objects.filter(pk__in=User_Data['addresses'])
     User_Address_Serializer = UserAddressSerializer(User_Address_Instance, many=True)
 
