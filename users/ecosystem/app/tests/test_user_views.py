@@ -36,14 +36,9 @@ class TestUserViewSet(TestCase):
             request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-  
-        print(res.data)
 
-        #check if data is correct
-        # self.assertEqual(res.data['gender_choice'], 1)
-        # self.assertGreater(len(res.data['profiles']), 0)
-        # self.assertEqual(res.data['first_name'], 'Desmond')
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.data['first_name'], 'Desmond')
+        self.assertEqual(res.status_code, 201)
     
     # def test_account_sign_up_create_no_data(self):
     #     #set request data
