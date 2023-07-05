@@ -41,6 +41,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     
     # Create hidden password field for password confirmation
     confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    gender = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
@@ -52,7 +53,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
             'password',
             'confirm_password',
             'date_of_birth',
-            'agreed_to_toa'
+            'agreed_to_toa',
+            'gender'
         ]
         extra_kwargs = {
             'password': {'write_only': True}
@@ -97,7 +99,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         )
         User_Instance.save()
 
-        gender_pk = self.context['request'].data['gender']
+        gender_pk = attrs.get('gender')
         User_Gender_Instance = UserGender.objects.get(pk=gender_pk)
         User_Gender_Choice_Instance = UserGenderChoice.objects.create(
             user_gender = User_Gender_Instance,
