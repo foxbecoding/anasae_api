@@ -171,7 +171,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         model = UserLogin
         fields = [
             'pk',
-            'user',
             'created'
         ]
 
@@ -188,9 +187,7 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserGenderChoice
         fields = [
-            'pk',
-            'user_gender',
-            'user'
+            'pk'
         ]
 
 class UserImageSerializer(serializers.ModelSerializer):
