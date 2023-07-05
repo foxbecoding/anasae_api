@@ -7,8 +7,7 @@ class UserPermission(BasePermission):
 
     def has_object_permission(self, request, view, obj) -> bool:
         if request.method == 'POST':
-            request_data = self.context['request'].data
-            if 'gender' not in request_data:
+            if 'gender' not in request.data:
                 return False
             
             gender_pk = self.context['request'].data['gender']
