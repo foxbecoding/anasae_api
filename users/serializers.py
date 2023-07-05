@@ -103,7 +103,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         User_Gender_Instance = UserGender.objects.get(pk=gender_pk)
         User_Gender_Choice_Instance = UserGenderChoice.objects.create(
             user_gender = User_Gender_Instance,
-            user = User_Instance.id
+            user = User_Instance
         )
         User_Gender_Choice_Instance.save()
 

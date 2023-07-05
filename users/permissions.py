@@ -10,7 +10,7 @@ class UserPermission(BasePermission):
             if 'gender' not in request.data:
                 return False
             
-            gender_pk = self.context['request'].data['gender']
+            gender_pk = request.data['gender']
             if not UserGender.objects.filter(pk=gender_pk).exists():  
                 return False
         return True
