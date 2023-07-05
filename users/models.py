@@ -5,7 +5,7 @@ class User(AbstractUser):
     uid = models.CharField(max_length=20, blank=True, unique=True)
     agreed_to_toa = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
-    username = models.CharField(max_length=150, blank=True, null=True, unique=True)
+    display_name = models.CharField(max_length=150, blank=True, null=True, default='')
     first_name = models.CharField(max_length=300, blank=False)
     last_name = models.CharField(max_length=300, blank=False)
     stripe_customer_id = models.CharField(max_length=200, blank=True)

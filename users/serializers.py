@@ -17,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'username',
             'date_of_birth',
             'agreed_to_toa',
             'is_active',
@@ -35,7 +36,7 @@ class EditUserSerializer(serializers.ModelSerializer):
             'last_name',
         ]
 
-class CreateAccountSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     
     # Create hidden password field for password confirmation
     confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -46,6 +47,7 @@ class CreateAccountSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'username',
             'password',
             'confirm_password',
             'date_of_birth',
@@ -95,11 +97,11 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         return attrs  
 
-class AccountLoginSerializer(serializers.ModelSerializer):
+class AuthenticationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email',
+            'username',
             'password',
         ]
         extra_kwargs = {
@@ -143,17 +145,13 @@ class AccountLoginSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         return attrs
     
-    def authenticate(self, email, password):
-        # Check if username or email exist in database
-        # and check if password matches with user input
-        if User.objects.filter(email=email.lower()):
-            user = User.objects.get(email=email.lower())     
-            if check_password(password, user.password):
-                return user
-            else :
-                return None
-        else :
+    def authenticate(self, username, password) -> User:
+        if not User.objects.filter(username=username).exists():
             return None
+        User_Instance = User.objects.get(username=username)     
+        if not check_password(password, User_Instance.password):
+            return None
+        return User_Instance
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
@@ -180,41 +178,6 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
             'pk',
             'user_gender',
             'user'
-        ]
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = [
-            'pk',
-            'user',
-            'name',
-            'is_account_holder',
-            'is_active'
-        ]
-
-class CreateUserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = [
-            'name',
-        ]
-    
-    def validate(self, attrs):
-        user = self.context['user']
-        User_Profile_Instance = UserProfile.objects.create(
-            user = user,
-            name = attrs.get('name')
-        )
-        User_Profile_Instance.save()
-        attrs['profile'] = User_Profile_Instance
-        return attrs  
-
-class EditUserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = [
-            'name'
         ]
 
 class UserProfileImageSerializer(serializers.ModelSerializer):
