@@ -1,0 +1,2 @@
+from users.ecosystem.security.tests.test_security_urls import TestSecurityUrls
+from users.ecosystem.security.tests.test_security_views import TestForceCSRFViewSet
