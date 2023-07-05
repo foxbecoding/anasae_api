@@ -12,7 +12,8 @@ class TestUserViewSet(TestCase):
         self.client = Client(enforce_csrf_checks=is_CSRF)
         self.client.get(reverse('x-fct-list'))
         self.csrftoken = self.client.cookies['csrftoken'].value
-        self.User_Gender_Instance = UserGender.objects.get(pk=1)
+        self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
+        self.User_Gender_Instance.save()
 
     def test_user_create(self):
         date_time_str = '12/31/1990'
