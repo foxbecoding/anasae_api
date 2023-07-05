@@ -17,7 +17,12 @@ class UserViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(request.data)
+        Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
+        if not Create_User_Serializer.is_valid():
+            return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+        
+        User_Instance = Create_User_Serializer.validated_data['user']
+        get_user_Data(User_Instance)
         return Response(None, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):

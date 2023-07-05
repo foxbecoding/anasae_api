@@ -95,7 +95,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             date_of_birth = attrs.get('date_of_birth'), 
             stripe_customer_id = stripe_customer_id
         )
-        
+
         User_Instance.save()
         attrs['user'] = User_Instance
         return attrs  
@@ -183,7 +183,7 @@ class UserGenderChoiceSerializer(serializers.ModelSerializer):
             'user'
         ]
 
-class UserProfileImageSerializer(serializers.ModelSerializer):
+class UserImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserImage
         fields = [
@@ -192,7 +192,7 @@ class UserProfileImageSerializer(serializers.ModelSerializer):
             'image'
         ]
 
-class CreateUserProfileImageSerializer(serializers.ModelSerializer):
+class CreateUserImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserImage
         fields = [
