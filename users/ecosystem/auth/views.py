@@ -15,19 +15,16 @@ class UserAuthLogInViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        Account_Login_Serializer = UserAuthSerializer(data=request.data, context={ 'request': request })
+        User_Auth_Serializer = UserAuthSerializer(data=request.data, context={ 'request': request })
         
-        if not Account_Login_Serializer.is_valid():
-            return Response(Account_Login_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not User_Auth_Serializer.is_valid():
+            return Response(User_Auth_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        user = Account_Login_Serializer.validated_data['user']
+        user = User_Auth_Serializer.validated_data['user']
         login(request, user)
-        
-        User_Login_Serializer = UserLoginSerializer(data={'user': user.id})
-        if User_Login_Serializer.is_valid(): User_Login_Serializer.save()
-        User_Serializer = UserSerializer(user)
-        
-        return Response(User_Serializer.data, status=status.HTTP_202_ACCEPTED)
+    
+        data = get_user_data(user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
     
 class UserAuthLogOutViewSet(viewsets.ViewSet):
     def get_permissions(self):

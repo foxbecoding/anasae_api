@@ -17,24 +17,28 @@ class TestAuthLogInViewSet(TestCase):
         date_time_str = '12/31/1990'
         date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
-        self.User_Instance = User.objects.create(
-            first_name="Desmond",
-            last_name='Fox',
-            email='fox@foxbecoding.com',
-            username='foxbecoding',
-            password='123456',
-            confirm_password='123456',
-            date_of_birth=date_time_obj.date(),
-            agreed_to_toa=True,
-            gender=self.User_Gender_Instance.id
-        )
+        user_data = {
+            'first_name': "Desmond",
+            'last_name': 'Fox',
+            'email': 'slugga@gmail.com',
+            'username': 'slugga',
+            'password': '123456',
+            'confirm_password': '123456',
+            'date_of_birth': date_time_obj.date(),
+            'agreed_to_toa': True,
+            'gender': self.User_Gender_Instance.id
+        }
 
-        self.User_Instance.save()
+        self.client.post(
+            reverse('user-list'), 
+            user_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
     def test_account_log_in_create(self):
         #set request data
         request_data = {
-            'username': 'foxbecoding',
+            'username': 'slugga',
             'password': '123456'
         }
     

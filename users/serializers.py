@@ -119,7 +119,6 @@ class UserAuthSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             'password': {'write_only': True},
-            'username': {'write_only': True},
         }
 
     # username = serializers.CharField(
@@ -153,8 +152,9 @@ class UserAuthSerializer(serializers.ModelSerializer):
             msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
 
-        # We have a valid user, put it in the serializer's validated_data.
-        # It will be used in the view.
+        User_Login_Instance = UserLogin.objects.create(user = user)
+        User_Login_Instance.save()
+        
         attrs['user'] = user
         return attrs
     
