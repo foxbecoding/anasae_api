@@ -49,25 +49,25 @@ class UserViewSet(viewsets.ViewSet):
         logout(request)    
         return Response(None, status=status.HTTP_202_ACCEPTED)
     
-# class MPAUserProfileImageViewSet(viewsets.ViewSet):
-#     def get_permissions(self):
-#         permission_classes = [IsAuthenticated, UserProfileImagePermission]
-#         return [permission() for permission in permission_classes]
+class UserImageViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
-#     @method_decorator(csrf_protect)
-#     def create(self, request):
-#         is_User_Profile_Image = UserProfileImage.objects.filter(user_profile_id=str(request.data['user_profile'])).exists()
-#         if is_User_Profile_Image:
-#             User_Profile_Image = UserProfileImage.objects.get(user_profile_id=str(request.data['user_profile']))
-#             # remove image from cdn maybe??? idk yet
-#             User_Profile_Image.delete()
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        is_User_Image = UserImage.objects.filter(user_id=str(request.user.id)).exists()
+        if is_User_Image:
+            User_Image = UserImage.objects.get(user_id=str(request.user.id))
+            # remove image from cdn maybe??? idk yet
+            User_Image.delete()
         
-#         Create_User_Profile_Image_Serializer = CreateUserProfileImageSerializer(data=request.data, context={ 'request': request })
-#         if not Create_User_Profile_Image_Serializer.is_valid():
-#             return Response(Create_User_Profile_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Create_User_Image_Serializer = CreateUserImageSerializer(data=request.data, context={ 'request': request })
+        if not Create_User_Image_Serializer.is_valid():
+            return Response(Create_User_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-#         data = Prepare_User_Data(request.user)
-#         return Response(data, status=status.HTTP_201_CREATED)
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_201_CREATED)
            
 # class UserAddressViewSet(viewsets.ViewSet):
 #     def get_permissions(self):
