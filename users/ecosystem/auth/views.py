@@ -20,12 +20,11 @@ class UserAuthLogInViewSet(viewsets.ViewSet):
         if not User_Auth_Serializer.is_valid():
             return Response(User_Auth_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # user = User_Auth_Serializer.validated_data['user']
-        # login(request, user)
+        user = User_Auth_Serializer.validated_data['user']
+        login(request, user)
     
-        # data = get_user_data(user)
-        # return Response(data, status=status.HTTP_202_ACCEPTED)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        data = get_user_data(user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
     
 class UserAuthLogOutViewSet(viewsets.ViewSet):
     def get_permissions(self):
