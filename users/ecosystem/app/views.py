@@ -20,7 +20,6 @@ class UserViewSet(viewsets.ViewSet):
     def create(self, request):
         Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
         if not Create_User_Serializer.is_valid():
-            print(Create_User_Serializer.errors)
             return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
         User_Instance = Create_User_Serializer.validated_data['user']
