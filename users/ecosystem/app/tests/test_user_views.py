@@ -146,4 +146,5 @@ class TestUserViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(res.data)
+        self.assertEqual(res.data['display_name'], request_data['display_name'])
+        self.assertEqual(res.status_code, 202)
