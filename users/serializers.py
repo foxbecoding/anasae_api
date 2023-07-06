@@ -229,7 +229,6 @@ class UserImageSerializer(serializers.ModelSerializer):
         model = UserImage
         fields = [
             'pk',
-            'user',
             'image'
         ]
 
