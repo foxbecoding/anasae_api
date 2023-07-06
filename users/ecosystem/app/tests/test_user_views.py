@@ -105,4 +105,4 @@ class TestUserViewSet(TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_user_retrieve(self):
-        
+        pass

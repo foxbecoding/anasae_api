@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import *
+from users.ecosystem.methods import get_user_data
     
 class UserAuthLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):

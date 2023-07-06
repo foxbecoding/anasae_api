@@ -1,7 +1,7 @@
 from users.serializers import *
 from users.models import *
 
-def get_user_Data(instance: User):
+def get_user_data(instance: User):
     User_Serializer = UserSerializer(instance)
     User_Data = User_Serializer.data
     User_Login_Instances = UserLogin.objects.filter(pk__in=User_Data['logins'])

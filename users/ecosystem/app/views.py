@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
-from users.ecosystem.methods import get_user_Data
+from users.ecosystem.methods import get_user_data
 
 class UserViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -23,11 +23,11 @@ class UserViewSet(viewsets.ViewSet):
             return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
         User_Instance = Create_User_Serializer.validated_data['user']
-        data = get_user_Data(User_Instance)
+        data = get_user_data(User_Instance)
         return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
-        data = get_user_Data(request.user)
+        data = get_user_data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
     # @method_decorator(csrf_protect)
