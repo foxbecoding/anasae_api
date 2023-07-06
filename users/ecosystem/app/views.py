@@ -34,15 +34,15 @@ class UserViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def partial_update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'user_pk': pk})
-        print(request.data)
-        # Edit_User_Serializer = EditUserSerializer(request.user, data=request.data)
-        # if not Edit_User_Serializer.is_valid():
-        #     return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # Edit_User_Serializer.save()
         
-        # data = get_user_data(request.user)
-        # return Response(data, status=status.HTTP_202_ACCEPTED)      
-        return Response(None, status=status.HTTP_202_ACCEPTED)      
+        Edit_User_Serializer = EditUserSerializer(request.user, data=request.data)
+        if not Edit_User_Serializer.is_valid():
+            return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Edit_User_Serializer.save()
+        
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)      
+        # return Response(None, status=status.HTTP_202_ACCEPTED)      
     
 # class MPAUserProfileImageViewSet(viewsets.ViewSet):
 #     def get_permissions(self):
