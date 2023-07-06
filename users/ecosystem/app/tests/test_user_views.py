@@ -145,3 +145,5 @@ class TestUserViewSet(TestCase):
             data=request_data,
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        print(res.data)

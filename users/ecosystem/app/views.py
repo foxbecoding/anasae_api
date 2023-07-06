@@ -41,8 +41,7 @@ class UserViewSet(viewsets.ViewSet):
         Edit_User_Serializer.save()
         
         data = get_user_data(request.user)
-        return Response(data, status=status.HTTP_202_ACCEPTED)      
-        # return Response(None, status=status.HTTP_202_ACCEPTED)      
+        return Response(data, status=status.HTTP_202_ACCEPTED)    
     
 # class MPAUserProfileImageViewSet(viewsets.ViewSet):
 #     def get_permissions(self):
