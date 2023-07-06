@@ -38,24 +38,19 @@ class TestAuthLogInViewSet(TestCase):
         )
 
     def test_auth_log_in_create(self):
-        #set request data
         request_data = {
             'username': 'slugga',
             'password': '123456'
         }
-    
-        #Get response data
+
         res = self.client.post(
             reverse('auth-log-in-list'), 
             request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
-        print(res.data)
-
-        #check if data is correct
-        # self.assertGreater(len(res.data['logins']), 0)
-        # self.assertEqual(res.data['first_name'], 'Desmond')
-        # self.assertEqual(res.status_code, 202)
+        self.assertGreater(len(res.data['logins']), 0)
+        self.assertEqual(res.data['first_name'], 'Desmond')
+        self.assertEqual(res.status_code, 202)
 
     # def test_account_log_in_create_failed(self):
     #     #set request data
