@@ -11,7 +11,7 @@ def get_user_data(instance: User):
 
     if UserImage.objects.filter(pk=user_data['image']).exists():
         User_Image_Instance = UserImage.objects.get(pk=user_data['image'])
-        user_data['image'] = UserImageSerializer(User_Image_Instance)
+        user_data['image'] = UserImageSerializer(User_Image_Instance).data
 
     data = {
         'pk': user_data['pk'],
