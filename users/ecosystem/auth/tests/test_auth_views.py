@@ -13,6 +13,8 @@ class TestAuthLogInViewSet(TestCase):
         self.client = Client(enforce_csrf_checks=is_CSRF)
         self.client.get(reverse('x-fct-list'))
         self.csrftoken = self.client.cookies['csrftoken'].value
+        self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
+        self.User_Gender_Instance.save()
 
         date_time_str = '12/31/1990'
         date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
@@ -35,7 +37,7 @@ class TestAuthLogInViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-    def test_account_log_in_create(self):
+    def test_auth_log_in_create(self):
         #set request data
         request_data = {
             'username': 'slugga',
@@ -47,6 +49,8 @@ class TestAuthLogInViewSet(TestCase):
             reverse('auth-log-in-list'), 
             request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+
+        print(res.data)
 
         #check if data is correct
         # self.assertGreater(len(res.data['logins']), 0)
