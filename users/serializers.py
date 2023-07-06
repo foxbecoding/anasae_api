@@ -38,9 +38,9 @@ class EditUserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'display_name',
+            'username',
             'password',
             'confirm_password'
-            'username'
         ]
 
         extra_kwargs = {

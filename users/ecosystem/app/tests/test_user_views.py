@@ -129,3 +129,19 @@ class TestUserViewSet(TestCase):
 
         self.assertEqual(res.data['pk'], self.user['pk'])
         self.assertEqual(res.status_code, 200)
+
+    def test_user_partial_update(self):
+        request_data = {
+            # 'first_name': "Lavell",
+            # 'last_name': 'Fox',
+            # 'email': 'slugga@gmail.com',
+            # 'username': 'slugga',
+            'display_name': 'King Slugga'
+        }
+
+        self.client.patch(
+            reverse('user-detail', kwargs={'pk': self.user['pk']}),
+            content_type='application/json',
+            data=request_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
