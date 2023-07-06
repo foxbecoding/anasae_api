@@ -61,7 +61,7 @@ class TestUserImageViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(res.data)
+        # print(res.data)
 
         # self.assertNotEqual(res.data['profiles'][0]['image'], None)
         # self.assertEqual(res.status_code, 201)   
