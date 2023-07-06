@@ -29,13 +29,36 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 class EditUserSerializer(serializers.ModelSerializer):
+    
+    confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
     class Meta:
         model = User
         fields = [
             'first_name',
             'last_name',
-            'display_name'
+            'display_name',
+            'password',
+            'confirm_password'
+            'username'
         ]
+
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def validate(self, attrs):
+        # password = attrs.get('password')
+        # confirm_password = attrs.get('confirm_password')
+
+        print(attrs)
+
+        # Check if passwords matches
+        # if password != confirm_password:
+        #     msg = 'Passwords must match.'
+        #     raise serializers.ValidationError({"password": msg}, code='authorization')
+        
+        return
 
 class CreateUserSerializer(serializers.ModelSerializer):
     
