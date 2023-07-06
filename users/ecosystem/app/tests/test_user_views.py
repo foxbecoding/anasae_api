@@ -124,4 +124,9 @@ class TestUserViewSet(TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_user_retrieve(self):
-        pass
+        res = self.client.get(
+            reverse('user-detail', kwargs={'pk': self.user['pk']})
+        )
+
+        self.assertEqual(res.data['pk'], self.user['pk'])
+        self.assertEqual(res.status_code, 200)
