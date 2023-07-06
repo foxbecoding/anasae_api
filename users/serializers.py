@@ -25,7 +25,8 @@ class UserSerializer(serializers.ModelSerializer):
             'stripe_customer_id',
             'addresses',
             'logins',
-            'gender_choice'
+            'gender_choice',
+            'image'
         ]
 
 class EditUserSerializer(serializers.ModelSerializer):
