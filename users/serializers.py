@@ -48,13 +48,18 @@ class EditUserSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        # password = attrs.get('password')
-        # confirm_password = attrs.get('confirm_password')
-
-        # Check if passwords matches
-        # if password != confirm_password:
-        #     msg = 'Passwords must match.'
-        #     raise serializers.ValidationError({"password": msg}, code='authorization')
+        is_password_change = 'password' in attrs or 'confirm_password' in attrs
+        both_passwords_exists = 'password' in attrs and 'confirm_password' in attrs
+        if is_password_change:
+            if not both_passwords_exists:
+                msg = 'Passwords must match.'
+                raise serializers.ValidationError({"password": msg}, code='authorization')
+            
+            password = attrs.get('password')
+            confirm_password = attrs.get('confirm_password')
+            if password != confirm_password:
+                msg = 'Passwords must match.'
+                raise serializers.ValidationError({"password": msg}, code='authorization')
         
         return attrs
 
