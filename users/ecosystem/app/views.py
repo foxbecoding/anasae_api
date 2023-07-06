@@ -18,7 +18,6 @@ class UserViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        self.check_object_permissions(request=request, obj={})
         Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
         if not Create_User_Serializer.is_valid():
             print(Create_User_Serializer.errors)
