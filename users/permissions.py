@@ -5,6 +5,16 @@ from users.serializers import UserSerializer
 class UserPermission(BasePermission):
     message = "Access Denied!"   
 
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            if 'gender' not in request.data:
+                return False
+            
+            gender_pk = request.data['gender']
+            if not UserGender.objects.filter(pk=gender_pk).exists():  
+                return False
+        return True
+
     def has_object_permission(self, request, view, obj) -> bool:
         if request.method == 'POST':
             if 'gender' not in request.data:
