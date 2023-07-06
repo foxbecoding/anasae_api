@@ -55,13 +55,13 @@ class EditUserSerializer(serializers.ModelSerializer):
         if is_password_change:
             if not both_passwords_exists:
                 msg = 'Passwords must match.'
-                raise serializers.ValidationError({"password": msg}, code='authorization')
+                raise serializers.ValidationError(msg, code='authorization')
             
             password = attrs.get('password')
             confirm_password = attrs.get('confirm_password')
             if password != confirm_password:
                 msg = 'Passwords must match.'
-                raise serializers.ValidationError({"password": msg}, code='authorization')
+                raise serializers.ValidationError(msg, code='authorization')
             
             User_Instance = User.objects.get(pk=str(self.context['request'].user.id))
             User_Instance(password=make_password(password))
