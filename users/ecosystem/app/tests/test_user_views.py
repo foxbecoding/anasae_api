@@ -40,12 +40,25 @@ class TestUserViewSet(TestCase):
         self.assertEqual(res.data['first_name'], 'Desmond')
         self.assertEqual(res.status_code, 201)
     
-    # def test_account_sign_up_create_no_data(self):
-    #     #set request data
-    #     request_data = {}
+    def test_user_create_permissions_failed(self):
+        date_time_str = '12/31/1990'
+        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
-    #     #Get response data
-    #     res = self.client.post(self.list_url, request_data, **{'HTTP_X_CSRFTOKEN': self.csrftoken})
+        request_data = {
+            'first_name': "Desmond",
+            'last_name': 'Fox',
+            'email': 'fox@foxbecoding.com',
+            'username': 'foxbecoding',
+            'password': '123456',
+            'confirm_password': '123456',
+            'date_of_birth': date_time_obj.date(),
+            'agreed_to_toa': True
+        }
 
-    #     #check if data is correct
-    #     self.assertEqual(res.status_code, 400)
+        res = self.client.post(
+            reverse('user-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 403)
