@@ -10,3 +10,9 @@ class TestUserUrls(SimpleTestCase):
     def test_user_detail_url_resolves(self):
         url = reverse('user-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'user-detail')
+
+class TestUserImageUrls(SimpleTestCase):
+
+    def test_user_image_list_url_resolves(self):
+        url = reverse('user-image-list')
+        self.assertEqual(resolve(url).view_name, 'user-image-list')
