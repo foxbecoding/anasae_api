@@ -62,7 +62,7 @@ class UserImageViewSet(viewsets.ViewSet):
             # remove image from cdn maybe??? idk yet
             User_Image.delete()
         
-        Create_User_Image_Serializer = CreateUserImageSerializer(data=request.data, context={ 'request': request })
+        Create_User_Image_Serializer = CreateUserImageSerializer(data={'user': request.user}, context={ 'request': request })
         if not Create_User_Image_Serializer.is_valid():
             return Response(Create_User_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
