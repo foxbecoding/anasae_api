@@ -16,7 +16,8 @@ class UserPermission(BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj) -> bool:
-        if request.method == 'PATCH':
+        allowed_methods = ['PATCH', 'GET']
+        if request.method in allowed_methods:
             if str(request.user.id) != str(obj['user_pk']):
                 return False
         return True
