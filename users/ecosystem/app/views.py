@@ -27,10 +27,8 @@ class UserViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
-        # self.check_object_permissions(request=request, obj={'user_pk': pk})
-        # data = Prepare_User_Data(request.user)
-        # return Response(data, status=status.HTTP_200_OK)
-        return Response(None, status=status.HTTP_200_OK)
+        data = get_user_Data(request.user)
+        return Response(data, status=status.HTTP_200_OK)
         
     # @method_decorator(csrf_protect)
     # def update(self, request, pk=None):
