@@ -64,7 +64,7 @@ class EditUserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(msg, code='authorization')
             
             User_Instance = User.objects.get(pk=str(self.context['request'].user.id))
-            User_Instance(password=make_password(password))
+            User_Instance.password=make_password(password)
             User_Instance.save()
             attrs['password_changed'] = True
         
