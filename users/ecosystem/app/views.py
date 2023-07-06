@@ -36,10 +36,10 @@ class UserViewSet(viewsets.ViewSet):
     def partial_update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'user_pk': pk})
         
-        Edit_User_Serializer = EditUserSerializer(request.user, data=request.data, partial=True)
+        Edit_User_Serializer = EditUserSerializer(request.user, data=request.data, context={'request': request}, partial=True)
         if not Edit_User_Serializer.is_valid():
             return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        if not Edit_User_Serializer.validated_data['password_change']:
+        if not Edit_User_Serializer.validated_data['password_changed']:
             Edit_User_Serializer.save()
             
             data = get_user_data(request.user)
