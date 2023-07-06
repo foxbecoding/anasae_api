@@ -39,11 +39,13 @@ class UserViewSet(viewsets.ViewSet):
         Edit_User_Serializer = EditUserSerializer(request.user, data=request.data, context={'request': request}, partial=True)
         if not Edit_User_Serializer.is_valid():
             return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         if not Edit_User_Serializer.validated_data['password_changed']:
             Edit_User_Serializer.save()
             
             data = get_user_data(request.user)
             return Response(data, status=status.HTTP_202_ACCEPTED)
+        
         logout(request)    
         return Response(None, status=status.HTTP_202_ACCEPTED)
     
