@@ -30,18 +30,17 @@ class UserViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_200_OK)
         
-    # @method_decorator(csrf_protect)
-    # def update(self, request, pk=None):
-    #     self.check_object_permissions(request=request, obj={'user_pk': pk})
-    #     User_Instance = request.user
-    #     Edit_User_Serializer = EditUserSerializer(User_Instance, data=request.data)
+    @method_decorator(csrf_protect)
+    def update(self, request, pk=None):
+        self.check_object_permissions(request=request, obj={'user_pk': pk})
         
-    #     if not Edit_User_Serializer.is_valid():
-    #         return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Edit_User_Serializer = EditUserSerializer(request.user, data=request.data)
+        if not Edit_User_Serializer.is_valid():
+            return Response(Edit_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Edit_User_Serializer.save()
         
-    #     Edit_User_Serializer.save()
-    #     data = Prepare_User_Data(User_Instance)
-    #     return Response(data, status=status.HTTP_202_ACCEPTED)      
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)      
     
 # class MPAUserProfileImageViewSet(viewsets.ViewSet):
 #     def get_permissions(self):
