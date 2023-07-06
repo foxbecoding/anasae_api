@@ -50,7 +50,7 @@ class TestUserImageViewSet(TestCase):
         self.csrftoken = self.client.cookies['csrftoken'].value
         
 
-    def test_mpa_user_image_create(self):
+    def test_user_image_create(self):
         request_data = {
             'image': tmp_image()
         }

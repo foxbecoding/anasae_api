@@ -261,7 +261,7 @@ class CreateUserImageSerializer(serializers.ModelSerializer):
         
         current_GMT = time.gmtime()
         time_stamp = calendar.timegm(current_GMT)
-        image_name = create_uid('up-')+f'-{time_stamp}.{img.format.lower()}'
+        image_name = create_uid('ui-')+f'-{time_stamp}.{img.format.lower()}'
         image_path = str(env('CDN_USER_IMAGE_DIR')+image_name)
     
         upload = requests.post(
