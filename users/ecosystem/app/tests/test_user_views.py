@@ -38,7 +38,7 @@ class TestUserViewSet(TestCase):
 
         #User Login
         login_credentials = {
-            'email': 'slugga@gmail.com',
+            'username': 'slugga',
             'password': '123456'
         }
     

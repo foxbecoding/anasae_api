@@ -121,10 +121,10 @@ class UserAuthSerializer(serializers.ModelSerializer):
             'password': {'write_only': True},
         }
 
-    # username = serializers.CharField(
-    #     label="Username",
-    #     write_only=True
-    # )
+    username = serializers.CharField(
+        label="Username",
+        write_only=True
+    )
     
     password = serializers.CharField(
         label="Password",
@@ -138,7 +138,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
         # Set username and password from attrs
         username = attrs.get('username')
         password = attrs.get('password')
-        
+       
         if username and password:
 
             # Find user with username/email and password combination
@@ -149,7 +149,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
                 msg = 'Access denied: Invalid authentication credentials.'
                 raise serializers.ValidationError(msg, code='authorization')
         else:
-            msg = 'Both "email" and "password" are required.'
+            msg = 'Both "username" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
 
         User_Login_Instance = UserLogin.objects.create(user = user)
