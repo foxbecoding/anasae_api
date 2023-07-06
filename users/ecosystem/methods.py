@@ -15,6 +15,7 @@ def get_user_data(instance: User):
         'first_name': User_Data['first_name'],
         'last_name': User_Data['last_name'],
         'email': User_Data['email'],
+        'display_name': User_Data['display_name'],
         'username': User_Data['username'],
         'logins': User_Account_Login_Serializer.data,
         'addresses': User_Address_Serializer.data
