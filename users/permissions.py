@@ -16,12 +16,8 @@ class UserPermission(BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj) -> bool:
-        if request.method == 'POST':
-            if 'gender' not in request.data:
-                return False
-            
-            gender_pk = request.data['gender']
-            if not UserGender.objects.filter(pk=gender_pk).exists():  
+        if request.method == 'PATCH':
+            if str(request.user.id) != str(obj['user_pk']):
                 return False
         return True
 

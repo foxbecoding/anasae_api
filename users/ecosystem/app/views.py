@@ -29,9 +29,9 @@ class UserViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_200_OK)
-        
+
     @method_decorator(csrf_protect)
-    def update(self, request, pk=None):
+    def partial_update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'user_pk': pk})
         
         Edit_User_Serializer = EditUserSerializer(request.user, data=request.data)
