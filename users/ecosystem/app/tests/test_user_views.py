@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.middleware.csrf import get_token
-from users.models import UserGender
+from users.models import User, UserGender
 from datetime import datetime
 
 is_CSRF = True
@@ -14,6 +14,23 @@ class TestUserViewSet(TestCase):
         self.csrftoken = self.client.cookies['csrftoken'].value
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
+
+        date_time_str = '12/31/1990'
+        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+
+        self.User_Instance = User.objects.create(
+            first_name="Desmond",
+            last_name='Fox',
+            email='fox@foxbecoding.com',
+            username='foxbecoding',
+            password='123456',
+            confirm_password='123456',
+            date_of_birth=date_time_obj.date(),
+            agreed_to_toa=True,
+            gender=self.User_Gender_Instance.id
+        )
+
+        self.User_Instance.save()
 
     def test_user_create(self):
         date_time_str = '12/31/1990'
@@ -86,3 +103,6 @@ class TestUserViewSet(TestCase):
         )
         
         self.assertEqual(res.status_code, 400)
+
+    def test_user_retrieve(self):
+        
