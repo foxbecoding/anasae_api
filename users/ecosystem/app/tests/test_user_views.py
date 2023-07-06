@@ -148,3 +148,19 @@ class TestUserViewSet(TestCase):
 
         self.assertEqual(res.data['display_name'], request_data['display_name'])
         self.assertEqual(res.status_code, 202)
+    
+    def test_user_partial_update_password_change(self):
+        request_data = {
+            'password': '123456789',
+            'confirm_password': '123456789',
+        }
+
+        res = self.client.patch(
+            reverse('user-detail', kwargs={'pk': self.user['pk']}),
+            content_type='application/json',
+            data=request_data,
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        print(res.data)
+        # self.assertEqual(res.data['display_name'], request_data['display_name'])
+        # self.assertEqual(res.status_code, 202)
