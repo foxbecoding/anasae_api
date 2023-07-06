@@ -51,14 +51,12 @@ class EditUserSerializer(serializers.ModelSerializer):
         # password = attrs.get('password')
         # confirm_password = attrs.get('confirm_password')
 
-        print(attrs)
-
         # Check if passwords matches
         # if password != confirm_password:
         #     msg = 'Passwords must match.'
         #     raise serializers.ValidationError({"password": msg}, code='authorization')
         
-        return
+        return attrs
 
 class CreateUserSerializer(serializers.ModelSerializer):
     

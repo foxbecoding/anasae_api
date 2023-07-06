@@ -139,7 +139,7 @@ class TestUserViewSet(TestCase):
             'display_name': 'King Slugga'
         }
 
-        self.client.patch(
+        res = self.client.patch(
             reverse('user-detail', kwargs={'pk': self.user['pk']}),
             content_type='application/json',
             data=request_data,
