@@ -228,7 +228,7 @@ class UserImageSerializer(serializers.ModelSerializer):
         model = UserImage
         fields = [
             'pk',
-            'user_profile',
+            'user',
             'image'
         ]
 
@@ -236,7 +236,7 @@ class CreateUserImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserImage
         fields = [
-            'user_profile'
+            'user'
         ]
 
     def validate(self, attrs):
@@ -251,8 +251,7 @@ class CreateUserImageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"image": msg}, code='authorization')
 
         image = request_data['image']
-        user_profile = attrs.get('user_profile')
-
+        
         img = Image.open(image)
         valid_formats = ['PNG', 'JPEG']
         if img.format not in valid_formats:
@@ -262,12 +261,12 @@ class CreateUserImageSerializer(serializers.ModelSerializer):
         current_GMT = time.gmtime()
         time_stamp = calendar.timegm(current_GMT)
         image_name = create_uid('up-')+f'-{time_stamp}.{img.format.lower()}'
-        image_path = str(env('CDN_USER_PROFILE_DIR')+image_name)
+        image_path = str(env('CDN_USER_IMAGE_DIR')+image_name)
     
         upload = requests.post(
             f'{env("CDN_HOST_API")}{env("CDN_UPLOAD_IMAGE")}',
             data = {
-                "file_path": env('CDN_USER_PROFILE_DIR'),
+                "file_path": env('CDN_USER_IMAGE_DIR'),
                 "image_name": image_name
             },
             files={ "image": image.file.getvalue() }
@@ -278,7 +277,7 @@ class CreateUserImageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"image": msg}, code='authorization')
 
         User_Image_Instance = UserImage.objects.create(
-            user_profile = user_profile,
+            user = attrs.get('user'),
             image = image_path
         )
 
