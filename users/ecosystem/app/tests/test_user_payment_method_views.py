@@ -81,7 +81,7 @@ class TestUserPaymentMethodViewSet(TestCase):
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-
+        
         delete_res = self.client.delete(
             reverse(
                 'user-payment-method-detail',

@@ -53,11 +53,15 @@ class UserPaymentMethodPermission(BasePermission):
     
     def has_object_permission(self, request, view, obj):
         if request.method == 'DELETE':
-            pk = obj['payment_method_pk']
-            User_Instance = User.objects.get(pk=str(request.user.id))
-            user_payment_method_pks = [str(pk) for pk in User_Instance.payment_methods]
-
-            if pk not in user_payment_method_pks:
+            payment_method_pk = obj['payment_method_pk']
+            
+            is_payment_method = UserPaymentMethod.objects.filter(pk=payment_method_pk).exists()
+            if not is_payment_method:
+                return False
+            
+            User_Payment_Method_Instance = UserPaymentMethod.objects.get(pk=payment_method_pk)
+            is_user_match = str(request.user.id) == str(User_Payment_Method_Instance.user_id)
+            if not is_user_match:
                 return False
 
         return True
