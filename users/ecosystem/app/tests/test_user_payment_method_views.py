@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
+import stripe
 
 is_CSRF = True
 
@@ -49,6 +50,17 @@ class TestUserPaymentMethodViewSet(TestCase):
         )
         self.user = res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
+        
+        setup_intent_create_res = stripe.SetupIntent.create(
+            customer=self.user['stripe_customer_id'],
+            payment_method="pm_card_visa"
+        )
+        
+        self.setup_intent_confirm_res = stripe.SetupIntent.confirm(
+            setup_intent_create_res.id,
+            payment_method="pm_card_visa"
+        )
 
-    def test_user_payment_method_create(self):
-       pass
+    def test_user_payment_method_get_client_secret_list(self):
+        res = self.client.get(reverse('user-payment-method-list'))
+        self.assertEqual(res.status_code, 200)
