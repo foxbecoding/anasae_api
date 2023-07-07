@@ -77,14 +77,17 @@ class UserAddressViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_User_Address_Serializer = CreateUserAddressSerializer(
-            data=request.data, 
-            context={'user': request.user}
-        )
+        data = request.data
+        data._mutable = True
+        data['user'] = request.user
+        
+        Create_User_Address_Serializer = CreateUserAddressSerializer(data=data)
 
         if not Create_User_Address_Serializer.is_valid():
             return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        
+        Create_User_Address_Serializer.save()
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
           
