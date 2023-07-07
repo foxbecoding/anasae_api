@@ -71,6 +71,41 @@ class TestUserPaymentMethodViewSet(TestCase):
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        
+
         self.assertGreater(len(res.data['payment_methods']), 0)
         self.assertEqual(res.status_code, 201)
+
+    def test_user_payment_method_destroy(self):
+        create_res = self.client.post(
+            reverse('user-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        delete_res = self.client.delete(
+            reverse(
+                'user-payment-method-detail',
+                kwargs={'pk': create_res.data['payment_methods'][0]['pk']}
+            ),
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(len(delete_res.data['payment_methods']), 0)
+        self.assertEqual(delete_res.status_code, 202)
+
+    def test_user_payment_method_destroy_permissions_failed(self):
+        self.client.post(
+            reverse('user-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        delete_res = self.client.delete(
+            reverse(
+                'user-payment-method-detail',
+                kwargs={'pk': 18}
+            ),
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(delete_res.status_code, 403)
