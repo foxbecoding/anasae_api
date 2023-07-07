@@ -126,62 +126,62 @@ class TestUserAddressViewSet(TestCase):
         ) 
         self.assertEqual(res.status_code, 202)
 
-    # def test_mpa_user_address_update_error(self):
-    #     request_data = { 
-    #         'full_name': '',
-    #         'phone_number': '(504)729-8617',
-    #         'street_address': '4024 Crossmor dr',
-    #         'street_address_ext': '',
-    #         'country': 'United States',
-    #         'state': 'Louisiana',
-    #         'city': 'Marrero',
-    #         'postal_code': '70072',
-    #         'is_default': True
-    #     }
-    #     res = self.client.put(
-    #         reverse('mpa-user-address-detail', kwargs={'pk': self.user_address.id}),
-    #         content_type='application/json',
-    #         data=request_data,  
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
-    #     self.assertEqual(res.status_code, 400)
+    def test_user_address_update_error(self):
+        request_data = { 
+            'full_name': '',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmor dr',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072',
+            'is_default': True
+        }
+        res = self.client.put(
+            reverse('user-address-detail', kwargs={'pk': self.user_address_pk}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 400)
 
-    # def test_mpa_user_address_update_permissions_failed(self):
-    #     request_data = { 
-    #         'full_name': 'Desmond L Fox',
-    #         'phone_number': '(504)729-8617',
-    #         'street_address': '4024 Crossmor dr',
-    #         'street_address_ext': '',
-    #         'country': 'United States',
-    #         'state': 'Louisiana',
-    #         'city': 'Marrero',
-    #         'postal_code': '70072',
-    #         'is_default': True
-    #     }
-    #     res = self.client.put(
-    #         reverse('mpa-user-address-detail', kwargs={'pk': 847}),
-    #         content_type='application/json',
-    #         data=request_data,  
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
-    #     self.assertEqual(res.status_code, 403)
+    def test_user_address_update_permissions_failed(self):
+        request_data = { 
+            'full_name': 'Desmond L Fox',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmor dr',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072',
+            'is_default': True
+        }
+        res = self.client.put(
+            reverse('user-address-detail', kwargs={'pk': 847}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 403)
     
-    # def test_mpa_user_address_destroy(self):
-    #     request_data = {}
-    #     res = self.client.delete(
-    #         reverse('mpa-user-address-detail', kwargs={'pk': self.user_address.id}),
-    #         content_type='application/json',
-    #         data=request_data,  
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
-    #     self.assertEqual(res.status_code, 202)
+    def test_user_address_destroy(self):
+        request_data = {}
+        res = self.client.delete(
+            reverse('user-address-detail', kwargs={'pk': self.user_address_pk}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 202)
     
-    # def test_mpa_user_address_destroy_permissions_failed(self):
-    #     request_data = {}
-    #     res = self.client.delete(
-    #         reverse('mpa-user-address-detail', kwargs={'pk': 847}),
-    #         content_type='application/json',
-    #         data=request_data,  
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
-    #     self.assertEqual(res.status_code, 403)
+    def test_user_address_destroy_permissions_failed(self):
+        request_data = {}
+        res = self.client.delete(
+            reverse('user-address-detail', kwargs={'pk': 847}),
+            content_type='application/json',
+            data=request_data,  
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 403)

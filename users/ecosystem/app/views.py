@@ -104,10 +104,10 @@ class UserAddressViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
         
-    # @method_decorator(csrf_protect)
-    # def destroy(self, request, pk=None):
-    #     self.check_object_permissions(request=request, obj={'address_pk': pk})
-    #     User_Address_Instance = UserAddress.objects.get(pk=pk)
-    #     User_Address_Instance.delete()
-    #     data = Prepare_User_Data(request.user)
-    #     return Response(data, status=status.HTTP_202_ACCEPTED)
+    @method_decorator(csrf_protect)
+    def destroy(self, request, pk=None):
+        self.check_object_permissions(request=request, obj={'address_pk': pk})
+        User_Address_Instance = UserAddress.objects.get(pk=pk)
+        User_Address_Instance.delete()
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
