@@ -79,7 +79,7 @@ class UserAddressViewSet(viewsets.ViewSet):
     def create(self, request):
         data = request.data
         data._mutable = True
-        data['user'] = request.user
+        data['user'] = str(request.user.id)
         
         Create_User_Address_Serializer = CreateUserAddressSerializer(data=data)
 
