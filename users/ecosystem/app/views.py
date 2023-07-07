@@ -70,41 +70,41 @@ class UserImageViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
            
-# class UserAddressViewSet(viewsets.ViewSet):
-#     def get_permissions(self):
-#         permission_classes = [IsAuthenticated, UserAddressPermission]
-#         return [permission() for permission in permission_classes]
+class UserAddressViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, UserAddressPermission]
+        return [permission() for permission in permission_classes]
     
-#     @method_decorator(csrf_protect)
-#     def create(self, request):
-#         Create_User_Address_Serializer = CreateUserAddressSerializer(
-#             data=request.data, 
-#             context={'user': request.user}
-#         )
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        Create_User_Address_Serializer = CreateUserAddressSerializer(
+            data=request.data, 
+            context={'user': request.user}
+        )
 
-#         if not Create_User_Address_Serializer.is_valid():
-#             return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not Create_User_Address_Serializer.is_valid():
+            return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-#         data = Prepare_User_Data(request.user)
-#         return Response(data, status=status.HTTP_201_CREATED)
+        data = Prepare_User_Data(request.user)
+        return Response(data, status=status.HTTP_201_CREATED)
           
-#     @method_decorator(csrf_protect)
-#     def update(self, request, pk=None):
-#         self.check_object_permissions(request=request, obj={'address_pk': pk})
-#         User_Address_Instance = UserAddress.objects.get(pk=pk)
-#         Edit_User_Address_Serializer = EditUserAddressSerializer(User_Address_Instance, data=request.data)
+    # @method_decorator(csrf_protect)
+    # def update(self, request, pk=None):
+    #     self.check_object_permissions(request=request, obj={'address_pk': pk})
+    #     User_Address_Instance = UserAddress.objects.get(pk=pk)
+    #     Edit_User_Address_Serializer = EditUserAddressSerializer(User_Address_Instance, data=request.data)
 
-#         if not Edit_User_Address_Serializer.is_valid():
-#             return Response(Edit_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     if not Edit_User_Address_Serializer.is_valid():
+    #         return Response(Edit_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-#         Edit_User_Address_Serializer.save()
-#         data = Prepare_User_Data(request.user)
-#         return Response(data, status=status.HTTP_202_ACCEPTED)
+    #     Edit_User_Address_Serializer.save()
+    #     data = Prepare_User_Data(request.user)
+    #     return Response(data, status=status.HTTP_202_ACCEPTED)
         
-#     @method_decorator(csrf_protect)
-#     def destroy(self, request, pk=None):
-#         self.check_object_permissions(request=request, obj={'address_pk': pk})
-#         User_Address_Instance = UserAddress.objects.get(pk=pk)
-#         User_Address_Instance.delete()
-#         data = Prepare_User_Data(request.user)
-#         return Response(data, status=status.HTTP_202_ACCEPTED)
+    # @method_decorator(csrf_protect)
+    # def destroy(self, request, pk=None):
+    #     self.check_object_permissions(request=request, obj={'address_pk': pk})
+    #     User_Address_Instance = UserAddress.objects.get(pk=pk)
+    #     User_Address_Instance.delete()
+    #     data = Prepare_User_Data(request.user)
+    #     return Response(data, status=status.HTTP_202_ACCEPTED)
