@@ -33,19 +33,13 @@ class UserPermission(BasePermission):
 #             return False     
 #         return True
 
-# class UserAddressPermission(BasePermission):
-#     message = "Access Denied!"   
-
-#     def has_permission(self, request, view):
-#         SAFE_METHODS = ('POST', 'PUT', 'DELETE')
-#         if request.method in SAFE_METHODS:
-#             return True
-#         return False
+class UserAddressPermission(BasePermission):
+    message = "Access Denied!"   
     
-#     def has_object_permission(self, request, view, obj):
-#         User_Serializer = UserSerializer(request.user) 
-#         user_address_pks = (str(address) for address in User_Serializer.data['addresses'])
+    def has_object_permission(self, request, view, obj):
+        User_Serializer = UserSerializer(request.user) 
+        user_address_pks = (str(address) for address in User_Serializer.data['addresses'])
 
-#         if str(obj['address_pk']) not in user_address_pks:
-#             return False
-#         return True
+        if str(obj['address_pk']) not in user_address_pks:
+            return False
+        return True
