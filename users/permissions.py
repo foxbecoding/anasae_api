@@ -22,17 +22,6 @@ class UserPermission(BasePermission):
                 return False
         return True
 
-# class UserImagePermission(BasePermission):
-#     message = "Access Denied!"   
-
-#     def has_permission(self, request, view):
-#         User_Serializer = UserSerializer(request.user) 
-#         user_profile_pks = (str(profile) for profile in User_Serializer.data['profiles'])  
-        
-#         if str(request.data['user_profile']) not in user_profile_pks:
-#             return False     
-#         return True
-
 class UserAddressPermission(BasePermission):
     message = "Access Denied!"   
     
