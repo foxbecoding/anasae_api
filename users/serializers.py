@@ -341,7 +341,7 @@ class UserPaymentMethodSerializer(serializers.ModelSerializer):
             'stripe_pm_id'
         ]
 
-class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
+class CreateUserPaymentMethodSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserPaymentMethod
