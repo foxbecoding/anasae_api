@@ -48,19 +48,21 @@ class TestUserAddressViewSet(TestCase):
         self.user = login_res.data
         self.csrftoken = self.client.cookies['csrftoken'].value
 
-        # self.user_address = UserAddress.objects.create(
-        #     user = user,
-        #     full_name = 'Desmond Fox',
-        #     phone_number = '(504)366-7899',
-        #     street_address = '1912 Pailet',
-        #     street_address_ext = '',
-        #     country = 'United States',
-        #     state = 'Louisiana',
-        #     city = 'Harvey',
-        #     postal_code = '70058'
-        # )
-
-        # self.user_address.save()
+        user_address_data = { 
+            'full_name': 'Desmond Fox',
+            'phone_number': '(504)366-7899',
+            'street_address': '1912 Pailet',
+            'street_address_ext': '',
+            'country': 'United States',
+            'state': 'Louisiana',
+            'city': 'Harvey',
+            'postal_code': '70058'
+        }
+        self.user_address = self.client.post(
+            reverse('user-address-list'), 
+            data=user_address_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         
 
     def test_mpa_user_address_create(self):
@@ -78,10 +80,10 @@ class TestUserAddressViewSet(TestCase):
             reverse('user-address-list'), 
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-        print(res.data)
-        # self.assertEqual(res.data['addresses'][1]['city'], 'Marrero')
-        # self.assertEqual(res.status_code, 201)
+        ) 
+        
+        self.assertEqual(res.data['addresses'][1]['city'], 'Marrero')
+        self.assertEqual(res.status_code, 201)
     
     # def test_mpa_user_address_create_error(self):
     #     request_data = { 
