@@ -10,7 +10,7 @@ from brands.permissions import *
 from brands.ecosystem.methods import *
 from pprint import pprint
 
-class UserViewSet(viewsets.ViewSet):
+class BrandViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
