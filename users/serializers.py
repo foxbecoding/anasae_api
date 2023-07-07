@@ -331,3 +331,21 @@ class EditUserAddressSerializer(serializers.ModelSerializer):
             'postal_code',
             'is_default'
         ]
+
+class UserPaymentMethodSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UserPaymentMethod
+        fields = [
+            'pk',
+            'stripe_pm_id'
+        ]
+
+class CreateMerchantPaymentMethodSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UserPaymentMethod
+        fields = [
+            'user',
+            'stripe_pm_id'
+        ]
