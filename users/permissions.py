@@ -47,9 +47,6 @@ class UserAddressPermission(BasePermission):
 class UserPaymentMethodPermission(BasePermission):
     
     message = "Access Denied!"
-
-    # def has_permission(self, request, view) -> bool:
-    #     return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
     
     def has_object_permission(self, request, view, obj):
         if request.method == 'DELETE':
