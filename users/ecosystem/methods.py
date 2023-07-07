@@ -8,6 +8,8 @@ def get_user_data(instance: User):
     User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instances, many=True)
     User_Address_Instance = UserAddress.objects.filter(pk__in=user_data['addresses'])
     User_Address_Serializer = UserAddressSerializer(User_Address_Instance, many=True)
+    User_Payment_Method_Instance = UserPaymentMethod.objects.filter(pk__in=user_data['payment_methods'])
+    User_Payment_Method_Serializer = UserPaymentMethodSerializer(User_Payment_Method_Instance, many=True)
 
     if UserImage.objects.filter(pk=user_data['image']).exists():
         User_Image_Instance = UserImage.objects.get(pk=user_data['image'])
@@ -22,9 +24,10 @@ def get_user_data(instance: User):
         'display_name': user_data['display_name'],
         'username': user_data['username'],
         'stripe_customer_id': user_data['stripe_customer_id'],
+        'image': user_data['image'],
         'logins': User_Account_Login_Serializer.data,
         'addresses': User_Address_Serializer.data,
-        'image': user_data['image']
+        'payment_methods': User_Payment_Method_Serializer.data
     }
     
     return data
