@@ -63,5 +63,14 @@ class TestUserPaymentMethodViewSet(TestCase):
 
     def test_user_payment_method_get_client_secret_list(self):
         res = self.client.get(reverse('user-payment-method-list'))
-        print(res)
         self.assertEqual(res.status_code, 200)
+
+    def test_user_payment_method_create(self):
+        res = self.client.post(
+            reverse('user-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertGreater(len(res.data['payment_methods']), 0)
+        self.assertEqual(res.status_code, 201)
