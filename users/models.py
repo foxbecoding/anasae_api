@@ -56,3 +56,10 @@ class UserLogin(models.Model):
     device = models.CharField(max_length=200, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
+
+class UserPaymentMethod(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_methods", default='')
+    stripe_pm_id = models.CharField(max_length=120, blank=False)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
