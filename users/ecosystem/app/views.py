@@ -144,11 +144,9 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
-        # self.check_object_permissions(request=request, obj={'pk': pk})
-        # Merchant_Payment_Method_Instance = MerchantPaymentMethod.objects.get(pk=str(pk))
-        # Merchant_Payment_Method_Instance.delete()
-        # stripe.PaymentMethod.detach(Merchant_Payment_Method_Instance.stripe_pm_id)
-        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
-        # data = get_merchant_data(Merchant_Instance)
-        # return Response(data, status=status.HTTP_202_ACCEPTED)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        self.check_object_permissions(request=request, obj={'payment_method_pk': pk})
+        User_Payment_Method_Instance = UserPaymentMethod.objects.get(pk=str(pk))
+        User_Payment_Method_Instance.delete()
+        stripe.PaymentMethod.detach(User_Payment_Method_Instance.stripe_pm_id)
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
