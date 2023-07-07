@@ -58,11 +58,13 @@ class TestUserAddressViewSet(TestCase):
             'city': 'Harvey',
             'postal_code': '70058'
         }
-        self.user_address = self.client.post(
+        user_address_res = self.client.post(
             reverse('user-address-list'), 
             data=user_address_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        self.user_address_pk = user_address_res.data['addresses'][0]['pk']
         
 
     def test_user_address_create(self):
@@ -115,8 +117,9 @@ class TestUserAddressViewSet(TestCase):
             'postal_code': '70072',
             'is_default': True
         }
+        
         res = self.client.put(
-            reverse('user-address-detail', kwargs={'pk': self.user_address.id}),
+            reverse('user-address-detail', kwargs={'pk': self.user_address_pk}),
             content_type='application/json',
             data=request_data,  
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
