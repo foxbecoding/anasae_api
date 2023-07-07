@@ -21,6 +21,7 @@ def get_user_data(instance: User):
         'email': user_data['email'],
         'display_name': user_data['display_name'],
         'username': user_data['username'],
+        'stripe_customer_id': user_data['stripe_customer_id'],
         'logins': User_Account_Login_Serializer.data,
         'addresses': User_Address_Serializer.data,
         'image': user_data['image']

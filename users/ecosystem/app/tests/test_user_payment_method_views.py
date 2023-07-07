@@ -63,4 +63,5 @@ class TestUserPaymentMethodViewSet(TestCase):
 
     def test_user_payment_method_get_client_secret_list(self):
         res = self.client.get(reverse('user-payment-method-list'))
+        print(res)
         self.assertEqual(res.status_code, 200)
