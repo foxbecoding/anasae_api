@@ -43,3 +43,29 @@ class UserAddressPermission(BasePermission):
         if str(obj['address_pk']) not in user_address_pks:
             return False
         return True
+    
+class UserPaymentMethodPermission(BasePermission):
+    
+    message = "Access Denied!"
+
+    # def has_permission(self, request, view) -> bool:
+    #     return Merchant.objects.filter(user_id=str(request.user.id)).exists() 
+    
+    def has_object_permission(self, request, view, obj):
+        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        # Merchant_Store_Instances = MerchantStore.objects.filter(merchant_id=Merchant_Instance.id)
+        # merchant_store_pks = [str(ms.id) for ms in Merchant_Store_Instances]
+
+        # if request.method == 'POST':
+        #     if 'merchant_store' not in request.data:
+        #         return False
+            
+        #     store_pk = str(request.data['merchant_store'])
+
+        #     if not MerchantStore.objects.filter(pk=store_pk).exists():
+        #         return False 
+
+        #     if store_pk not in merchant_store_pks:
+        #         return False
+
+        return True

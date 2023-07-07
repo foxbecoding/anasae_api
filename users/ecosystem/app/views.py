@@ -111,3 +111,47 @@ class UserAddressViewSet(viewsets.ViewSet):
         User_Address_Instance.delete()
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+    
+class UserPaymentMethodViewSet(viewsets.ViewSet):
+    
+    def get_permissions(self):
+        permission_classes = [ IsAuthenticated, UserPaymentMethodPermission ]
+        return [ permission() for permission in permission_classes ]
+
+    def list(self, request):
+        setup_intent_res = stripe.SetupIntent.create(
+            customer=request.user.stripe_customer_id,
+            payment_method_types=["card"],
+        )
+        return Response(setup_intent_res.client_secret, status=status.HTTP_200_OK)
+
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        # self.check_object_permissions(request=request, obj={})
+
+        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        # payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
+
+        # data = {
+        #     'merchant': Merchant_Instance.id,
+        #     'stripe_pm_id': payment_method_res.id
+        # }
+        
+        # Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=data)
+        # if not Create_Merchant_Payment_Method_Serializer.is_valid():
+        #     return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create_Merchant_Payment_Method_Serializer.save()
+        # data = get_merchant_data(Merchant_Instance)
+        # return Response(data, status=status.HTTP_201_CREATED)
+        return Response(None, status=status.HTTP_201_CREATED)
+    
+    def destroy(self, request, pk=None):
+        # self.check_object_permissions(request=request, obj={'pk': pk})
+        # Merchant_Payment_Method_Instance = MerchantPaymentMethod.objects.get(pk=str(pk))
+        # Merchant_Payment_Method_Instance.delete()
+        # stripe.PaymentMethod.detach(Merchant_Payment_Method_Instance.stripe_pm_id)
+        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
+        # data = get_merchant_data(Merchant_Instance)
+        # return Response(data, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_202_ACCEPTED)

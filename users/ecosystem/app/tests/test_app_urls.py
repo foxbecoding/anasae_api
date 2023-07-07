@@ -26,3 +26,13 @@ class TestUserAddressUrls(SimpleTestCase):
     def test_user_address_detail_url_resolves(self):
         url = reverse('user-address-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'user-address-detail')
+
+class TestUserPaymentMethodUrls(SimpleTestCase):
+
+    def test_user_payment_method_list_url_resolves(self):
+        url = reverse('user-payment-method-list')
+        self.assertEqual(resolve(url).view_name, 'user-payment-method-list')
+    
+    def test_user_payment_method_detail_url_resolves(self):
+        url = reverse('user-payment-method-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'user-payment-method-detail')
