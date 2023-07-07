@@ -127,24 +127,21 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # self.check_object_permissions(request=request, obj={})
+        self.check_object_permissions(request=request, obj={})
+        payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
 
-        # Merchant_Instance = Merchant.objects.get(user_id=str(request.user.id))
-        # payment_method_res = stripe.PaymentMethod.retrieve(id=request.data['payment_method_id'])
-
-        # data = {
-        #     'merchant': Merchant_Instance.id,
-        #     'stripe_pm_id': payment_method_res.id
-        # }
+        data = {
+            'user': str(request.user.id),
+            'stripe_pm_id': payment_method_res.id
+        }
         
-        # Create_Merchant_Payment_Method_Serializer = CreateMerchantPaymentMethodSerializer(data=data)
-        # if not Create_Merchant_Payment_Method_Serializer.is_valid():
-        #     return Response(Create_Merchant_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Create_User_Payment_Method_Serializer = CreateUserPaymentMethodSerializer(data=data)
+        if not Create_User_Payment_Method_Serializer.is_valid():
+            return Response(Create_User_Payment_Method_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # Create_Merchant_Payment_Method_Serializer.save()
-        # data = get_merchant_data(Merchant_Instance)
-        # return Response(data, status=status.HTTP_201_CREATED)
-        return Response(None, status=status.HTTP_201_CREATED)
+        Create_User_Payment_Method_Serializer.save()
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     def destroy(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={'pk': pk})
