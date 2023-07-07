@@ -85,7 +85,7 @@ class UserAddressViewSet(viewsets.ViewSet):
         if not Create_User_Address_Serializer.is_valid():
             return Response(Create_User_Address_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        data = Prepare_User_Data(request.user)
+        data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
           
     # @method_decorator(csrf_protect)
