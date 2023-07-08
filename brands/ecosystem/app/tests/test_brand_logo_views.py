@@ -73,8 +73,8 @@ class TestBrandLogoViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        # self.assertNotEqual(res.data['image'], None)
-        # self.assertEqual(res.status_code, 201)   
+        self.assertNotEqual(res.data['logo'], None)
+        self.assertEqual(res.status_code, 201)   
 
     # def test_user_image_create_error(self):
     #     request_data = {
