@@ -33,5 +33,6 @@ class BrandFollower(models.Model):
 class BrandRating(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="ratings")
     rater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated_brands")
+    rating = models.IntegerField(blank=False, default=0)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
