@@ -88,23 +88,36 @@ class TestBrandLogoViewSet(TestCase):
         )
         self.assertEqual(res.status_code, 400)
 
-    # # This test uses the create method to update
-    # def test_user_image_update(self):
-    #     create_image_request_data = {
-    #         'image': tmp_image('png')
-    #     }
-    #     create_image_res = self.client.post(
-    #         reverse('user-image-list'), 
-    #         data=create_image_request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
-    #     update_image_request_data = {
-    #         'image': tmp_image('png')
-    #     }
-    #     update_image_res = self.client.post(
-    #         reverse('user-image-list'),
-    #         data=update_image_request_data,
-    #         **{ 'HTTP_X_CSRFTOKEN': self.csrftoken }
-    #     )
-    #     self.assertEqual(create_image_res.status_code, 201)
-    #     self.assertEqual(update_image_res.status_code, 201)
+    def test_brand_logo_create_permissions_failed(self):
+        request_data = {
+            'image': tmp_image('gif')
+        }
+        res = self.client.post(
+            reverse('brand-logo-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 403)
+
+    # This test uses the create method to update
+    def test_brand_logo_update(self):
+        create_logo_request_data = {
+            'brand': self.brand_data['pk'],
+            'image': tmp_image('png')
+        }
+        create_logo_res = self.client.post(
+            reverse('brand-logo-list'), 
+            data=create_logo_request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        update_logo_request_data = {
+            'brand': self.brand_data['pk'],
+            'image': tmp_image('png')
+        }
+        update_logo_res = self.client.post(
+            reverse('brand-logo-list'),
+            data=update_logo_request_data,
+            **{ 'HTTP_X_CSRFTOKEN': self.csrftoken }
+        )
+        self.assertEqual(create_logo_res.status_code, 201)
+        self.assertEqual(update_logo_res.status_code, 201)
