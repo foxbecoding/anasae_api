@@ -91,4 +91,3 @@ class TestBrandViewSet(TestCase):
         res = self.client.get(
             reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
         )
-        

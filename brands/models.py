@@ -22,7 +22,7 @@ class BrandLogo(models.Model):
 
 class BrandOwner(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="owners")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="brand_owner")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owned_brands")
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)

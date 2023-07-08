@@ -6,8 +6,10 @@ class BrandPermission(BasePermission):
     message = "Access Denied!" 
 
     def has_object_permission(self, request, view, obj) -> bool:
-        # pk = obj['pk']
-        
+        brand_pk = obj['brand_pk']
+        print()
+        if not Brand.objects.filter(pk=brand_pk).exists():
+            return False
         # if not Brand.objects.filter(user_id=str(request.user.id)).exists():
         #     return False
         
