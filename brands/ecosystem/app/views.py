@@ -31,11 +31,12 @@ class BrandViewSet(viewsets.ViewSet):
         data = get_brand_data(Brand_Instance)
         return Response(data, status=status.HTTP_200_OK)
     
+    @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'brand_pk': pk})
         Brand_Instance = Brand.objects.get(pk=pk)
         
-        Edit_Brand_Serializer = EditBrandSerializer(Brand_Instance, data=request)
+        Edit_Brand_Serializer = EditBrandSerializer(Brand_Instance, data=request.data)
         if not Edit_Brand_Serializer.is_valid():
             return Response(Edit_Brand_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -102,7 +102,9 @@ class TestBrandViewSet(TestCase):
         res = self.client.put(
             reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
             data=request_data,
-            content_type='application/json'
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
+        self.assertEqual(res.data['name'], 'Fenty x Savage')
         self.assertEqual(res.status_code, 202)
