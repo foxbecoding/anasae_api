@@ -10,3 +10,9 @@ class TestBrandUrls(SimpleTestCase):
     def test_brand_detail_url_resolves(self):
         url = reverse('brand-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'brand-detail')
+
+class TestBrandLogoUrls(SimpleTestCase):
+    
+    def test_brand_logo_list_url_resolves(self):
+        url = reverse('brand-logo-list')
+        self.assertEqual(resolve(url).view_name, 'brand-logo-list')
