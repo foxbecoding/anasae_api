@@ -63,4 +63,4 @@ class BrandLogoViewSet(viewsets.ViewSet):
             return Response(Create_Brand_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         data = get_brand_data(Create_Brand_Logo_Serializer.validated_data['brand'])
-        return Response(None, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_201_CREATED)
