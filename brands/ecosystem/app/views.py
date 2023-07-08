@@ -43,3 +43,25 @@ class BrandViewSet(viewsets.ViewSet):
         Edit_Brand_Serializer.save()
         data = get_brand_data(Brand_Instance)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+
+class BrandLogoViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        # user_id = str(request.user.id)
+        # is_User_Image = UserImage.objects.filter(user_id=user_id).exists()
+        # if is_User_Image:
+        #     User_Image = UserImage.objects.get(user_id=user_id)
+        #     # remove image from cdn maybe??? idk yet
+        #     User_Image.delete()
+        
+        # Create_User_Image_Serializer = CreateUserImageSerializer(data={'user': user_id}, context={ 'request': request })
+        # if not Create_User_Image_Serializer.is_valid():
+        #     return Response(Create_User_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # data = get_user_data(request.user)
+        # return Response(data, status=status.HTTP_201_CREATED)
+        return Response(None, status=status.HTTP_201_CREATED)
