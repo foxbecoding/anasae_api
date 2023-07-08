@@ -27,5 +27,6 @@ class BrandViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'brand_pk': pk})
-        # data = get_user_data(request.user)
-        return Response(None, status=status.HTTP_200_OK)
+        Brand_Instance = Brand.objects.get(pk=pk)
+        data = get_brand_data(Brand_Instance)
+        return Response(data, status=status.HTTP_200_OK)
