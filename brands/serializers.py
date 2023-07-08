@@ -141,4 +141,5 @@ class CreateBrandLogoSerializer(serializers.ModelSerializer):
 
         Brand_Logo_Instance.save()
         attrs['brand_logo'] = Brand_Logo_Instance
+        attrs['brand'] = attrs.get('brand')
         return attrs

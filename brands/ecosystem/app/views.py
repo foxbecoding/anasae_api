@@ -46,7 +46,7 @@ class BrandViewSet(viewsets.ViewSet):
 
 class BrandLogoViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, BasePermission]
+        permission_classes = [IsAuthenticated, BrandLogoPermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
@@ -57,10 +57,17 @@ class BrandLogoViewSet(viewsets.ViewSet):
         #     User_Image = UserImage.objects.get(user_id=user_id)
         #     # remove image from cdn maybe??? idk yet
         #     User_Image.delete()
-        
-        # Create_User_Image_Serializer = CreateUserImageSerializer(data={'user': user_id}, context={ 'request': request })
-        # if not Create_User_Image_Serializer.is_valid():
-        #     return Response(Create_User_Image_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        brand_pk = str(request.data['brand'])
+        is_brand_logo = BrandLogo.objects.filter(brand_id=brand_pk).exists()
+        if is_brand_logo:
+            Brand_Logo = BrandLogo.objects.get(brand_id=brand_pk)
+            # remove image from cdn maybe??? idk yet
+            Brand_Logo.delete()
+
+        Create_Brand_Logo_Serializer = CreateBrandLogoSerializer(data={'brand': brand_pk}, context={ 'request': request })
+        if not Create_Brand_Logo_Serializer.is_valid():
+            return Response(Create_Brand_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         # data = get_user_data(request.user)
         # return Response(data, status=status.HTTP_201_CREATED)
