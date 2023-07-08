@@ -58,7 +58,7 @@ class TestBrandViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-
+        print(res.data)
         # self.assertEqual(res.data['addresses'][1]['city'], 'Marrero')
         # self.assertEqual(res.status_code, 201)
     

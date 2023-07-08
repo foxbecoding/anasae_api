@@ -70,3 +70,21 @@ class CreateBrandSerializer(serializers.ModelSerializer):
         
         attrs['brand'] = Brand_Instance
         return attrs
+
+class BrandOwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandOwner
+        fields = [
+            'pk',
+            'brand',
+            'user'
+        ]
+
+class CreateBrandOwnerSerializer(serializers.ModelSerializer):
+  
+    class Meta:
+        model = Brand
+        fields = [
+            'brand',
+            'user',
+        ]
