@@ -4,6 +4,8 @@ from utils.helpers import create_uid
 from PIL import Image
 import stripe, requests, os, calendar, time
 
+env = os.getenv
+
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
@@ -79,3 +81,64 @@ class BrandOwnerSerializer(serializers.ModelSerializer):
             'brand',
             'owner'
         ]
+
+class BrandLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandLogo
+        fields = [
+            'pk',
+            'image'
+        ]
+
+class CreateBrandLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandLogo
+        fields = [
+            'brand'
+        ]
+
+    def validate(self, attrs):
+        request_data = self.context['request'].data
+
+        if 'image' not in request_data:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        if not request_data['image']:
+            msg = 'Please upload an image'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        image = request_data['image']
+        
+        img = Image.open(image)
+        valid_formats = ['PNG', 'JPEG']
+        if img.format not in valid_formats:
+            msg = 'Image must be in PNG or JPEG format'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        current_GMT = time.gmtime()
+        time_stamp = calendar.timegm(current_GMT)
+        image_name = create_uid('bl-')+f'-{time_stamp}.{img.format.lower()}'
+        image_path = str(env('CDN_BRAND_LOGO_DIR')+image_name)
+    
+        upload = requests.post(
+            f'{env("CDN_HOST_API")}{env("CDN_UPLOAD_IMAGE")}',
+            data = {
+                "file_path": env('CDN_BRAND_LOGO_DIR'),
+                "image_name": image_name
+            },
+            files={ "image": image.file.getvalue() }
+        )
+
+        if upload.status_code != 200:
+            msg = 'Please try again'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+
+        Brand_Logo_Instance = BrandLogo.objects.create(
+            brand = attrs.get('brand'),
+            image = image_path
+        )
+
+        Brand_Logo_Instance.save()
+        attrs['brand_logo'] = Brand_Logo_Instance
+        return attrs
