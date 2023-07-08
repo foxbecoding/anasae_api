@@ -14,4 +14,10 @@ def get_brand_data(instance: Brand):
     owner_pks = [ str(owner['owner']) for owner in brand_owner_data ]
     User_Instances = User.objects.filter(pk__in=owner_pks)
     brand_data['owners'] = [ get_owner_data(instance) for instance in User_Instances ]
+    
+    is_brand_logo = BrandLogo.objects.filter(pk=brand_data['logo']).exists()
+    if is_brand_logo:
+        Brand_Logo_Instance = BrandLogo.objects.get(pk=brand_data['logo'])
+        brand_data['logo'] = BrandLogoSerializer(Brand_Logo_Instance).data
+    
     return brand_data
