@@ -70,7 +70,7 @@ class TestBrandViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        
+
         self.assertEqual(res.data['name'], 'ANASAE')
         self.assertGreater(len(res.data['owners']), 0)
         self.assertEqual(res.status_code, 201)

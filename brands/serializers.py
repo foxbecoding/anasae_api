@@ -49,13 +49,19 @@ class CreateBrandSerializer(serializers.ModelSerializer):
         )
 
         Brand_Instance = Brand.objects.create(
+            creator = request.user,
             uid = create_uid('b-'),
             stripe_account_id = Stripe_Account.id,
             name = attrs.get('name'),
             bio = attrs.get('bio')
         )
-        Brand_Instance.owners.add(request.user)
         Brand_Instance.save()
+
+        Brand_Owner_Instance = BrandOwner.objects.create(
+            brand = Brand_Instance,
+            owner = request.user
+        )
+        Brand_Owner_Instance.save()
 
         stripe.Account.modify(
             Stripe_Account.id,
@@ -64,3 +70,12 @@ class CreateBrandSerializer(serializers.ModelSerializer):
         
         attrs['brand'] = Brand_Instance
         return attrs
+    
+class BrandOwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandOwner
+        fields = [
+            'pk',
+            'brand',
+            'owner'
+        ]
