@@ -69,6 +69,6 @@ class BrandLogoViewSet(viewsets.ViewSet):
         if not Create_Brand_Logo_Serializer.is_valid():
             return Response(Create_Brand_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # data = get_user_data(request.user)
-        # return Response(data, status=status.HTTP_201_CREATED)
+        data = get_brand_data(Create_Brand_Logo_Serializer.validated_data['brand'])
+        print(data)
         return Response(None, status=status.HTTP_201_CREATED)
