@@ -17,12 +17,13 @@ class BrandViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
-        # if not Create_User_Serializer.is_valid():
-        #     return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+        Create_Brand_Serializer = CreateBrandSerializer(data=request.data, context={'request': request})
+        if not Create_Brand_Serializer.is_valid():
+            return Response(Create_Brand_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
-        # User_Instance = Create_User_Serializer.validated_data['user']
-        # data = get_user_data(User_Instance)
+        Brand_Instance = Create_Brand_Serializer.validated_data['brand']
+        data = get_brand_data(Brand_Instance)
+        print(data)
         return Response(None, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
