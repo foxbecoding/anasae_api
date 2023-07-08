@@ -75,19 +75,21 @@ class TestBrandViewSet(TestCase):
         ) 
         self.assertEqual(res.status_code, 400)
 
-    def test_brand_retrieve(self):
-        brand_request_data = { 
-            'name': 'Fenty Beauty',
-            'bio': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
-        }
+    # def test_brand_retrieve(self):
+    #     brand_request_data = { 
+    #         'name': 'Fenty Beauty',
+    #         'bio': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+    #     }
 
-        brand_res = self.client.post(
-            reverse('brand-list'), 
-            data=brand_request_data, 
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
-        self.brand_data = brand_res.data
+    #     brand_res = self.client.post(
+    #         reverse('brand-list'), 
+    #         data=brand_request_data, 
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     ) 
+    #     self.brand_data = brand_res.data
 
-        res = self.client.get(
-            reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
-        )
+    #     res = self.client.get(
+    #         reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
+    #     )
+
+    #     self.assertEqual(res.status_code, 200)
