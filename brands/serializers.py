@@ -12,7 +12,7 @@ class BrandSerializer(serializers.ModelSerializer):
             'uid',
             'name',
             'bio',
-            'stripe_account_id'
+            'stripe_account_id',
             'owners',
             'logo'
         ]
