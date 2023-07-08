@@ -51,24 +51,16 @@ class BrandLogoViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # user_id = str(request.user.id)
-        # is_User_Image = UserImage.objects.filter(user_id=user_id).exists()
-        # if is_User_Image:
-        #     User_Image = UserImage.objects.get(user_id=user_id)
-        #     # remove image from cdn maybe??? idk yet
-        #     User_Image.delete()
+        brand_pk = str(request.data['brand'])
+        is_brand_logo = BrandLogo.objects.filter(brand_id=brand_pk).exists()
+        if is_brand_logo:
+            Brand_Logo = BrandLogo.objects.get(brand_id=brand_pk)
+            # remove image from cdn maybe??? idk yet
+            Brand_Logo.delete()
 
-        # brand_pk = str(request.data['brand'])
-        # is_brand_logo = BrandLogo.objects.filter(brand_id=brand_pk).exists()
-        # if is_brand_logo:
-        #     Brand_Logo = BrandLogo.objects.get(brand_id=brand_pk)
-        #     # remove image from cdn maybe??? idk yet
-        #     Brand_Logo.delete()
-
-        # Create_Brand_Logo_Serializer = CreateBrandLogoSerializer(data={'brand': brand_pk}, context={ 'request': request })
-        # if not Create_Brand_Logo_Serializer.is_valid():
-        #     return Response(Create_Brand_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Create_Brand_Logo_Serializer = CreateBrandLogoSerializer(data={'brand': brand_pk}, context={ 'request': request })
+        if not Create_Brand_Logo_Serializer.is_valid():
+            return Response(Create_Brand_Logo_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # data = get_brand_data(Create_Brand_Logo_Serializer.validated_data['brand'])
-        # print(data)
+        data = get_brand_data(Create_Brand_Logo_Serializer.validated_data['brand'])
         return Response(None, status=status.HTTP_201_CREATED)
