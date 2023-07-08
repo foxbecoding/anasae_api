@@ -18,7 +18,7 @@ class BrandLogoPermission(BasePermission):
     
     message = "Access Denied!" 
 
-    def has_permission(self, request, view, obj) -> bool:
+    def has_permission(self, request, view) -> bool:
         brand_pk = str(request.data['brand'])
         user_pk = str(request.user.id)
     
