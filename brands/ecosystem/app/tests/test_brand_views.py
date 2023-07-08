@@ -93,3 +93,16 @@ class TestBrandViewSet(TestCase):
         )
 
         self.assertEqual(res.status_code, 200)
+    
+    def test_brand_update(self):
+        request_data = { 
+            'name': 'Fenty x Savage',
+            'bio': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+        }
+        res = self.client.put(
+            reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
+            data=request_data,
+            content_type='application/json'
+        )
+
+        self.assertEqual(res.status_code, 202)
