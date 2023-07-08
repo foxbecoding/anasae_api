@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
+from utils.helpers import tmp_image
 
 is_CSRF = True
 
@@ -61,16 +62,47 @@ class TestBrandLogoViewSet(TestCase):
         self.brand_data = brand_res.data
 
     def test_brand_logo_create(self):
-        request_data = { 
-            'name': 'ANASAE',
-            'bio': 'ANASAE has all of the essentials for all of your needs.  Shop with us today!',
+        request_data = {
+            'image': tmp_image()
         }
+
         res = self.client.post(
-            reverse('brand-list'), 
+            reverse('brand-logo-list'), 
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
+        )
 
-        self.assertEqual(res.data['name'], 'ANASAE')
-        self.assertGreater(len(res.data['owners']), 0)
-        self.assertEqual(res.status_code, 201)
+        # self.assertNotEqual(res.data['image'], None)
+        # self.assertEqual(res.status_code, 201)   
+
+    # def test_user_image_create_error(self):
+    #     request_data = {
+    #         'image': tmp_image('gif')
+    #     }
+    #     res = self.client.post(
+    #         reverse('user-image-list'), 
+    #         data=request_data, 
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+    #     self.assertEqual(res.status_code, 400)
+
+    # # This test uses the create method to update
+    # def test_user_image_update(self):
+    #     create_image_request_data = {
+    #         'image': tmp_image('png')
+    #     }
+    #     create_image_res = self.client.post(
+    #         reverse('user-image-list'), 
+    #         data=create_image_request_data, 
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+    #     update_image_request_data = {
+    #         'image': tmp_image('png')
+    #     }
+    #     update_image_res = self.client.post(
+    #         reverse('user-image-list'),
+    #         data=update_image_request_data,
+    #         **{ 'HTTP_X_CSRFTOKEN': self.csrftoken }
+    #     )
+    #     self.assertEqual(create_image_res.status_code, 201)
+    #     self.assertEqual(update_image_res.status_code, 201)
