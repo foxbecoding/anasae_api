@@ -76,16 +76,17 @@ class TestBrandLogoViewSet(TestCase):
         self.assertNotEqual(res.data['logo'], None)
         self.assertEqual(res.status_code, 201)   
 
-    # def test_user_image_create_error(self):
-    #     request_data = {
-    #         'image': tmp_image('gif')
-    #     }
-    #     res = self.client.post(
-    #         reverse('user-image-list'), 
-    #         data=request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
-    #     self.assertEqual(res.status_code, 400)
+    def test_brand_logo_create_error(self):
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'image': tmp_image('gif')
+        }
+        res = self.client.post(
+            reverse('brand-logo-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertEqual(res.status_code, 400)
 
     # # This test uses the create method to update
     # def test_user_image_update(self):
