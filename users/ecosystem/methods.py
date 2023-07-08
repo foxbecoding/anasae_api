@@ -1,7 +1,7 @@
 from users.serializers import *
 from users.models import *
 
-def get_user_data(instance: User):
+def get_user_data(instance: User, filter = []):
     User_Serializer = UserSerializer(instance)
     user_data = User_Serializer.data
     User_Login_Instances = UserLogin.objects.filter(pk__in=user_data['logins'])
@@ -29,5 +29,13 @@ def get_user_data(instance: User):
         'addresses': User_Address_Serializer.data,
         'payment_methods': User_Payment_Method_Serializer.data
     }
+
+    if len(filter) > 0:
+        newDict = dict()
+        for (key, value) in data.items():
+            if key in filter:
+                newDict[key] = value
+        data = newDict
     
     return data
+

@@ -7,5 +7,9 @@ def get_brand_data(instance: Brand):
     brand_data = BrandSerializer(instance).data
     Brand_Owner_Instances = BrandOwner.objects.filter(pk__in=brand_data['owners'])
     brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
-    brand_data['owners'] = [ get_user_data(User.objects.get(pk=owner['user'])) for owner in brand_owner_data ]
+    filter = [ 'pk','uid','first_name','last_name','display_name','username','image' ]
+    brand_data['owners'] = [ 
+        get_user_data(User.objects.get(pk=owner['user']), filter=filter) 
+        for owner in brand_owner_data 
+    ]
     return brand_data
