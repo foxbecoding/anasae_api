@@ -12,7 +12,7 @@ from pprint import pprint
 
 class BrandViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, BrandPermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
