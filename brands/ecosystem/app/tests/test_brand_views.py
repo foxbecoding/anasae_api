@@ -108,3 +108,31 @@ class TestBrandViewSet(TestCase):
 
         self.assertEqual(res.data['name'], 'Fenty x Savage')
         self.assertEqual(res.status_code, 202)
+    
+    def test_brand_update_error(self):
+        request_data = { 
+            'name': '',
+            'bio': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+        }
+        res = self.client.put(
+            reverse('brand-detail', kwargs={'pk': self.brand_data['pk']}),
+            data=request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
+
+    def test_brand_permissions_failed(self):
+        request_data = { 
+            'name': 'Fenty x Savage',
+            'bio': 'Fenty Beauty by Rihanna was created with promise of inclusion for all women. With an unmatched offering of shades and colors for ALL skin tones, you&#39;ll never look elsewhere for your beauty staples. Browse our foundation line, lip colors, and so much more.'
+        }
+        res = self.client.put(
+            reverse('brand-detail', kwargs={'pk': 154}),
+            data=request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 403)
