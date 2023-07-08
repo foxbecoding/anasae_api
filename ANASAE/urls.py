@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/', include('users.ecosystem.auth.urls')),
     path('api/', include('users.ecosystem.security.urls')),
     path('api/', include('users.ecosystem.app.urls')),
+    path('api/', include('brands.ecosystem.app.urls')),
 ]
