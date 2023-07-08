@@ -13,3 +13,16 @@ class BrandPermission(BasePermission):
             return False
         
         return True
+
+class BrandLogoPermission(BasePermission):
+    
+    message = "Access Denied!" 
+
+    def has_permission(self, request, view, obj) -> bool:
+        brand_pk = str(request.data['brand'])
+        user_pk = str(request.user.id)
+    
+        if not BrandOwner.objects.filter(brand_id=brand_pk).filter(owner_id=user_pk).exists():
+            return False
+        
+        return True
