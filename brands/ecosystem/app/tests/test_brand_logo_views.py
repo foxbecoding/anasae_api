@@ -63,6 +63,7 @@ class TestBrandLogoViewSet(TestCase):
 
     def test_brand_logo_create(self):
         request_data = {
+            'brand': self.brand_data['pk'],
             'image': tmp_image()
         }
 
