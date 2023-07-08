@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+from brands.ecosystem.app.tests.test_app_urls import *
