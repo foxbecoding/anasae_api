@@ -58,9 +58,10 @@ class TestBrandViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        print(res.data)
-        # self.assertEqual(res.data['addresses'][1]['city'], 'Marrero')
-        # self.assertEqual(res.status_code, 201)
+        
+        self.assertEqual(res.data['name'], 'ANASAE')
+        self.assertGreater(len(res.data['owners']), 0)
+        self.assertEqual(res.status_code, 201)
     
     # def test_brand_create_error(self):
     #     request_data = { 

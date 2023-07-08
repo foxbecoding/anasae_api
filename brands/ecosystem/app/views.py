@@ -23,8 +23,7 @@ class BrandViewSet(viewsets.ViewSet):
         
         Brand_Instance = Create_Brand_Serializer.validated_data['brand']
         data = get_brand_data(Brand_Instance)
-        print(data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         # self.check_object_permissions(request=request, obj={'user_pk': pk})
