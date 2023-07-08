@@ -63,20 +63,14 @@ class TestBrandViewSet(TestCase):
         self.assertGreater(len(res.data['owners']), 0)
         self.assertEqual(res.status_code, 201)
     
-    # def test_brand_create_error(self):
-    #     request_data = { 
-    #         'full_name': '',
-    #         'phone_number': '(504)729-8617',
-    #         'street_address': '4024 Crossmor dr',
-    #         'street_address_ext': '',
-    #         'country': 'United States',
-    #         'state': 'Louisiana',
-    #         'city': 'Marrero',
-    #         'postal_code': '70072'
-    #     }
-    #     res = self.client.post(
-    #         reverse('user-address-list'), 
-    #         data=request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
-    #     self.assertEqual(res.status_code, 400)
+    def test_brand_create_error(self):
+        request_data = { 
+            'name': '',
+            'bio': 'ANASAE has all of the essentials for all of your needs.  Shop with us today!',
+        }
+        res = self.client.post(
+            reverse('brand-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.assertEqual(res.status_code, 400)
