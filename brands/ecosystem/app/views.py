@@ -78,8 +78,7 @@ class BrandOwnerViewSet(viewsets.ViewSet):
         
         Brand_Instance = Brand.objects.get(creator_id=str(request.user.id))
         data = get_brand_data(Brand_Instance)
-        print(data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def destroy(self, request):
