@@ -45,3 +45,18 @@ class BrandOwnerPermission(BasePermission):
             return False
         
         return True
+
+class BrandFollowerPermission(BasePermission):
+    
+    message = "Access Denied!" 
+
+    def has_permission(self, request, view) -> bool:
+        if 'brand' not in request.data:
+            return False
+        
+        brand_pk = str(request.data['brand'])
+    
+        if not Brand.objects.filter(pk=brand_pk).exists():
+            return False
+        
+        return True
