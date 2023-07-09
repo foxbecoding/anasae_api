@@ -26,3 +26,9 @@ class TestBrandOwnerUrls(SimpleTestCase):
     def test_brand_owner_detail_url_resolves(self):
         url = reverse('brand-owner-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'brand-owner-detail')
+
+class TestBrandFollowerUrls(SimpleTestCase):
+    
+    def test_brand_follower_list_url_resolves(self):
+        url = reverse('brand-follower-list')
+        self.assertEqual(resolve(url).view_name, 'brand-follower-list')
