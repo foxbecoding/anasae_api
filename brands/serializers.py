@@ -80,7 +80,7 @@ class BrandOwnerSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'brand',
-            'owner'
+            'user'
         ]
 
 class CreateBrandOwnerSerializer(serializers.ModelSerializer):
@@ -88,20 +88,20 @@ class CreateBrandOwnerSerializer(serializers.ModelSerializer):
         model = BrandOwner
         fields = [
             'brand',
-            'owner'
+            'user'
         ]
     
     def validate(self, attrs):
         brand = attrs.get('brand')
-        owner = attrs.get('owner')
+        user = attrs.get('user')
 
-        if BrandOwner.objects.filter(brand_id=brand.id).filter(owner_id=owner.id).exists():
+        if BrandOwner.objects.filter(brand_id=brand.id).filter(user_id=user.id).exists():
             msg = 'User is already an owner.'
             raise serializers.ValidationError({"error": msg}, code='authorization')
         
         Brand_Owner_Instance = BrandOwner.objects.create(
             brand = brand,
-            owner = owner
+            user = user
         )
 
         Brand_Owner_Instance.save()

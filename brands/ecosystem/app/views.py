@@ -97,4 +97,4 @@ class BrandFollowerViewSet(viewsets.ViewSet):
         
         Brand_Instance = Brand.objects.get(pk=request.data['brand'])
         data = get_brand_data(Brand_Instance)
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(None, status=status.HTTP_201_CREATED)
