@@ -62,7 +62,7 @@ class CreateBrandSerializer(serializers.ModelSerializer):
 
         Brand_Owner_Instance = BrandOwner.objects.create(
             brand = Brand_Instance,
-            owner = request.user
+            user = request.user
         )
         Brand_Owner_Instance.save()
 
