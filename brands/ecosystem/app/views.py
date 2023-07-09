@@ -72,6 +72,8 @@ class BrandOwnerViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
+        print(request.data)
+        print(str(request.user.id))
         # Create_Brand_Serializer = CreateBrandSerializer(data=request.data, context={'request': request})
         # if not Create_Brand_Serializer.is_valid():
         #     return Response(Create_Brand_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
