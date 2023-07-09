@@ -76,7 +76,7 @@ class BrandOwnerViewSet(viewsets.ViewSet):
         if not Create_Brand_Owner_Serializer.is_valid():
             return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        Brand_Instance = Brand.objects.get(creator_id=str(request.user.id))
+        Brand_Instance = Brand.objects.get(pk=request.data['brand'])
         data = get_brand_data(Brand_Instance)
         return Response(data, status=status.HTTP_201_CREATED)
     
@@ -91,11 +91,10 @@ class BrandFollowerViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_Brand_Owner_Serializer = CreateBrandFollowerSerializer(data=request.data)
-        # if not Create_Brand_Owner_Serializer.is_valid():
-        #     return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        Create_Brand_Follower_Serializer = CreateBrandFollowerSerializer(data=request.data, context={'request': request})
+        if not Create_Brand_Follower_Serializer.is_valid():
+            return Response(Create_Brand_Follower_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # Brand_Instance = Brand.objects.get(creator_id=str(request.user.id))
-        # data = get_brand_data(Brand_Instance)
-        # return Response(data, status=status.HTTP_201_CREATED)
-        return Response(None, status=status.HTTP_201_CREATED)
+        Brand_Instance = Brand.objects.get(pk=request.data['brand'])
+        data = get_brand_data(Brand_Instance)
+        return Response(data, status=status.HTTP_201_CREATED)
