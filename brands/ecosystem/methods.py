@@ -20,5 +20,6 @@ def get_brand_data(instance: Brand):
         Brand_Logo_Instance = BrandLogo.objects.get(pk=brand_data['logo'])
         brand_data['logo'] = BrandLogoSerializer(Brand_Logo_Instance).data
     
-    # print(brand_data)
+    brand_data['followers'] = len(brand_data['followers'])
+    
     return brand_data

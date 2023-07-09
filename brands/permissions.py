@@ -54,6 +54,9 @@ class BrandFollowerPermission(BasePermission):
         if 'brand' not in request.data:
             return False
         
+        if not request.data['brand']:
+            return False
+
         brand_pk = str(request.data['brand'])
     
         if not Brand.objects.filter(pk=brand_pk).exists():
