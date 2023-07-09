@@ -62,8 +62,7 @@ class TestBrandFollowerViewSet(TestCase):
 
     def test_brand_follower_create(self):   
         request_data = {
-            'brand': self.brand_data['pk'],
-            'follower': self.user['pk']
+            'brand': self.brand_data['pk']
         }
 
         res = self.client.post(
@@ -77,8 +76,7 @@ class TestBrandFollowerViewSet(TestCase):
     
     def test_brand_follower_create_errors(self):   
         request_data = {
-            'brand': self.brand_data['pk'],
-            'follower': ''
+            'brand': ''
         }
 
         res = self.client.post(

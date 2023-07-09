@@ -86,12 +86,12 @@ class BrandOwnerViewSet(viewsets.ViewSet):
     
 class BrandFollowerViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, BrandFollowerPermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # Create_Brand_Owner_Serializer = CreateBrandOwnerSerializer(data=request.data)
+        Create_Brand_Owner_Serializer = CreateBrandFollowerSerializer(data=request.data)
         # if not Create_Brand_Owner_Serializer.is_valid():
         #     return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
