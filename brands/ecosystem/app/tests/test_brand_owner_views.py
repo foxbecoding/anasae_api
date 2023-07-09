@@ -137,5 +137,4 @@ class TestBrandOwnerViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(res.data)
         self.assertEqual(res.status_code, 400)   
