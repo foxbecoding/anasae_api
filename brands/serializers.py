@@ -89,6 +89,9 @@ class CreateBrandOwnerSerializer(serializers.ModelSerializer):
             'brand',
             'owner'
         ]
+    
+    def validate(self, attrs):
+        request = self.context['request']
 
 class BrandLogoSerializer(serializers.ModelSerializer):
     class Meta:

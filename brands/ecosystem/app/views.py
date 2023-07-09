@@ -67,20 +67,15 @@ class BrandLogoViewSet(viewsets.ViewSet):
     
 class BrandOwnerViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, BrandOwnerPermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(request.data)
-        print(str(request.user.id))
-        # Create_Brand_Serializer = CreateBrandSerializer(data=request.data, context={'request': request})
-        # if not Create_Brand_Serializer.is_valid():
-        #     return Response(Create_Brand_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-        
-        # Brand_Instance = Create_Brand_Serializer.validated_data['brand']
-        # data = get_brand_data(Brand_Instance)
-        # return Response(data, status=status.HTTP_201_CREATED)
+        Create_Brand_Owner_Serializer = CreateBrandOwnerSerializer(data=request.data, context={'request': request})
+        if not Create_Brand_Owner_Serializer.is_valid():
+            return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_201_CREATED)
+            
         return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
