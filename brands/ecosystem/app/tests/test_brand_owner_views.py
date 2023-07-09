@@ -89,6 +89,53 @@ class TestBrandOwnerViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+        
+        self.assertGreater(len(res.data['owners']), 1)
+        self.assertEqual(res.status_code, 201)   
+    
+    def test_brand_owner_create_errors(self):
+        user_data = {
+            'first_name': "Rihhana",
+            'last_name': 'Fenty',
+            'email': 'riri@fentybeauty.com',
+            'username': 'badgalriri',
+            'password': '123456',
+            'confirm_password': '123456',
+            'date_of_birth': self.date_time_obj.date(),
+            'agreed_to_toa': True,
+            'gender': self.User_Gender_Instance.id
+        }
 
-        # self.assertNotEqual(res.data['logo'], None)
-        # self.assertEqual(res.status_code, 201)   
+        user_res = self.client.post(
+            reverse('user-list'), 
+            user_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'owner': ''
+        }
+
+        res = self.client.post(
+            reverse('brand-owner-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)   
+    
+    def test_brand_owner_create_owner_errors(self):
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'owner': self.user['pk']
+        }
+
+        res = self.client.post(
+            reverse('brand-owner-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        print(res.data)
+        self.assertEqual(res.status_code, 400)   

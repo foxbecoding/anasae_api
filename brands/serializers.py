@@ -94,7 +94,7 @@ class CreateBrandOwnerSerializer(serializers.ModelSerializer):
         brand = attrs.get('brand')
         owner = attrs.get('owner')
 
-        if  BrandOwner.objects.filter(pk=brand.id).filter(owner_id=owner.id).exists():
+        if BrandOwner.objects.filter(brand_id=brand.id).filter(owner_id=owner.id).exists():
             msg = 'User is already an owner.'
             raise serializers.ValidationError({"error": msg}, code='authorization')
         
