@@ -16,6 +16,7 @@ class BrandSerializer(serializers.ModelSerializer):
             'bio',
             'stripe_account_id',
             'owners',
+            'followers',
             'logo'
         ]
 
@@ -168,4 +169,39 @@ class CreateBrandLogoSerializer(serializers.ModelSerializer):
         Brand_Logo_Instance.save()
         attrs['brand_logo'] = Brand_Logo_Instance
         attrs['brand'] = attrs.get('brand')
+        return attrs
+    
+class BrandFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandFollower
+        fields = [
+            'pk',
+            'brand',
+            'follower'
+        ]
+
+class CreateBrandFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandFollower
+        fields = [
+            'brand',
+            'follower'
+        ]
+    
+    def validate(self, attrs):
+        brand = attrs.get('brand')
+        follower = attrs.get('follower')
+
+        if BrandFollower.objects.filter(brand_id=brand.id).filter(follower_id=follower.id).exists():
+            msg = 'User is already following this brand.'
+            raise serializers.ValidationError({"error": msg}, code='authorization')
+        
+        Brand_Follower_Instance = BrandFollower.objects.create(
+            brand = brand,
+            follower = follower
+        )
+
+        Brand_Follower_Instance.save()
+
+        attrs['brand_follower'] = Brand_Follower_Instance
         return attrs
