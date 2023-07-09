@@ -78,17 +78,17 @@ class TestBrandOwnerViewSet(TestCase):
             owner_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(owner_res)
-        # request_data = {
-        #     'brand': self.brand_data['pk'],
-        #     'user': 
-        # }
+        
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'user': owner_res.data['pk']
+        }
 
-        # res = self.client.post(
-        #     reverse('brand-owner-list'), 
-        #     data=request_data, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
+        res = self.client.post(
+            reverse('brand-owner-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
         # self.assertNotEqual(res.data['logo'], None)
         # self.assertEqual(res.status_code, 201)   
