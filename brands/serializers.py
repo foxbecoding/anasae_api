@@ -82,6 +82,14 @@ class BrandOwnerSerializer(serializers.ModelSerializer):
             'owner'
         ]
 
+class CreateBrandOwnerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BrandOwner
+        fields = [
+            'brand',
+            'owner'
+        ]
+
 class BrandLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BrandLogo
