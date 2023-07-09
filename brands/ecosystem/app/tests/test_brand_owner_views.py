@@ -61,7 +61,7 @@ class TestBrandOwnerViewSet(TestCase):
         self.brand_data = brand_res.data
 
     def test_brand_owner_create(self):
-        owner_data = {
+        user_data = {
             'first_name': "Rihhana",
             'last_name': 'Fenty',
             'email': 'riri@fentybeauty.com',
@@ -73,15 +73,15 @@ class TestBrandOwnerViewSet(TestCase):
             'gender': self.User_Gender_Instance.id
         }
 
-        owner_res = self.client.post(
+        user_res = self.client.post(
             reverse('user-list'), 
-            owner_data, 
+            user_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
         request_data = {
             'brand': self.brand_data['pk'],
-            'user': owner_res.data['pk']
+            'owner': user_res.data['pk']
         }
 
         res = self.client.post(

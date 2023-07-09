@@ -92,6 +92,22 @@ class CreateBrandOwnerSerializer(serializers.ModelSerializer):
     
     def validate(self, attrs):
         request = self.context['request']
+        brand = attrs.get('brand')
+        owner = attrs.get('owner')
+
+        if  BrandOwner.objects.filter(pk=brand.id).filter(owner_id=owner.id).exists():
+            msg = 'User is already an owner.'
+            raise serializers.ValidationError({"error": msg}, code='authorization')
+        
+        Brand_Owner_Instance = BrandOwner.objects.create(
+            brand = brand,
+            owner = owner
+        )
+
+        Brand_Owner_Instance.save()
+
+        attrs['brand_owner'] = Brand_Owner_Instance
+        return attrs
 
 class BrandLogoSerializer(serializers.ModelSerializer):
     class Meta:
