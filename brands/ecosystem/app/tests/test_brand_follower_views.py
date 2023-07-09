@@ -87,16 +87,23 @@ class TestBrandFollowerViewSet(TestCase):
 
         self.assertEqual(res.status_code, 403)   
     
-    # def test_brand_follower_create_follow_errors(self):
-    #     request_data = {
-    #         'brand': self.brand_data['pk'],
-    #         'follower': self.user['pk']
-    #     }
+    def test_brand_follower_create_errors(self):
+        request_data = {
+            'brand': self.brand_data['pk']
+        }
 
-    #     res = self.client.post(
-    #         reverse('brand-follower-list'), 
-    #         data=request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        self.client.post(
+            reverse('brand-follower-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(res.status_code, 400)   
+        res = self.client.post(
+            reverse('brand-follower-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        print(res.data)
+
+        self.assertEqual(res.status_code, 400)   
