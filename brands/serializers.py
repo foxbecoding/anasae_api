@@ -91,7 +91,6 @@ class CreateBrandOwnerSerializer(serializers.ModelSerializer):
         ]
     
     def validate(self, attrs):
-        request = self.context['request']
         brand = attrs.get('brand')
         owner = attrs.get('owner')
 

@@ -72,10 +72,13 @@ class BrandOwnerViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_Brand_Owner_Serializer = CreateBrandOwnerSerializer(data=request.data, context={'request': request})
+        Create_Brand_Owner_Serializer = CreateBrandOwnerSerializer(data=request.data)
         if not Create_Brand_Owner_Serializer.is_valid():
             return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_201_CREATED)
-            
+        
+        Brand_Instance = Brand.objects.get(creator_id=str(request.user.id))
+        data = get_brand_data(Brand_Instance)
+        print(data)
         return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
