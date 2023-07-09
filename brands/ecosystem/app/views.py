@@ -74,7 +74,7 @@ class BrandOwnerViewSet(viewsets.ViewSet):
     def create(self, request):
         Create_Brand_Owner_Serializer = CreateBrandOwnerSerializer(data=request.data)
         if not Create_Brand_Owner_Serializer.is_valid():
-            return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_201_CREATED)
+            return Response(Create_Brand_Owner_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Brand_Instance = Brand.objects.get(creator_id=str(request.user.id))
         data = get_brand_data(Brand_Instance)
