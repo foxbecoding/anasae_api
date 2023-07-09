@@ -177,28 +177,27 @@ class BrandFollowerSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'brand',
-            'follower'
+            'user'
         ]
 
 class CreateBrandFollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = BrandFollower
         fields = [
-            'brand',
-            'follower'
+            'brand'
         ]
     
     def validate(self, attrs):
         brand = attrs.get('brand')
-        follower = attrs.get('follower')
+        user = self.context['request'].user
 
-        if BrandFollower.objects.filter(brand_id=brand.id).filter(follower_id=follower.id).exists():
+        if BrandFollower.objects.filter(brand_id=brand.id).filter(user_id=user.id).exists():
             msg = 'User is already following this brand.'
             raise serializers.ValidationError({"error": msg}, code='authorization')
         
         Brand_Follower_Instance = BrandFollower.objects.create(
             brand = brand,
-            follower = follower
+            user = user
         )
 
         Brand_Follower_Instance.save()
