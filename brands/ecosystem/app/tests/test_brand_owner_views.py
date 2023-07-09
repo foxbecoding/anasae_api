@@ -81,7 +81,7 @@ class TestBrandOwnerViewSet(TestCase):
         
         request_data = {
             'brand': self.brand_data['pk'],
-            'owner': user_res.data['pk']
+            'user': user_res.data['pk']
         }
 
         res = self.client.post(
@@ -114,7 +114,7 @@ class TestBrandOwnerViewSet(TestCase):
         
         request_data = {
             'brand': self.brand_data['pk'],
-            'owner': ''
+            'user': ''
         }
 
         res = self.client.post(
@@ -128,7 +128,7 @@ class TestBrandOwnerViewSet(TestCase):
     def test_brand_owner_create_owner_errors(self):
         request_data = {
             'brand': self.brand_data['pk'],
-            'owner': self.user['pk']
+            'user': self.user['pk']
         }
 
         res = self.client.post(
