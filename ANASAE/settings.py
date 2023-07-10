@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users.apps.UsersConfig',
     'brands.apps.BrandsConfig',
+    'categories.apps.CategoriesConfig',
 ]
 
 REST_FRAMEWORK = {
