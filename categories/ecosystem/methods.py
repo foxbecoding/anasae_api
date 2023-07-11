@@ -1,4 +1,5 @@
 from categories.models import *
+from categories.serializers import *
 from utils.helpers import create_uid
 
 def test_categories(): 
@@ -19,3 +20,9 @@ def test_categories():
     )
     Subcategory_Instance.save()
     
+    return {
+        'category_instance': Category_Instance,
+        'category_data': CategorySerializer(Category_Instance).data,
+        'subcategory_instance': Subcategory_Instance,
+        'subcategory_data': SubcategorySerializer(Subcategory_Instance).data,
+    }
