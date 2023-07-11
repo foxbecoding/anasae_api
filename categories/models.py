@@ -45,13 +45,6 @@ class CategoryProductSpecificationItem(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
-class CategoryProductSpecificationItemOption(models.Model):
-    category_product_specification_item = models.ForeignKey(CategoryProductSpecificationItem, on_delete=models.CASCADE, related_name="options")
-    option = models.CharField(max_length=200, blank=False, default='')
-    is_active = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now_add=True, null=True)
-
 class SubcategoryProductSpecification(models.Model):
     subcategory = models.OneToOneField(Subcategory, on_delete=models.CASCADE, related_name="product_specification")
     is_active = models.BooleanField(default=True)
@@ -62,13 +55,6 @@ class SubcategoryProductSpecificationItem(models.Model):
     subcategory_product_specification = models.ForeignKey(SubcategoryProductSpecification, on_delete=models.CASCADE, related_name="items")
     item = models.CharField(max_length=200, blank=False, default='')
     is_required = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now_add=True, null=True)
-
-class SubcategoryProductSpecificationItemOption(models.Model):
-    subcategory_product_specification_item = models.ForeignKey(SubcategoryProductSpecificationItem, on_delete=models.CASCADE, related_name="options")
-    option = models.CharField(max_length=200, blank=False, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
