@@ -14,6 +14,23 @@ class CategorySerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'description',
+            'product_specification'
+        ]
+
+class CategoryProductSpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryProductSpecification
+        fields = [
+            'pk',
+        ]
+
+class CategoryProductSpecificationItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryProductSpecificationItem
+        fields = [
+            'pk',
+            'item',
+            'is_required'
         ]
 
 class SubcategorySerializer(serializers.ModelSerializer):
@@ -24,5 +41,22 @@ class SubcategorySerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'description',
-            'category'
+            'category',
+            'product_specification'
+        ]
+
+class SubcategoryProductSpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubcategoryProductSpecification
+        fields = [
+            'pk',
+        ]
+
+class SubcategoryProductSpecificationItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubcategoryProductSpecificationItem
+        fields = [
+            'pk',
+            'item',
+            'is_required'
         ]
