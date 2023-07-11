@@ -59,10 +59,19 @@ def test_categories():
         )
         qs.save()
 
+    category_data = CategorySerializer(Category_Instance).data
+    cat_pro_spec_items_instances = CategoryProductSpecificationItem.objects.filter(category_product_specification_id=category_data['product_specification'])
+    cat_pro_spec_data = CategoryProductSpecificationItemSerializer(cat_pro_spec_items_instances, many=True).data
+    category_data['product_specification'] = cat_pro_spec_data
     
+    subcategory_data = SubcategorySerializer(Category_Instance).data
+    subcat_pro_spec_items_instances = SubcategoryProductSpecificationItem.objects.filter(subcategory_product_specification_id=subcategory_data['product_specification'])
+    subcat_pro_spec_data = SubcategoryProductSpecificationItemSerializer(subcat_pro_spec_items_instances, many=True).data
+    subcategory_data['product_specification'] = subcat_pro_spec_data
+
     return {
         'category_instance': Category_Instance,
-        'category_data': CategorySerializer(Category_Instance).data,
+        'category_data': category_data,
         'subcategory_instance': Subcategory_Instance,
-        'subcategory_data': SubcategorySerializer(Subcategory_Instance).data,
+        'subcategory_data': subcategory_data
     }
