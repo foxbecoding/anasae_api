@@ -22,11 +22,11 @@ def test_categories():
         { 'item': 'Brand', 'is_required': False }
     ]
 
-    for cat_specs in category_specifications:
+    for cat_spec in category_specifications:
         qs = CategoryProductSpecificationItem.objects.create(
             category_product_specification = Category_Product_Specification_Instance,
-            item = cat_specs['item'],
-            is_required = cat_specs['is_required']
+            item = cat_spec['item'],
+            is_required = cat_spec['is_required']
         )
         qs.save()
 
@@ -51,11 +51,11 @@ def test_categories():
         { 'item': 'Brand', 'is_required': False }
     ]
 
-    for scat_specs in subcategory_specifications:
+    for scat_spec in subcategory_specifications:
         qs = SubcategoryProductSpecificationItem.objects.create(
             subcategory_product_specification = Subcategory_Product_Specification_Instance,
-            item = scat_specs['item'],
-            is_required = scat_specs['is_required']
+            item = scat_spec['item'],
+            is_required = scat_spec['is_required']
         )
         qs.save()
 
