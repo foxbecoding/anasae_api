@@ -1,5 +1,4 @@
 from django.db import models
-from utils.helpers import create_uid
 
 class Category(models.Model):
     uid = models.CharField(max_length=20, blank=False, unique=True)
