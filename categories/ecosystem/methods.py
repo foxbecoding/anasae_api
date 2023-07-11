@@ -11,6 +11,32 @@ def test_categories():
     )
     Category_Instance.save()
 
+    Category_Product_Specification_Instance = CategoryProductSpecification.objects.create(
+        category = Category_Instance
+    )
+    Category_Product_Specification_Instance.save()
+
+    category_specifications = [
+        { 'item': 'Color', 'is_required': True, 'options': ['Red','Blue','Green'] },
+        { 'item': 'Brand', 'is_required': False, 'options': [] }
+    ]
+
+    for cat_specs in category_specifications:
+        qs = CategoryProductSpecificationItem.objects.create(
+            category_product_specification = Category_Product_Specification_Instance,
+            item = cat_specs['item'],
+            is_required = cat_specs['is_required']
+        )
+        qs.save()
+
+        if len(cat_specs['options']) > 0:
+            for option in cat_specs['options']:
+                qs = CategoryProductSpecificationItemOption.objects.create(
+                    category_product_specification_item = qs,
+                    option = option
+                )
+                qs.save()
+
     Subcategory_Instance = Subcategory.objects.create(
         category = Category_Instance,
         uid = create_uid('scat-'),
