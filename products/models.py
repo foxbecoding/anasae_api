@@ -8,13 +8,20 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
-    price = models.IntegerField(default=0)
+    stripe_product_id = models.CharField(max_length=50, blank=False, unique=True, default="")
     sku = models.CharField(max_length=50, blank=True, unique=True)
     isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
     title = models.CharField(max_length=200, blank=False)
     description = models.TextField(max_length=10000, blank=False)
     quantity = models.IntegerField(blank=False, default=0)
     is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
+class ProductPrice(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="price")
+    price = models.IntegerField(default=0, blank=False)
+    stripe_price_id = models.CharField(max_length=50, blank=False, default="")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -37,19 +44,26 @@ class ProductImage(models.Model):
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
     title = models.CharField(max_length=250, blank=False)
-    sku = models.CharField(max_length=50, blank=True, unique=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
 class ProductVariantItem(models.Model):
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=200, blank=False)
-    price = models.IntegerField(default=0)
     description = models.TextField(max_length=10000, blank=False)
+    stripe_product_id = models.CharField(max_length=50, blank=False, unique=True, default="")
+    sku = models.CharField(max_length=50, blank=True, unique=True)
     quantity = models.IntegerField(default=0, blank=False)
     is_active = models.BooleanField(default=True)
     is_available = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
+class ProductVariantItemPrice(models.Model):
+    product_variant_item = models.OneToOneField(ProductVariantItem, on_delete=models.CASCADE, related_name="price")
+    price = models.IntegerField(default=0, blank=False)
+    stripe_price_id = models.CharField(max_length=50, blank=False, default="")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
