@@ -8,6 +8,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
+    price = models.IntegerField(default=0)
     sku = models.CharField(max_length=50, blank=True, unique=True)
     isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
     title = models.CharField(max_length=200, blank=False)
@@ -44,6 +45,7 @@ class ProductVariant(models.Model):
 class ProductVariantItem(models.Model):
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=200, blank=False)
+    price = models.IntegerField(default=0)
     description = models.TextField(max_length=10000, blank=False)
     quantity = models.IntegerField(default=0, blank=False)
     is_active = models.BooleanField(default=True)
