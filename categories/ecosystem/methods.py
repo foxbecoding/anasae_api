@@ -17,8 +17,9 @@ def test_categories():
     Category_Product_Specification_Instance.save()
 
     category_specifications = [
-        { 'item': 'Color', 'is_required': True, 'options': ['Red','Blue','Green'] },
-        { 'item': 'Brand', 'is_required': False, 'options': [] }
+        { 'item': 'Color', 'is_required': True },
+        { 'item': 'Size', 'is_required': True },
+        { 'item': 'Brand', 'is_required': False }
     ]
 
     for cat_specs in category_specifications:
@@ -29,13 +30,6 @@ def test_categories():
         )
         qs.save()
 
-        if len(cat_specs['options']) > 0:
-            for option in cat_specs['options']:
-                qs = CategoryProductSpecificationItemOption.objects.create(
-                    category_product_specification_item = qs,
-                    option = option
-                )
-                qs.save()
 
     Subcategory_Instance = Subcategory.objects.create(
         category = Category_Instance,
@@ -45,6 +39,26 @@ def test_categories():
         is_active = True
     )
     Subcategory_Instance.save()
+
+    Subcategory_Product_Specification_Instance = SubcategoryProductSpecification.objects.create(
+        subcategory = Subcategory_Instance
+    )
+    Subcategory_Product_Specification_Instance.save()
+
+    subcategory_specifications = [
+        { 'item': 'Color', 'is_required': True },
+        { 'item': 'Size', 'is_required': True },
+        { 'item': 'Brand', 'is_required': False }
+    ]
+
+    for scat_specs in subcategory_specifications:
+        qs = SubcategoryProductSpecificationItem.objects.create(
+            subcategory_product_specification = Subcategory_Product_Specification_Instance,
+            item = scat_specs['item'],
+            is_required = scat_specs['is_required']
+        )
+        qs.save()
+
     
     return {
         'category_instance': Category_Instance,
