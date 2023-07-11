@@ -22,6 +22,7 @@ class CategoryProductSpecificationSerializer(serializers.ModelSerializer):
         model = CategoryProductSpecification
         fields = [
             'pk',
+            'items'
         ]
 
 class CategoryProductSpecificationItemSerializer(serializers.ModelSerializer):
@@ -50,6 +51,7 @@ class SubcategoryProductSpecificationSerializer(serializers.ModelSerializer):
         model = SubcategoryProductSpecification
         fields = [
             'pk',
+            'items'
         ]
 
 class SubcategoryProductSpecificationItemSerializer(serializers.ModelSerializer):
