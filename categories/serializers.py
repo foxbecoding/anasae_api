@@ -14,6 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'description',
+            'subcategories',
             'product_specification'
         ]
 
@@ -42,7 +43,6 @@ class SubcategorySerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'description',
-            'category',
             'product_specification'
         ]
 
