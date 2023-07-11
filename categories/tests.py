@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+from categories.ecosystem.app.test.test_urls import TestCategoryUrls
