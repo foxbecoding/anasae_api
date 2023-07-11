@@ -12,4 +12,5 @@ class TestProductViewSet(TestCase):
         self.categories = test_categories()
 
     def test_product_list(self):
+        self.categories
         pprint(self.categories)
