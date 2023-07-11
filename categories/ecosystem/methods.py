@@ -1,4 +1,3 @@
 from categories.models import *
 
-def test_categories():
-    pass
+def test_categories(): return 'Fox'
