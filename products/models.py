@@ -11,7 +11,7 @@ class Product(models.Model):
     sku = models.CharField(max_length=50, blank=True, unique=True)
     isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
     title = models.CharField(max_length=200, blank=False)
-    description = models.CharField(max_length=10000, blank=False)
+    description = models.TextField(max_length=10000, blank=False)
     quantity = models.IntegerField(blank=False, default=0)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -44,7 +44,7 @@ class ProductVariant(models.Model):
 class ProductVariantItem(models.Model):
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name="items")
     title = models.CharField(max_length=200, blank=False)
-    description = models.CharField(max_length=10000, blank=False)
+    description = models.TextField(max_length=10000, blank=False)
     quantity = models.IntegerField(default=0, blank=False)
     is_active = models.BooleanField(default=True)
     is_available = models.BooleanField(default=True)
