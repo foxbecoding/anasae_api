@@ -16,4 +16,5 @@ class CategoryViewSet(viewsets.ViewSet):
     #     return [permission() for permission in permission_classes]
 
     def list(self, request):
-        pass
+        data = test_categories()
+        return Response(data, status=status.HTTP_200_OK)
