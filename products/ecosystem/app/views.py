@@ -18,3 +18,7 @@ class ProductViewSet(viewsets.ViewSet):
     
     def list(self, request):
         return Response(None, status=status.HTTP_200_OK)
+    
+    def create(self, request):
+        print(request.data)
+        return Response(None, status=status.HTTP_200_OK)
