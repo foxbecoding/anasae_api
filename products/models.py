@@ -9,7 +9,7 @@ class Product(models.Model):
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
     sku = models.CharField(max_length=50, blank=True, unique=True)
-    isbn = models.TextField(max_length=14, blank=True, null=True, unique=True)
+    isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=10000, blank=False)
     quantity = models.IntegerField(blank=False, default=0)
@@ -19,7 +19,7 @@ class Product(models.Model):
 
 class ProductSpecification(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="specifications")
-    label = models.TextField(max_length=100, blank=False)
+    label = models.CharField(max_length=100, blank=False)
     value = models.CharField(max_length=100, blank=True, null=True, default='')
     is_required = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -53,7 +53,7 @@ class ProductVariantItem(models.Model):
 
 class ProductVariantItemSpecification(models.Model):
     product_variant_item = models.ForeignKey(ProductVariantItem, on_delete=models.CASCADE, related_name="specifications")
-    label = models.TextField(max_length=100, blank=False)
+    label = models.CharField(max_length=100, blank=False)
     value = models.CharField(max_length=100, blank=True, null=True, default='')
     is_required = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -70,7 +70,7 @@ class ProductVariantItemImage(models.Model):
 class ProductReview(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="product_reviews")
-    comment = models.TextField(max_length=500, blank=False)
+    comment = models.CharField(max_length=500, blank=False)
     stars = models.IntegerField(default=0, blank=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
