@@ -19,7 +19,7 @@ class Subcategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="subcategories")
     uid = models.CharField(max_length=20, blank=False, unique=True)
     title = models.CharField(max_length=200, blank=False)
-    description = models.CharField(max_length=2000, blank=False)
+    description = models.TextField(max_length=2000, blank=False)
     is_active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
