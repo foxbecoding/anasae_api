@@ -83,3 +83,23 @@ class TestProductViewSet(TestCase):
 
         self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
         self.assertEqual(res.status_code, 201)
+    
+    def test_product_create_permissions_failed(self):
+        request_data = {
+            'brand': 155,
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Business casual navy blue chinos for men",
+            'description': 'Business casual navy blue chinos for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': ''
+        }
+        
+        res = self.client.post(
+            reverse('product-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+
+        self.assertEqual(res.status_code, 403)
