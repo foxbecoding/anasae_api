@@ -38,12 +38,12 @@ class CreateProductSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         Product.objects.create(
             uid = create_uid('pro-'),
-            title = attrs.get('title'),
-            description = attrs.get('description'),
-            quantity = attrs.get('quantity'),
             brand = attrs.get('brand'),
             category = attrs.get('category'),
             subcategory = attrs.get('subcategory'),
+            title = attrs.get('title'),
+            description = attrs.get('description'),
+            quantity = attrs.get('quantity'),
             sku = attrs.get('sku'),
             isbn = attrs.get('isbn')
         )
