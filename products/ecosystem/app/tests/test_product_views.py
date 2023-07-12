@@ -72,8 +72,7 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': '',
-            'isbn': '',
-            'price': 4999
+            'isbn': ''
         }
         
         res = self.client.post(
