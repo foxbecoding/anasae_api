@@ -5,21 +5,23 @@ from categories.serializers import CategorySerializer, SubcategorySerializer
 from products.models import *
 from products.serializers import *
 
-def filter_brand_data(obj):
-    return {
-        'pk': obj['pk'],
-        'uid': obj['uid'],
-        'name': obj['name'],
-        'logo': obj['logo']
-    }
+def filter_data(obj, filter = []):
+    if len(filter) == 0: return obj
+    newDict = dict()
+    for (key, value) in obj.items():
+        if key in filter:
+            newDict[key] = value
+    return newDict
 
 def unzip_products(zip):
     product = zip[0]
     brand = zip[1]
     category = zip[2]
+    subcategory = zip[3]
 
-    product['brand'] = filter_brand_data(brand)
-    product['category'] = category
+    product['brand'] = filter_data(brand, filter = ['pk','uid','name','logo'])
+    product['category'] = filter_data(category, filter = ['pk','uid','title'])
+    product['subcategory'] = filter_data(subcategory, filter = ['pk','uid','title'])
     return product
 
 def get_product_rel_data(product_data, key, model, serializer):
@@ -31,14 +33,9 @@ def get_product_data(pks = (), many = False):
     Product_Instances = Product.objects.filter(pk__in=pks)
     product_data = ProductSerializer(Product_Instances, many=True).data
     brand_data = get_product_rel_data(product_data, 'brand', Brand, BrandSerializer)
-    
-    # category_pks = tuple( str(data['category']) for data in product_data )
-    # Category_Instances = Category.objects.filter(pk__in=category_pks)
-    # category_data = CategorySerializer(Category_Instances, many=True).data
     category_data = get_product_rel_data(product_data, 'category', Category, CategorySerializer)
+    subcategory_data = get_product_rel_data(product_data, 'subcategory', Subcategory, SubcategorySerializer)
 
-    products_zip = list(zip(product_data, brand_data, category_data))
+    products_zip = list(zip(product_data, brand_data, category_data, subcategory_data))
     products = [ unzip_products(zip) for zip in products_zip ]
-    print(products)
-    return product_data if many else product_data[0]
-    
+    return products if many else products[0]   
