@@ -10,6 +10,7 @@ class ProductPermission(BasePermission):
 
     def has_object_permission(self, request, view, obj) -> bool:
         brand_pk = ''
+        
         if request.method == 'POST':
             if 'brand' not in request.data: return False 
             brand_pk = str(obj['brand_pk'])
@@ -25,4 +26,5 @@ class ProductPermission(BasePermission):
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
         if brand_pk not in brand_pks: return False
+        
         return True
