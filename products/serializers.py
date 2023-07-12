@@ -24,6 +24,17 @@ class ProductSerializer(serializers.ModelSerializer):
             'price'
         ]
 
+class EditProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            'title',
+            'description',
+            'sku',
+            'isbn',
+            'quantity'
+        ]
+
 class CreateProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
