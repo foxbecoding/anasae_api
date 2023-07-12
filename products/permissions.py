@@ -26,5 +26,4 @@ class ProductPermission(BasePermission):
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
         if brand_pk not in brand_pks: return False
-        
         return True
