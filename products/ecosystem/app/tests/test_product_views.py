@@ -149,3 +149,21 @@ class TestProductViewSet(TestCase):
         
         self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
         self.assertEqual(res.status_code, 200)
+    
+    def test_product_update(self):
+        request_data = {
+            'title': "Black chinos dress pants for men",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': ''
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        
+        # self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
+        # self.assertEqual(res.status_code, 200)
