@@ -20,10 +20,10 @@ def get_product_rel_data(product_data, key, model, serializer):
 
 def get_product_data(pks = (), many = False):
     Product_Instances = Product.objects.filter(pk__in=pks)
-    product_data = ProductSerializer(Product_Instances, many=True).data
-    brand_data = get_product_rel_data(product_data, 'brand', Brand, BrandSerializer)
-    category_data = get_product_rel_data(product_data, 'category', Category, CategorySerializer)
-    subcategory_data = get_product_rel_data(product_data, 'subcategory', Subcategory, SubcategorySerializer)
-    products_zip = list(zip(product_data, brand_data, category_data, subcategory_data))
-    products = [ unzip_products(zip) for zip in products_zip ]
+    product = ProductSerializer(Product_Instances, many=True).data
+    brand = get_product_rel_data(product, 'brand', Brand, BrandSerializer)
+    category = get_product_rel_data(product, 'category', Category, CategorySerializer)
+    subcategory = get_product_rel_data(product, 'subcategory', Subcategory, SubcategorySerializer)
+    products_zip = list(zip(product, brand, category, subcategory))
+    products = tuple( unzip_products(zip) for zip in products_zip )
     return products if many else products[0]   
