@@ -19,7 +19,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'stripe_product_id',
             'quantity',
             'category',
-            'subcategory' 
+            'subcategory',
+            'price'
         ]
 
 class CreateProductSerializer(serializers.ModelSerializer):
