@@ -6,7 +6,7 @@ from products.models import *
 from products.serializers import *
 
 def filter_data(obj, filter = []):
-    if len(filter) == 0: return obj
+    if len(filter) == 0 or len(obj) == 0: return obj
     newDict = dict()
     for (key, value) in obj.items():
         if key in filter:
@@ -35,7 +35,6 @@ def get_product_data(pks = (), many = False):
     brand_data = get_product_rel_data(product_data, 'brand', Brand, BrandSerializer)
     category_data = get_product_rel_data(product_data, 'category', Category, CategorySerializer)
     subcategory_data = get_product_rel_data(product_data, 'subcategory', Subcategory, SubcategorySerializer)
-
     products_zip = list(zip(product_data, brand_data, category_data, subcategory_data))
     products = [ unzip_products(zip) for zip in products_zip ]
     return products if many else products[0]   
