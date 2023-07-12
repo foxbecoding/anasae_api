@@ -8,9 +8,12 @@ from utils.helpers import filter_obj
 
 def unzip_products(zip):
     product, brand, category, subcategory = zip
-    product['brand'] = filter_obj(brand, filter = ['pk','uid','name','logo'])
-    product['category'] = filter_obj(category, filter = ['pk','uid','title'])
-    product['subcategory'] = filter_obj(subcategory, filter = ['pk','uid','title'])
+    product_rel_data = (
+        {'data': brand, 'key': 'brand', 'filter': ['pk','uid','name','logo']},
+        {'data': category, 'key': 'category', 'filter': ['pk','uid','title']},
+        {'data': subcategory, 'key': 'subcategory', 'filter': ['pk','uid','title']}
+    )
+    for data in product_rel_data: product[data['key']] = filter_obj(data['data'], data['filter'])
     return product
 
 def get_product_rel_data(product_data, key, model, serializer):
