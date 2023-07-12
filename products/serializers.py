@@ -22,9 +22,6 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 class CreateProductSerializer(serializers.ModelSerializer):
-
-    price = serializers.CharField(write_only=True)
-
     class Meta:
         model = Product
         fields = [
@@ -35,8 +32,7 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'description',
             'sku',
             'isbn',
-            'quantity',
-            'price'
+            'quantity'
         ]
 
     def validate(self, attrs):
@@ -53,8 +49,11 @@ class CreateProductSerializer(serializers.ModelSerializer):
         )
 
         Product_Instance.save()
-        stripe.Product.create(
+        stripe_product = stripe.Product.create(
             name=Product_Instance.title,
             metadata={ 'pk': Product_Instance.id }
         )
+
+        Product_Instance.stripe_product_id = stripe_product.stripe_id
+        Product_Instance.save()
         return attrs
