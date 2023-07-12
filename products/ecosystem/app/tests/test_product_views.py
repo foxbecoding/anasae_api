@@ -63,6 +63,24 @@ class TestProductViewSet(TestCase):
         ) 
         self.brand_data = brand_res.data
 
+        product_request_data = {
+            'brand': self.brand_data['pk'],
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Black chinos dress pants for men",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': ''
+        }
+        
+        product_res = self.client.post(
+            reverse('product-list'), 
+            data=product_request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.product_data = product_res.data
+
     def test_product_create(self):
         request_data = {
             'brand': self.brand_data['pk'],
@@ -81,6 +99,7 @@ class TestProductViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
+        # print(res.data)
         self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
         self.assertEqual(res.status_code, 201)
     
@@ -123,3 +142,6 @@ class TestProductViewSet(TestCase):
         ) 
 
         self.assertEqual(res.status_code, 400)
+
+    def test_product_retrieve(self):
+        print(self.product_data)

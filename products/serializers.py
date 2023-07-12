@@ -47,8 +47,8 @@ class CreateProductSerializer(serializers.ModelSerializer):
             title = attrs.get('title'),
             description = attrs.get('description'),
             quantity = attrs.get('quantity'),
-            sku = attrs.get('sku'),
-            isbn = attrs.get('isbn')
+            sku = attrs.get('sku') or None,
+            isbn = attrs.get('isbn') or None
         )
 
         Product_Instance.save()
