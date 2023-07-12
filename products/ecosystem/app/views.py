@@ -33,4 +33,5 @@ class ProductViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def retrieve(self, request, pk=None):
-        pass
+        data = get_product_data((pk))
+        return Response(data, status=status.HTTP_200_OK)
