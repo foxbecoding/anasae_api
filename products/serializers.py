@@ -18,6 +18,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'isbn',
             'stripe_product_id',
             'quantity',
+            'brand',
             'category',
             'subcategory',
             'price'
