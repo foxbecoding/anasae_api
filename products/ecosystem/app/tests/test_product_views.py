@@ -166,4 +166,4 @@ class TestProductViewSet(TestCase):
         ) 
         
         # self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
-        # self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 202)
