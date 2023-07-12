@@ -16,6 +16,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'description',
             'sku',
             'isbn',
+            'stripe_product_id',
             'quantity',
             'category',
             'subcategory' 
@@ -56,6 +57,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         Product_Instance.stripe_product_id = stripe_product.stripe_id
         Product_Instance.save()
-        
+
         attrs['product'] = Product_Instance
         return attrs
