@@ -56,4 +56,5 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         Product_Instance.stripe_product_id = stripe_product.stripe_id
         Product_Instance.save()
+        attrs['product'] = Product_Instance
         return attrs
