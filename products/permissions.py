@@ -17,7 +17,12 @@ class ProductPermission(BasePermission):
             brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
             if brand_pk not in brand_pks: return False
         
-        if request.method == 'GET':
+        if request.method == 'PUT':
             product_pk = obj['product_pk']
             if not Product.objects.filter(pk=product_pk).exists(): return False
+            Product_Instance = Product.objects.get(pk=product_pk)
+            product_data = ProductSerializer(Product_Instance).data
+            pro_brand_pk = product_data['brand']
+            print(pro_brand_pk)
+            Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         return True
