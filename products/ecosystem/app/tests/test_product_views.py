@@ -63,11 +63,16 @@ class TestProductViewSet(TestCase):
         ) 
         self.brand_data = brand_res.data
 
-    def test_product_list(self):
+    def test_product_create(self):
         request_data = {
             'brand': self.brand_data['pk'],
             'category': self.categories['category_data']['pk'],
             'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Business casual navy blue chinos for men",
+            'description': 'Business casual navy blue chinos for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': ''
         }
         
         res = self.client.post(
