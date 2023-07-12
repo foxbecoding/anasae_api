@@ -80,3 +80,6 @@ class TestProductViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
+
+        print(res.data)
+        print(res.status_code)
