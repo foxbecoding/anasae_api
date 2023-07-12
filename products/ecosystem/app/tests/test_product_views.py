@@ -81,5 +81,5 @@ class TestProductViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
-        # print(res.data)
+        print(res.data)
         self.assertEqual(res.status_code, 201)
