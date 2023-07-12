@@ -21,8 +21,9 @@ def get_product_rel_data(product_data, key, model, serializer):
     instances = model.objects.filter(pk__in=pks)
     return serializer(instances, many=True).data
 
-def get_product_data(pks = (), many = False):
+def get_product_data(pks = [], many = False):
     Product_Instances = Product.objects.filter(pk__in=pks)
+    if len(Product_Instances) == 0: return []
     product = ProductSerializer(Product_Instances, many=True).data
     brand = get_product_rel_data(product, 'brand', Brand, BrandSerializer)
     category = get_product_rel_data(product, 'category', Category, CategorySerializer)

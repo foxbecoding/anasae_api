@@ -20,7 +20,7 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(None, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
-        data = get_product_data((pk))
+        data = get_product_data([pk])
         return Response(data, status=status.HTTP_200_OK)
     
     @method_decorator(csrf_protect)
