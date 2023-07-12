@@ -13,7 +13,9 @@ from pprint import pprint
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, ProductPermission]
+        permission_classes = [ProductPermission]
+        needs_auth = ['create','update']
+        if self.action in needs_auth: permission_classes = [IsAuthenticated, ProductPermission]
         return [permission() for permission in permission_classes]
 
     def list(self, request):
