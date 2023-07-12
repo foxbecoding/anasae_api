@@ -144,7 +144,8 @@ class TestProductViewSet(TestCase):
 
     def test_product_retrieve(self):
         res = self.client.get(
-            reverse('product-detail', kwargs={'pk': 25})
-            # reverse('product-detail', kwargs={'pk': self.product_data['pk']})
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']})
         ) 
-        print(res.data)
+        
+        self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
+        self.assertEqual(res.status_code, 200)
