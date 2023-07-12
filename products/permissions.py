@@ -11,12 +11,11 @@ class ProductPermission(BasePermission):
     def has_object_permission(self, request, view, obj) -> bool:
         if 'brand' not in request.data: return False 
     
-        brand_pk = obj['brand_pk']
+        brand_pk = str(obj['brand_pk'])
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
-        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True)
-        print(brand_owner_data)
-        # allowed_methods = ['PATCH', 'GET']
-        # if request.method in allowed_methods:
-        #     if str(request.user.id) != str(obj['user_pk']):
-        #         return False
+        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
+        brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
+        
+        if brand_pk not in brand_pks: return False
+        
         return True
