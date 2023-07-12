@@ -24,6 +24,6 @@ class ProductViewSet(viewsets.ViewSet):
         self.check_object_permissions(request=request, obj={'brand_pk': request.data['brand']})
         Create_Product_Serializer = CreateProductSerializer(data=request.data)
         if not Create_Product_Serializer.is_valid(): return False
-        data = Create_Product_Serializer.validated_data['product']
-        get_product_data((str(data.id)))
-        return Response(None, status=status.HTTP_200_OK)
+        product_instance = Create_Product_Serializer.validated_data['product']
+        data = get_product_data((str(product_instance.id)))
+        return Response(data, status=status.HTTP_201_CREATED)
