@@ -16,7 +16,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'description',
             'sku',
             'isbn',
-            'description',
             'quantity',
             'category',
             'subcategory' 
@@ -28,9 +27,14 @@ class CreateProductSerializer(serializers.ModelSerializer):
         fields = [
             'brand',
             'category',
-            'subcategory' 
+            'subcategory' ,
+            'title',
+            'description',
+            'sku',
+            'isbn',
+            'quantity'
         ]
 
     def validate(self, attrs):
-        
+        Products.objects.create()
         return attrs
