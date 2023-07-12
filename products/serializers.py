@@ -21,3 +21,16 @@ class ProductSerializer(serializers.ModelSerializer):
             'category',
             'subcategory' 
         ]
+
+class CreateProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            'brand',
+            'category',
+            'subcategory' 
+        ]
+
+    def validate(self, attrs):
+        
+        return attrs
