@@ -30,3 +30,7 @@ class ProductViewSet(viewsets.ViewSet):
         product_instance = Create_Product_Serializer.validated_data['product']
         data = get_product_data((str(product_instance.id)))
         return Response(data, status=status.HTTP_201_CREATED)
+    
+    @method_decorator(csrf_protect)
+    def retrieve(self, request, pk=None):
+        pass
