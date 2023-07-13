@@ -36,6 +36,9 @@ class EditProductSerializer(serializers.ModelSerializer):
         ]
 
 class CreateProductSerializer(serializers.ModelSerializer):
+    
+    price = serializers.IntegerField(write_only=True)
+    
     class Meta:
         model = Product
         fields = [
