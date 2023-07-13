@@ -33,8 +33,8 @@ class ProductViewSet(viewsets.ViewSet):
         if not Create_Product_Serializer.is_valid(): 
             return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        product_instance = Create_Product_Serializer.validated_data['product']
-        data = get_product_data([str(product_instance.id)])
+        product_pk = Create_Product_Serializer.validated_data['product_pk']
+        data = get_product_data([str(product_pk)])
         return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
