@@ -71,7 +71,8 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 20,
             'sku': '',
-            'isbn': ''
+            'isbn': '',
+            'price': 2999
         }
         
         product_res = self.client.post(
@@ -90,7 +91,8 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': '',
-            'isbn': ''
+            'isbn': '',
+            'price': 2999
         }
         
         res = self.client.post(
@@ -111,7 +113,8 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': '',
-            'isbn': ''
+            'isbn': '',
+            'price': 2999
         }
         
         res = self.client.post(
@@ -131,7 +134,8 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': '',
-            'isbn': ''
+            'isbn': '',
+            'price': 2999
         }
         
         res = self.client.post(
@@ -156,7 +160,8 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 25,
             'sku': '',
-            'isbn': ''
+            'isbn': '',
+            'price': 2999
         }
         res = self.client.put(
             reverse('product-detail', kwargs={'pk': self.product_data['pk']}),

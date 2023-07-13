@@ -76,7 +76,7 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         Product_Instance.stripe_product_id = stripe_product.stripe_id
         Product_Instance.save()
-
+        print(attrs.get('price'))
         # stripe.Price.create(
         #     unit_amount=1999,
         #     currency="usd",
