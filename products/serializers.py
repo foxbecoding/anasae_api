@@ -96,3 +96,12 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         attrs['product_pk'] = Product_Instance.id
         return attrs
+    
+class ProductPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductPrice
+        fields = [
+            'pk',
+            'price',
+            'stripe_price_id'
+        ]
