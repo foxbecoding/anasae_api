@@ -8,7 +8,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
-    group_id = models.CharField(max_length=50, blank=True, null=True, unique=True, default="")
+    group_id = models.CharField(max_length=50, blank=True, null=True, default="")
     stripe_product_id = models.CharField(max_length=50, blank=True, null=True, default="")
     sku = models.CharField(max_length=50, blank=True, null=True, unique=True)
     isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
