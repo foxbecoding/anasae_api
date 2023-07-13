@@ -40,7 +40,8 @@ class ProductViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'product_pk': pk})
-        Edit_Product_Serializer = EditProductSerializer(data=request.data)
+        Product_Instance = Product.objects.get(pk=pk)
+        Edit_Product_Serializer = EditProductSerializer(Product_Instance, data=request.data)
         
         if not Edit_Product_Serializer.is_valid(): 
             return Response(Edit_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
