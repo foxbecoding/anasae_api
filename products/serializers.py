@@ -46,7 +46,8 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'description',
             'sku',
             'isbn',
-            'quantity'
+            'quantity',
+            'price'
         ]
 
     def validate(self, attrs):
