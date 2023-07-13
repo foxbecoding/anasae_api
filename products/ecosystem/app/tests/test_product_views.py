@@ -160,8 +160,7 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 25,
             'sku': '',
-            'isbn': '',
-            'price': 2999
+            'isbn': ''
         }
         res = self.client.put(
             reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
