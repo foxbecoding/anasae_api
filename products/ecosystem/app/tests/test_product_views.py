@@ -100,7 +100,7 @@ class TestProductViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        print(res.data)
+        
         self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
         self.assertEqual(res.status_code, 201)
     
@@ -150,7 +150,7 @@ class TestProductViewSet(TestCase):
         res = self.client.get(
             reverse('product-detail', kwargs={'pk': self.product_data['pk']})
         ) 
-        
+        print(res.data)
         self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
         self.assertEqual(res.status_code, 200)
     
