@@ -55,7 +55,7 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         group_id = None
-        if 'group_id' in self.context['request'].data['group_id']:
+        if 'group_id' in self.context['request'].data:
             group_id = self.context['request'].data['group_id']
 
         Product_Instance = Product.objects.create(
