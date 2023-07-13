@@ -7,9 +7,10 @@ from products.serializers import *
 from utils.helpers import filter_obj
 
 def unzip_products(zip):
-    product, brand, category, subcategory = zip
+    product, brand, category, subcategory, price = zip
     product_rel_data = (
         {'data': brand, 'key': 'brand', 'filter': ['pk','uid','name','logo']},
+        {'data': price, 'key': 'price', 'filter': ['price']},
         {'data': category, 'key': 'category', 'filter': ['pk','uid','title']},
         {'data': subcategory, 'key': 'subcategory', 'filter': ['pk','uid','title']}
     )
@@ -28,7 +29,7 @@ def get_product_data(pks = [], many = False):
     brand = get_product_rel_data(product, 'brand', Brand, BrandSerializer)
     category = get_product_rel_data(product, 'category', Category, CategorySerializer)
     subcategory = get_product_rel_data(product, 'subcategory', Subcategory, SubcategorySerializer)
-    price = get_product_rel_data(product, 'price', Subcategory, SubcategorySerializer)
-    products_zip = tuple( zip(product, brand, category, subcategory) )
+    price = get_product_rel_data(product, 'price', ProductPrice, ProductPriceSerializer)
+    products_zip = tuple( zip(product, brand, category, subcategory, price) )
     products = tuple( unzip_products(zip) for zip in products_zip )
     return products if many else products[0]   
