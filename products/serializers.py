@@ -71,5 +71,12 @@ class CreateProductSerializer(serializers.ModelSerializer):
         Product_Instance.stripe_product_id = stripe_product.stripe_id
         Product_Instance.save()
 
-        attrs['product'] = Product_Instance
+        # stripe.Price.create(
+        #     unit_amount=1999,
+        #     currency="usd",
+        #     recurring={"interval": "month"},
+        #     product="prod_O7khZ1x9KF5NEs",
+        # )
+
+        attrs['product_pk'] = Product_Instance.id
         return attrs
