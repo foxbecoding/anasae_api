@@ -154,7 +154,7 @@ class TestProductViewSet(TestCase):
         request_data = {
             'title': "Black chinos dress pants for men",
             'description': 'Black chinos dress pants for men',
-            'quantity': 20,
+            'quantity': 25,
             'sku': '',
             'isbn': ''
         }
@@ -165,5 +165,5 @@ class TestProductViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
         
-        # self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
+        self.assertEqual(res.data['quantity'], 25)
         self.assertEqual(res.status_code, 202)
