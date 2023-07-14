@@ -86,7 +86,8 @@ class TestProductViewSet(TestCase):
         request_data = {
             'brand': self.brand_data['pk'],
             'category': self.categories['category_data']['pk'],
-            'subcategory': self.categories['subcategory_data']['pk'],
+            'subcategory': '',
+            # 'subcategory': self.categories['subcategory_data']['pk'],
             'title': "Business casual navy blue chinos for men",
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
@@ -100,8 +101,7 @@ class TestProductViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        # print(self.categories)
-        print(res.data)
+        print(self.categories)
         self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
         self.assertEqual(res.status_code, 201)
     

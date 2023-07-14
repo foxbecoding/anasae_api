@@ -34,10 +34,10 @@ class ProductViewSet(viewsets.ViewSet):
         if not Create_Product_Serializer.is_valid(): 
             return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        # product_pk = Create_Product_Serializer.validated_data['product_pk']
-        # data = ProductData([str(product_pk)]).products
-        # return Response(data, status=status.HTTP_201_CREATED)
-        return Response(None, status=status.HTTP_201_CREATED)
+        product_pk = Create_Product_Serializer.validated_data['product_pk']
+        data = ProductData([str(product_pk)]).products
+        return Response(data, status=status.HTTP_201_CREATED)
+        # return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
