@@ -83,6 +83,18 @@ class TestProductViewSet(TestCase):
         self.product_data = product_res.data
 
     def test_product_create(self):
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Business casual navy blue chinos for men",
+            'description': 'Business casual navy blue chinos for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': '',
+            'price': 2999
+        }
+
         spec_values = ['Blue','34', 'ANASAE']
         product_specs = []
         if request_data['category'] and request_data['subcategory']:
@@ -103,20 +115,8 @@ class TestProductViewSet(TestCase):
                     'is_required': spec_data['is_required'],
                     'value': spec_value,
                 })
-
-        request_data = {
-            'brand': self.brand_data['pk'],
-            'category': self.categories['category_data']['pk'],
-            'subcategory': self.categories['subcategory_data']['pk'],
-            'title': "Business casual navy blue chinos for men",
-            'description': 'Business casual navy blue chinos for men',
-            'quantity': 20,
-            'sku': '',
-            'isbn': '',
-            'price': 2999,
-            'd'
-        }
         
+        request_data['specifications'] = product_specs
         res = self.client.post(
             reverse('product-list'), 
             data=request_data, 
