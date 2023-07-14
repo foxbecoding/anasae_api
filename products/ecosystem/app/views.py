@@ -23,7 +23,7 @@ class ProductViewSet(viewsets.ViewSet):
         return Response(None, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
-        data = get_product_data([pk])
+        data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_200_OK)
     
     @method_decorator(csrf_protect)
@@ -37,7 +37,6 @@ class ProductViewSet(viewsets.ViewSet):
         product_pk = Create_Product_Serializer.validated_data['product_pk']
         data = ProductData([str(product_pk)]).products
         return Response(data, status=status.HTTP_201_CREATED)
-        # return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
@@ -49,5 +48,5 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(Edit_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Edit_Product_Serializer.save()
-        data = ProductData([str(pk)])
+        data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_202_ACCEPTED)
