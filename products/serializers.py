@@ -91,7 +91,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
             price=attrs.get('price'),
             stripe_price_id=stripe_price.id
         )
-
         Product_Price_Instance.save()
 
         attrs['product_pk'] = Product_Instance.id
