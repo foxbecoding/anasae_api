@@ -8,9 +8,8 @@ from utils.helpers import filter_obj
 
 class ProductData:
     def __init__(self, pks = [], many = False):
-        self.pks = pks
-        self.many = many
-        return self.__get_product_data()
+        self.pks, self.many, self.products = pks, many, None
+        self.__get_product_data()
     
     def __get_product_data(self):
         if not Product.objects.filter(pk__in=self.pks).exists(): return []
@@ -22,7 +21,7 @@ class ProductData:
         price = self.__get_product_rel_data(products_data, 'price', ProductPrice, ProductPriceSerializer)
         products_zip = tuple( zip(products_data, brand, category, subcategory, price) )
         products = tuple( self.__unzip_products(zip) for zip in products_zip )
-        return products if self.many else products[0]
+        self.products = products if self.many else products[0]
 
     def __get_product_rel_data(self, product_data, key, model, serializer):
         pks = tuple( data[key] for data in product_data )

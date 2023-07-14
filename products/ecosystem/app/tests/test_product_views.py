@@ -86,7 +86,7 @@ class TestProductViewSet(TestCase):
         request_data = {
             'brand': self.brand_data['pk'],
             'category': self.categories['category_data']['pk'],
-            'subcategory': '',
+            'subcategory': self.categories['subcategory_data']['pk'],
             'title': "Business casual navy blue chinos for men",
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,

@@ -35,7 +35,8 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         product_pk = Create_Product_Serializer.validated_data['product_pk']
-        data = get_product_data([str(product_pk)])
+        # data = get_product_data([str(product_pk)])
+        data = ProductData([str(product_pk)]).products
         return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
@@ -48,5 +49,5 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(Edit_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Edit_Product_Serializer.save()
-        data = ProductData([str(pk)])
+        data = get_product_data([str(pk)])
         return Response(data, status=status.HTTP_202_ACCEPTED)
