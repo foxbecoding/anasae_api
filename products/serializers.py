@@ -54,11 +54,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        # subcategory = self.context['request'].data['subcategory']
-        # if subcategory:
-        #     if Subcategory.objects.filter(pk=subcategory).exists():
-        #         subcategory = Subcategory.objects.get(pk=subcategory)
-
         group_id = None
         if 'group_id' in self.context['request'].data:
             group_id = self.context['request'].data['group_id']

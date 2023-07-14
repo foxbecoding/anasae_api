@@ -27,7 +27,7 @@ class ProductPrice(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
 class ProductSpecification(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="specifications")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="specifications")
     label = models.CharField(max_length=30, blank=False)
     value = models.CharField(max_length=30, blank=True, null=True, default='')
     is_required = models.BooleanField(default=False)
