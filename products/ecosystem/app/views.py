@@ -8,6 +8,7 @@ from products.models import *
 from products.serializers import *
 from products.permissions import *
 from products.ecosystem.methods import get_product_data
+from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
 
@@ -47,5 +48,5 @@ class ProductViewSet(viewsets.ViewSet):
             return Response(Edit_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         Edit_Product_Serializer.save()
-        data = get_product_data([str(pk)])
+        data = ProductData([str(pk)])
         return Response(data, status=status.HTTP_202_ACCEPTED)
