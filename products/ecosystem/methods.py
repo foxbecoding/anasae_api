@@ -14,7 +14,9 @@ def unzip_products(zip):
         {'data': category, 'key': 'category', 'filter': ['pk','uid','title']},
         {'data': subcategory, 'key': 'subcategory', 'filter': ['pk','uid','title']}
     )
-    for data in product_rel_data: product[data['key']] = filter_obj(data['data'], data['filter'])
+    for data in product_rel_data:
+        obj = filter_obj(data['data'], data['filter']) 
+        product[data['key']] = None if obj == {} else obj
     return product
 
 def get_product_rel_data(product_data, key, model, serializer):
