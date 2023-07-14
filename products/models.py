@@ -12,7 +12,7 @@ class Product(models.Model):
     stripe_product_id = models.CharField(max_length=50, blank=True, null=True, default="")
     sku = models.CharField(max_length=50, blank=True, null=True, unique=True)
     isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
-    title = models.CharField(max_length=200, blank=False)
+    title = models.CharField(max_length=80, blank=False)
     description = models.TextField(max_length=10000, blank=False)
     quantity = models.IntegerField(default=0, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -28,8 +28,8 @@ class ProductPrice(models.Model):
 
 class ProductSpecification(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="specifications")
-    label = models.CharField(max_length=100, blank=False)
-    value = models.CharField(max_length=100, blank=True, null=True, default='')
+    label = models.CharField(max_length=30, blank=False)
+    value = models.CharField(max_length=30, blank=True, null=True, default='')
     is_required = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)

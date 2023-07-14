@@ -130,12 +130,12 @@ class TestProductViewSet(TestCase):
             'brand': self.brand_data['pk'],
             'category': self.categories['category_data']['pk'],
             'subcategory': self.categories['subcategory_data']['pk'],
-            'title': "",
+            'title': "Business casual navy blue chinos for men",
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': '',
             'isbn': '',
-            'price': 2999
+            'price': '29.99'
         }
         
         res = self.client.post(
@@ -143,7 +143,7 @@ class TestProductViewSet(TestCase):
             data=request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-
+        
         self.assertEqual(res.status_code, 400)
 
     def test_product_retrieve(self):
@@ -170,3 +170,20 @@ class TestProductViewSet(TestCase):
         
         self.assertEqual(res.data['quantity'], 25)
         self.assertEqual(res.status_code, 202)
+    
+    def test_product_update_errors(self):
+        request_data = {
+            'title': "",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 25,
+            'sku': '',
+            'isbn': ''
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        
+        self.assertEqual(res.status_code, 400)
