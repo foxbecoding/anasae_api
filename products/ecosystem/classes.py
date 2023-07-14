@@ -41,7 +41,3 @@ class ProductData:
             obj = filter_obj(data['data'], data['filter']) 
             product[data['key']] = None if obj == {} else obj
         return product
-
-    
-
-       
