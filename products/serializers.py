@@ -21,7 +21,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'brand',
             'category',
             'subcategory',
-            'price'
+            'price',
+            'specifications'
         ]
 
 class EditProductSerializer(serializers.ModelSerializer):
@@ -38,6 +39,7 @@ class EditProductSerializer(serializers.ModelSerializer):
 class CreateProductSerializer(serializers.ModelSerializer):
     
     price = serializers.IntegerField(write_only=True)
+    specifications = serializers.IntegerField(write_only=True)
     
     class Meta:
         model = Product
@@ -50,7 +52,8 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'sku',
             'isbn',
             'quantity',
-            'price'
+            'price',
+            'specifications'
         ]
 
     def validate(self, attrs):
