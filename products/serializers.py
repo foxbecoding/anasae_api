@@ -43,9 +43,8 @@ class CreateProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'brand',
-            'category',
-            'subcategory' ,
             'title',
+            'category',
             'description',
             'sku',
             'isbn',
@@ -54,6 +53,12 @@ class CreateProductSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
+        subcategory = self.context['request'].data['subcategory']
+        if subcategory:
+            print('FOX')
+            if Subcategory.objects.filter(pk=subcategory).exists():
+                subcategory = Subcategory.objects.get(pk=subcategory)
+
         group_id = None
         if 'group_id' in self.context['request'].data:
             group_id = self.context['request'].data['group_id']
@@ -63,13 +68,14 @@ class CreateProductSerializer(serializers.ModelSerializer):
             group_id = group_id,
             brand = attrs.get('brand'),
             category = attrs.get('category'),
-            subcategory = attrs.get('subcategory'),
             title = attrs.get('title'),
             description = attrs.get('description'),
             quantity = attrs.get('quantity'),
             sku = attrs.get('sku') or None,
             isbn = attrs.get('isbn') or None
         )
+
+        if subcategory:  Product_Instance.subcategory = subcategory
 
         Product_Instance.save()
         stripe_product = stripe.Product.create(
