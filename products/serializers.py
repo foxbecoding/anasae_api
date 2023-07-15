@@ -125,3 +125,13 @@ class ProductPriceSerializer(serializers.ModelSerializer):
             'price',
             'stripe_price_id'
         ]
+
+class ProductSpecificationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSpecification
+        fields = [
+            'pk',
+            'label',
+            'value',
+            'is_required'
+        ]
