@@ -20,7 +20,6 @@ class ProductData:
         subcategory = self.__get_product_rel_data(products_data, 'subcategory', Subcategory, SubcategoryProductPageSerializer)
         price = self.__get_product_rel_data(products_data, 'price', ProductPrice, ProductPagePriceSerializer)
         specifications = self.__get_product_rel_data(products_data, 'specifications', ProductSpecification, ProductSpecificationsSerializer)
-        # print(specifications)
         products_zip = tuple( zip(products_data, brand, category, subcategory, price, [specifications]) )
         products = tuple( self.__unzip_products(zip) for zip in products_zip )
         self.products = products if self.many else products[0]
