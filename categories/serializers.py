@@ -18,6 +18,15 @@ class CategorySerializer(serializers.ModelSerializer):
             'product_specification'
         ]
 
+class CategoryProductPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'pk',
+            'uid',
+            'title',
+        ]
+
 class CategoryProductSpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryProductSpecification
@@ -44,6 +53,15 @@ class SubcategorySerializer(serializers.ModelSerializer):
             'title',
             'description',
             'product_specification'
+        ]
+
+class SubcategoryProductPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subcategory
+        fields = [
+            'pk',
+            'uid',
+            'title'
         ]
 
 class SubcategoryProductSpecificationSerializer(serializers.ModelSerializer):

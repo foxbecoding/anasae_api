@@ -74,6 +74,16 @@ class CreateBrandSerializer(serializers.ModelSerializer):
         attrs['brand'] = Brand_Instance
         return attrs
     
+class BrandProductPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = [
+            'pk',
+            'uid',
+            'name',
+            'logo'
+        ]
+
 class BrandOwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = BrandOwner

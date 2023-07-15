@@ -1,7 +1,7 @@
 from brands.models import Brand
-from brands.serializers import BrandSerializer
+from brands.serializers import *
 from categories.models import Category, Subcategory
-from categories.serializers import CategorySerializer, SubcategorySerializer
+from categories.serializers import *
 from products.models import *
 from products.serializers import *
 from utils.helpers import filter_obj
@@ -15,10 +15,10 @@ class ProductData:
         if not Product.objects.filter(pk__in=self.pks).exists(): return []
         Product_Instances = Product.objects.filter(pk__in=self.pks)
         products_data = ProductSerializer(Product_Instances, many=True).data
-        brand = self.__get_product_rel_data(products_data, 'brand', Brand, BrandSerializer)
-        category = self.__get_product_rel_data(products_data, 'category', Category, CategorySerializer)
-        subcategory = self.__get_product_rel_data(products_data, 'subcategory', Subcategory, SubcategorySerializer)
-        price = self.__get_product_rel_data(products_data, 'price', ProductPrice, ProductPriceSerializer)
+        brand = self.__get_product_rel_data(products_data, 'brand', Brand, BrandProductPageSerializer)
+        category = self.__get_product_rel_data(products_data, 'category', Category, CategoryProductPageSerializer)
+        subcategory = self.__get_product_rel_data(products_data, 'subcategory', Subcategory, SubcategoryProductPageSerializer)
+        price = self.__get_product_rel_data(products_data, 'price', ProductPrice, ProductPagePriceSerializer)
         specifications = self.__get_product_rel_data(products_data, 'specifications', ProductSpecification, ProductSpecificationsSerializer)
         # print(specifications)
         products_zip = tuple( zip(products_data, brand, category, subcategory, price, [specifications]) )
@@ -35,15 +35,11 @@ class ProductData:
     def __unzip_products(self, zip):
         product, brand, category, subcategory, price, specifications = zip
         product_rel_data = (
-            {'data': brand, 'key': 'brand', 'filter': ['pk','uid','name','logo']},
-            {'data': price, 'key': 'price', 'filter': ['price']},
-            {'data': category, 'key': 'category', 'filter': ['pk','uid','title']},
-            {'data': subcategory, 'key': 'subcategory', 'filter': ['pk','uid','title']},
-            {'data': specifications, 'key': 'specifications', 'filter': ['pk','label','value','is_required']}
+            {'data': brand, 'key': 'brand'},
+            {'data': price, 'key': 'price'},
+            {'data': category, 'key': 'category'},
+            {'data': subcategory, 'key': 'subcategory'},
+            {'data': specifications, 'key': 'specifications'}
         )
-        for data in product_rel_data:
-            if data['key'] != 'specifications':
-                obj = filter_obj(data['data'], data['filter']) 
-                product[data['key']] = None if obj == {} else obj
-            product[data['key']] = data['data']
+        for data in product_rel_data: product[data['key']] = data['data']
         return product
