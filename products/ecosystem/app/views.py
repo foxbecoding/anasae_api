@@ -28,15 +28,20 @@ class ProductViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        self.check_object_permissions(request=request, obj={'brand_pk': request.data['brand']})
-        Create_Product_Serializer = CreateProductSerializer(data=request.data, context={'request': request})
+        # self.check_object_permissions(request=request, obj={'brand_pk': request.data['brand']})
+        Create_Product_Serializer = CreateProductSerializer(data=request.data, context={'request': request}, many=True)
         
         if not Create_Product_Serializer.is_valid(): 
             return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        product_pk = Create_Product_Serializer.validated_data['product_pk']
-        data = ProductData([str(product_pk)]).products
-        return Response(data, status=status.HTTP_201_CREATED)
+        validated_data = Create_Product_Serializer.validated_data
+        # print(validated_data)
+        # Create_Product_Serializer.bulk_create(validated_data)
+        # Create_Product_Serializer.create(validated_data)
+        BulkCreateProductSerializer.create(validated_data)
+        # product_pk = Create_Product_Serializer.validated_data['product_pk']
+        # data = ProductData([str(product_pk)]).products
+        # return Response(data, status=status.HTTP_201_CREATED)
+        return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
