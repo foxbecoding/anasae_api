@@ -2,7 +2,7 @@ from rest_framework import serializers
 from products.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe, requests, os, calendar, time
+import stripe, requests, os, calendar, time, json
 
 env = os.getenv
 
@@ -39,7 +39,7 @@ class EditProductSerializer(serializers.ModelSerializer):
 class CreateProductSerializer(serializers.ModelSerializer):
     
     price = serializers.IntegerField(write_only=True)
-    specifications = serializers.IntegerField(write_only=True)
+    specifications = serializers.ListField(write_only=True)
     
     class Meta:
         model = Product
@@ -57,8 +57,10 @@ class CreateProductSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
+        request_data = self.context['request'].data
+        
         group_id = None
-        if 'group_id' in self.context['request'].data:
+        if 'group_id' in request_data:
             group_id = self.context['request'].data['group_id']
 
         Product_Instance = Product.objects.create(
@@ -84,6 +86,12 @@ class CreateProductSerializer(serializers.ModelSerializer):
         Product_Instance.stripe_product_id = stripe_product.id
         Product_Instance.save()
         
+        if len(attrs.get('specifications')) > 0:
+            spec_instances = []
+            for spec in attrs.get('specifications'):
+                spec_instances.append(self.pro_specs_ins(Product_Instance, spec))
+            ProductSpecification.objects.bulk_create(spec_instances)
+
         stripe_price = stripe.Price.create(
             unit_amount=attrs.get('price'),
             currency="usd",
@@ -99,6 +107,15 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         attrs['product_pk'] = Product_Instance.id
         return attrs
+
+    def pro_specs_ins(self, product, spec):
+        Product_Specification_Instance = ProductSpecification(
+            product=product, 
+            label=spec['label'], 
+            value=spec['value'],
+            is_required=spec['is_required']
+        )
+        return Product_Specification_Instance
     
 class ProductPriceSerializer(serializers.ModelSerializer):
     class Meta:
