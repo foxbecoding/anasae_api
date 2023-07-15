@@ -1,6 +1,7 @@
 import string, secrets, os
 from PIL import Image
 import tempfile
+from rest_framework.utils.serializer_helpers import ReturnList
 
 def tmp_image(img_format = 'jpg'):
     image = Image.new('RGB', (100, 100))
@@ -15,7 +16,7 @@ def create_uid(prefix = '') -> str :
     uid_str = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(9)))
     return prefix+uid_str
 
-def filter_obj(obj, filter = []):
+def filter_obj(obj, filter=[]):
     if len(filter) == 0 or len(obj) == 0: return obj
     newDict = dict()
     for (key, value) in obj.items():

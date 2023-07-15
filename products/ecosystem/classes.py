@@ -42,6 +42,8 @@ class ProductData:
             {'data': specifications, 'key': 'specifications', 'filter': ['pk','label','value','is_required']}
         )
         for data in product_rel_data:
-            obj = filter_obj(data['data'], data['filter']) 
-            product[data['key']] = None if obj == {} else obj
+            if data['key'] != 'specifications':
+                obj = filter_obj(data['data'], data['filter']) 
+                product[data['key']] = None if obj == {} else obj
+            product[data['key']] = data['data']
         return product
