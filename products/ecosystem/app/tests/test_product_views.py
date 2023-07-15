@@ -64,24 +64,48 @@ class TestProductViewSet(TestCase):
         ) 
         self.brand_data = brand_res.data
 
-        # product_request_data = {
-        #     'brand': self.brand_data['pk'],
-        #     'category': self.categories['category_data']['pk'],
-        #     'subcategory': self.categories['subcategory_data']['pk'],
-        #     'title': "Black chinos dress pants for men",
-        #     'description': 'Black chinos dress pants for men',
-        #     'quantity': 20,
-        #     'sku': '',
-        #     'isbn': '',
-        #     'price': 2999
-        # }
+        product_request_data = {
+            'brand': self.brand_data['pk'],
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Black chinos dress pants for men",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': '',
+            'price': 2999
+        }
+
+        spec_values = ['Blue','34', 'ANASAE']
+        product_specs = []
+        if product_request_data['category'] and product_request_data['subcategory']:
+            specifications = self.categories['subcategory_data']['product_specification']
+            for spec in list(zip(specifications, spec_values)):
+                spec_data, spec_value = spec[0], spec[1]
+                product_specs.append({
+                    'label': spec_data['item'],
+                    'is_required': spec_data['is_required'],
+                    'value': spec_value,
+                })
+        else:
+            specifications = self.categories['category']['product_specification']
+            for spec in list(zip(specifications, spec_values)):
+                spec_data, spec_value = spec[0], spec[1]
+                product_specs.append({
+                    'label': spec_data['item'],
+                    'is_required': spec_data['is_required'],
+                    'value': spec_value,
+                })
+
+        product_request_data['specifications'] = product_specs
         
-        # product_res = self.client.post(
-        #     reverse('product-list'), 
-        #     data=product_request_data, 
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # ) 
-        # self.product_data = product_res.data
+        product_res = self.client.post(
+            reverse('product-list'), 
+            data=product_request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        self.product_data = product_res.data
 
     def test_product_create(self):
         request_data = {
@@ -116,98 +140,99 @@ class TestProductViewSet(TestCase):
                     'is_required': spec_data['is_required'],
                     'value': spec_value,
                 })
-        
+
         request_data['specifications'] = product_specs
+        
         res = self.client.post(
             reverse('product-list'), 
             data=request_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        print(res.data)
-        # self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
-        # self.assertEqual(res.status_code, 201)
+        
+        self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
+        self.assertEqual(res.status_code, 201)
     
-    # def test_product_create_permissions_failed(self):
-    #     request_data = {
-    #         'brand': 155,
-    #         'category': self.categories['category_data']['pk'],
-    #         'subcategory': self.categories['subcategory_data']['pk'],
-    #         'title': "Business casual navy blue chinos for men",
-    #         'description': 'Business casual navy blue chinos for men',
-    #         'quantity': 20,
-    #         'sku': '',
-    #         'isbn': '',
-    #         'price': 2999
-    #     }
+    def test_product_create_permissions_failed(self):
+        request_data = {
+            'brand': 155,
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Business casual navy blue chinos for men",
+            'description': 'Business casual navy blue chinos for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': '',
+            'price': 2999
+        }
         
-    #     res = self.client.post(
-    #         reverse('product-list'), 
-    #         data=request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.post(
+            reverse('product-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.status_code, 403)
+        self.assertEqual(res.status_code, 403)
 
-    # def test_product_create_errors(self):
-    #     request_data = {
-    #         'brand': self.brand_data['pk'],
-    #         'category': self.categories['category_data']['pk'],
-    #         'subcategory': self.categories['subcategory_data']['pk'],
-    #         'title': "Business casual navy blue chinos for men",
-    #         'description': 'Business casual navy blue chinos for men',
-    #         'quantity': 20,
-    #         'sku': '',
-    #         'isbn': '',
-    #         'price': '29.99'
-    #     }
+    def test_product_create_errors(self):
+        request_data = {
+            'brand': self.brand_data['pk'],
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Business casual navy blue chinos for men",
+            'description': 'Business casual navy blue chinos for men',
+            'quantity': 20,
+            'sku': '',
+            'isbn': '',
+            'price': '29.99'
+        }
         
-    #     res = self.client.post(
-    #         reverse('product-list'), 
-    #         data=request_data, 
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.post(
+            reverse('product-list'), 
+            data=request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
         
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
 
-    # def test_product_retrieve(self):
-    #     res = self.client.get(
-    #         reverse('product-detail', kwargs={'pk': self.product_data['pk']})
-    #     ) 
-    #     self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
-    #     self.assertEqual(res.status_code, 200)
+    def test_product_retrieve(self):
+        res = self.client.get(
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']})
+        ) 
+        self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
+        self.assertEqual(res.status_code, 200)
     
-    # def test_product_update(self):
-    #     request_data = {
-    #         'title': "Black chinos dress pants for men",
-    #         'description': 'Black chinos dress pants for men',
-    #         'quantity': 25,
-    #         'sku': '',
-    #         'isbn': ''
-    #     }
-    #     res = self.client.put(
-    #         reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
-    #         request_data,
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+    def test_product_update(self):
+        request_data = {
+            'title': "Black chinos dress pants for men",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 25,
+            'sku': '',
+            'isbn': ''
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
         
-    #     self.assertEqual(res.data['quantity'], 25)
-    #     self.assertEqual(res.status_code, 202)
+        self.assertEqual(res.data['quantity'], 25)
+        self.assertEqual(res.status_code, 202)
     
-    # def test_product_update_errors(self):
-    #     request_data = {
-    #         'title': "",
-    #         'description': 'Black chinos dress pants for men',
-    #         'quantity': 25,
-    #         'sku': '',
-    #         'isbn': ''
-    #     }
-    #     res = self.client.put(
-    #         reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
-    #         request_data,
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+    def test_product_update_errors(self):
+        request_data = {
+            'title': "",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 25,
+            'sku': '',
+            'isbn': ''
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
         
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
