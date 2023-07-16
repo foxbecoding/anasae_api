@@ -143,3 +143,20 @@ class TestProductPriceViewSet(TestCase):
         ) 
 
         self.assertEqual(res.status_code, 400)
+    
+    def test_product_price_create_permissions_failed(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': 158
+            })
+        
+        res = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+
+        self.assertEqual(res.status_code, 403)
