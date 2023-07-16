@@ -159,6 +159,16 @@ class BulkCreateProductPriceSerializer(serializers.ListSerializer):
             instance.stripe_price_id = stripe_price.id
             instance.save()
         return product_ids
+    
+class EditProductPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductPrice
+        fields = [
+            'price'
+        ]
+    
+    def update(self, instance, validated_data):
+        print(validated_data)
 
 class ProductPagePriceSerializer(serializers.ModelSerializer):
     class Meta:
