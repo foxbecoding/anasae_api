@@ -31,3 +31,22 @@ class ProductPermission(BasePermission):
             if brand_pk not in brand_pks: return False
 
         return True
+
+class ProductPricePermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_permission(self, request, view):
+        Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
+        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
+        if request.method == 'POST':
+            product_pks = [data['product'] for data in request.data]
+            print(product_pks)
+        return True
+
+    def has_object_permission(self, request, view, obj) -> bool:
+        data = request.data
+        Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
+        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
+        
+
+        return True
