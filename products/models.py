@@ -22,7 +22,7 @@ class Product(models.Model):
 class ProductPrice(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="price")
     price = models.IntegerField(default=0, blank=False)
-    stripe_price_id = models.CharField(max_length=50, blank=False, default="")
+    stripe_price_id = models.CharField(max_length=50, blank=True, default="")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
