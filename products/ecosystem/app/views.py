@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from products.models import *
 from products.serializers import *
 from products.permissions import *
-from products.ecosystem.methods import get_product_data
 from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
