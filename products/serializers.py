@@ -152,6 +152,14 @@ class ProductPriceSerializer(serializers.ModelSerializer):
             'price',
             'stripe_price_id'
         ]
+
+class CreateProductPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductPrice
+        fields = [
+            'product',
+            'price'
+        ]
         
 class ProductPagePriceSerializer(serializers.ModelSerializer):
     class Meta:

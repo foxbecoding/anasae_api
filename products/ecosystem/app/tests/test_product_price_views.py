@@ -15,6 +15,16 @@ class TestProductPriceViewSet(TestCase):
         self.products = test_products(self.categories)
 
     def test_product_price_create(self):
-        print(self.products)
-    
-  
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': product['pk']
+            })
+
+        res = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
