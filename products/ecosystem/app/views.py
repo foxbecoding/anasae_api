@@ -53,9 +53,9 @@ class ProductViewSet(viewsets.ViewSet):
     
 class ProductPriceViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = []
-        needs_auth = ['create','update']
-        if self.action in needs_auth: permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, ProductPricePermission]
+        # needs_auth = ['create','update']
+        # if self.action in needs_auth: permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
     
     # def retrieve(self, request, pk=None):

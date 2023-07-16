@@ -39,7 +39,7 @@ class ProductPricePermission(BasePermission):
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         if request.method == 'POST':
-            product_pks = [data['product'] for data in request.data]
+            product_pks = [str(data['product']) for data in request.data]
             print(product_pks)
         return True
 
