@@ -72,8 +72,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
         validated_data = Create_Product_Price_Serializer.validated_data
         pks = BulkCreateProductPriceSerializer.create(validated_data)
         data = ProductData(pks, many=True).products
-        print(data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
