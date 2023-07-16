@@ -51,3 +51,22 @@ class ProductViewSet(viewsets.ViewSet):
         Edit_Product_Serializer.save()
         data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_202_ACCEPTED)
+    
+class ProductPriceViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = []
+        needs_auth = ['create','update']
+        if self.action in needs_auth: permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    # def retrieve(self, request, pk=None):
+    #     data = ProductData([str(pk)]).products
+    #     return Response(data, status=status.HTTP_200_OK)
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        return Response(None, status=status.HTTP_201_CREATED)
+    
+    @method_decorator(csrf_protect)
+    def update(self, request, pk=None):
+        return Response(None, status=status.HTTP_202_ACCEPTED)
