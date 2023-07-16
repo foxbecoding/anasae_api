@@ -47,6 +47,7 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
                 group_id = group_id,
                 brand = data['brand'],
                 category = data['category'],
+                subcategory = data['subcategory'],
                 title = data['title'],
                 description = data['description'],
                 quantity = data['quantity'],
@@ -64,8 +65,8 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
 
             ins.stripe_product_id = stripe_product.id
             ins.save()
-        
-        return [str[ins.id] for ins in instances]
+    
+        return [str(ins.id) for ins in instances]
     
 class CreateProductSerializer(serializers.ModelSerializer):
     

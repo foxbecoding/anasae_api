@@ -4,6 +4,7 @@ from categories.models import Category, Subcategory
 from categories.serializers import *
 from products.models import *
 from products.serializers import *
+from pprint import pprint
 from utils.helpers import filter_obj
 
 class ProductData:
@@ -15,30 +16,25 @@ class ProductData:
         if not Product.objects.filter(pk__in=self.pks).exists(): return []
         Product_Instances = Product.objects.filter(pk__in=self.pks)
         products_data = ProductSerializer(Product_Instances, many=True).data
-        brand = self.__get_product_rel_data(products_data, 'brand', Brand, BrandProductPageSerializer)
-        category = self.__get_product_rel_data(products_data, 'category', Category, CategoryProductPageSerializer)
-        subcategory = self.__get_product_rel_data(products_data, 'subcategory', Subcategory, SubcategoryProductPageSerializer)
-        price = self.__get_product_rel_data(products_data, 'price', ProductPrice, ProductPagePriceSerializer)
-        specifications = self.__get_product_rel_data(products_data, 'specifications', ProductSpecification, ProductSpecificationsSerializer)
-        products_zip = tuple( zip(products_data, brand, category, subcategory, price, [specifications]) )
-        products = tuple( self.__unzip_products(zip) for zip in products_zip )
-        self.products = products if self.many else products[0]
+        brand_data = self.__get_rel_data(products_data, 'brand', Brand, BrandProductPageSerializer)
+        category_data = self.__get_rel_data(products_data, 'category', Category, CategoryProductPageSerializer)
+        subcategory_data = self.__get_rel_data(products_data, 'subcategory', Subcategory, SubcategoryProductPageSerializer)
+        
+        for product in products_data:
+            product['brand'] = self.__set_rel_data(product['brand'], brand_data)
+            product['category'] = self.__set_rel_data(product['category'], category_data)
+            product['subcategory'] = self.__set_rel_data(product['subcategory'], subcategory_data)
 
-    def __get_product_rel_data(self, product_data, key, model, serializer):
-        pks = tuple( data[key] for data in product_data )
-        if key == 'specifications': pks = pks[0]
-        if not model.objects.filter(pk__in=pks).exists(): return [{}]
+        self.products = products_data if self.many else products_data[0]
+
+    def __get_rel_data(self, products, key, model, serializer):
+        pks = []
+        for product in products: 
+            if str(product[key]) not in pks: pks.append(str(product[key]))
         instances = model.objects.filter(pk__in=pks)
-        return serializer(instances, many=True).data
-
-    def __unzip_products(self, zip):
-        product, brand, category, subcategory, price, specifications = zip
-        product_rel_data = (
-            {'data': brand, 'key': 'brand'},
-            {'data': price, 'key': 'price'},
-            {'data': category, 'key': 'category'},
-            {'data': subcategory, 'key': 'subcategory'},
-            {'data': specifications, 'key': 'specifications'}
-        )
-        for data in product_rel_data: product[data['key']] = data['data']
-        return product
+        data = serializer(instances, many=True).data
+        return data
+    
+    def __set_rel_data(self, value, rel_data):
+        data = [ data for data in rel_data if str(value) == str(data['pk'])]
+        return data if len(data) > 0 else None
