@@ -70,4 +70,11 @@ class ProductPriceViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
+        Product_Price_Instance = ProductPrice.objects.get(pk=pk)
+        Edit_Product_Price_Serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
+        
+        if not Edit_Product_Price_Serializer.is_valid():
+            return Response(Edit_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+        
+        
         return Response(None, status=status.HTTP_202_ACCEPTED)

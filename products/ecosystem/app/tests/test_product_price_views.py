@@ -178,8 +178,8 @@ class TestProductPriceViewSet(TestCase):
 
         product_pk = create_pro_res.data[0]['pk']
         product_price_pk = create_pro_res.data[0]['price']['pk']
-        
-        res = self.client.post(
+
+        res = self.client.put(
             reverse('product-price-detail', kwargs={'pk': product_price_pk}), 
             data={'price': 3999, 'product': product_pk}, 
             content_type='application/json',
