@@ -71,8 +71,8 @@ class TestProductViewSet(TestCase):
             'title': "Black chinos dress pants for men",
             'description': 'Black chinos dress pants for men',
             'quantity': 20,
-            'sku': '',
-            'isbn': ''
+            'sku': None,
+            'isbn': None
         }
         
         # product_res = self.client.post(
@@ -103,8 +103,8 @@ class TestProductViewSet(TestCase):
                 'title': data['title'],
                 'description': data['description'],
                 'quantity': 20,
-                'sku': '',
-                'isbn': ''
+                'sku': None,
+                'isbn': None
             }
 
             request_data.append(product)

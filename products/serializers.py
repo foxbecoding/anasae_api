@@ -39,8 +39,33 @@ class EditProductSerializer(serializers.ModelSerializer):
 class BulkCreateProductSerializer(serializers.ListSerializer):
     def create(validated_data):
         group_id = create_uid('gid-')
-        for data in validated_data: data['group_id'] = group_id
-        print(validated_data)    
+        products_objs = []
+        
+        for data in validated_data: 
+            products_objs.append(Product(
+                uid = create_uid('pro-'),
+                group_id = group_id,
+                brand = data['brand'],
+                category = data['category'],
+                title = data['title'],
+                description = data['description'],
+                quantity = data['quantity'],
+                sku = data['sku'],
+                isbn = data['isbn']
+            ))
+        
+        instances = Product.objects.bulk_create(products_objs)
+        
+        for ins in instances:        
+            stripe_product = stripe.Product.create(
+                name=ins.title,
+                metadata={ 'pk': ins.id }
+            )
+
+            ins.stripe_product_id = stripe_product.id
+            ins.save()
+        
+        return [str[ins.id] for ins in instances]
     
 class CreateProductSerializer(serializers.ModelSerializer):
     
@@ -108,13 +133,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
 
         # attrs['product_pk'] = Product_Instance.id
         # return attrs
-
-    def create(self, validated_data):
-        print('FOX')
-        print(validated_data)
-
-    def bulk_create(self, data):
-        print(data)
 
     def pro_specs_ins(self, product, spec):
         Product_Specification_Instance = ProductSpecification(
