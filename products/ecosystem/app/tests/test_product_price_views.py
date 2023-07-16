@@ -84,7 +84,7 @@ class TestProductPriceViewSet(TestCase):
                 'isbn': None
             }
 
-        request_data.append(product)
+            request_data.append(product)
     
         res = self.client.post(
             reverse('product-list'), 

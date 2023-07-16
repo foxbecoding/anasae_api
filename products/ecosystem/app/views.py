@@ -28,7 +28,7 @@ class ProductViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        Create_Product_Serializer = CreateProductSerializer(data=request.data, context={'request': request}, many=True)
+        Create_Product_Serializer = CreateProductSerializer(data=request.data, many=True)
         
         if not Create_Product_Serializer.is_valid(): 
             return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -65,6 +65,14 @@ class ProductPriceViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         print(request.data)
+        # Create_Product_Price_Serializer = CreateProductPriceSerializer(data=request.data, many=True)
+        
+        # if not Create_Product_Price_Serializer.is_valid(): 
+        #     return Response(Create_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # validated_data = Create_Product_Price_Serializer.validated_data
+        # pks = BulkCreateProductSerializer.create(validated_data)
+        # data = ProductData(pks, many=True).products
         return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
