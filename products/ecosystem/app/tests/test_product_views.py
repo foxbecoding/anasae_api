@@ -2,9 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
-from pprint import pprint
 from datetime import datetime
-from utils.helpers import tmp_image
 
 is_CSRF = True
 

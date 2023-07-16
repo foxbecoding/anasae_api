@@ -1,38 +1,89 @@
-from brands.models import Brand
-from brands.serializers import BrandSerializer
-from categories.models import Category, Subcategory
-from categories.serializers import CategorySerializer, SubcategorySerializer
-from products.models import *
-from products.serializers import *
-from utils.helpers import filter_obj
+from django.test import Client
+from django.urls import reverse
+from users.models import UserGender
+from datetime import datetime
 
-def unzip_products(zip):
-    product, brand, category, subcategory, price = zip
-    product_rel_data = (
-        {'data': brand, 'key': 'brand', 'filter': ['pk','uid','name','logo']},
-        {'data': price, 'key': 'price', 'filter': ['price']},
-        {'data': category, 'key': 'category', 'filter': ['pk','uid','title']},
-        {'data': subcategory, 'key': 'subcategory', 'filter': ['pk','uid','title']}
+def test_products(categories):
+    client = Client(enforce_csrf_checks=True)
+    client.get(reverse('x-fct-list'))
+    csrftoken = client.cookies['csrftoken'].value
+    User_Gender_Instance = UserGender.objects.create(gender = 'Male')
+    User_Gender_Instance.save()
+
+    date_time_str = '12/31/1990'
+    date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+
+    user_data = {
+        'first_name': "Desmond",
+        'last_name': 'Fox',
+        'email': 'slugga@gmail.com',
+        'username': 'slugga',
+        'password': '123456',
+        'confirm_password': '123456',
+        'date_of_birth': date_time_obj.date(),
+        'agreed_to_toa': True,
+        'gender': User_Gender_Instance.id
+    }
+
+    client.post(
+        reverse('user-list'), 
+        user_data, 
+        **{'HTTP_X_CSRFTOKEN': csrftoken}
     )
-    for data in product_rel_data:
-        obj = filter_obj(data['data'], data['filter']) 
-        product[data['key']] = None if obj == {} else obj
-    return product
 
-def get_product_rel_data(product_data, key, model, serializer):
-    pks = tuple( data[key] for data in product_data )
-    if not model.objects.filter(pk__in=pks).exists(): return [{}]
-    instances = model.objects.filter(pk__in=pks)
-    return serializer(instances, many=True).data
+    login_credentials = {
+        'username': 'slugga',
+        'password': '123456'
+    }
 
-def get_product_data(pks = [], many = False):
-    if not Product.objects.filter(pk__in=pks).exists(): return []
-    Product_Instances = Product.objects.filter(pk__in=pks)
-    products_data = ProductSerializer(Product_Instances, many=True).data
-    brand = get_product_rel_data(products_data, 'brand', Brand, BrandSerializer)
-    category = get_product_rel_data(products_data, 'category', Category, CategorySerializer)
-    subcategory = get_product_rel_data(products_data, 'subcategory', Subcategory, SubcategorySerializer)
-    price = get_product_rel_data(products_data, 'price', ProductPrice, ProductPriceSerializer)
-    products_zip = tuple( zip(products_data, brand, category, subcategory, price) )
-    products = tuple( unzip_products(zip) for zip in products_zip )
-    return products if many else products[0]   
+    login_res = client.post(
+        reverse('auth-log-in-list'), 
+        login_credentials, 
+        **{'HTTP_X_CSRFTOKEN': csrftoken}
+    )
+    user = login_res.data
+    csrftoken = client.cookies['csrftoken'].value
+
+    brand_request_data = { 
+        'name': 'ANASAE',
+        'bio': 'ANASAE has all of the essentials for all of your needs.  Shop with us today!',
+    }
+
+    brand_res = client.post(
+        reverse('brand-list'), 
+        data=brand_request_data, 
+        **{'HTTP_X_CSRFTOKEN': csrftoken}
+    ) 
+    brand_data = brand_res.data
+    request_data = []
+    product_data = [
+        {
+            'title': "Business casual navy blue chinos for men 34",
+            'description': 'Business casual navy blue chinos for men'
+        },
+        {
+            'title': "Business casual navy blue chinos for men 36",
+            'description': 'Business casual navy blue chinos for men '
+        }
+    ]
+    for data in product_data:
+        product = {
+            'brand': brand_data['pk'],
+            'category': categories['category_data']['pk'],
+            'subcategory': categories['subcategory_data']['pk'],
+            'title': data['title'],
+            'description': data['description'],
+            'quantity': 20,
+            'sku': None,
+            'isbn': None
+        }
+
+        request_data.append(product)
+    
+    res = client.post(
+            reverse('product-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': csrftoken}
+        ) 
+    return res.data
