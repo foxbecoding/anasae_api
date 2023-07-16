@@ -137,36 +137,28 @@ class CreateProductPriceSerializer(serializers.ModelSerializer):
 
 class BulkCreateProductPriceSerializer(serializers.ListSerializer):
     def create(validated_data):
-        print(validated_data)
-        # group_id = create_uid('gid-')
-        # products_objs = []
+        product_ids = [ str(data['product'].id) for data in validated_data ]
+        stripe_product_ids = [ data['product'].stripe_product_id for data in validated_data ]
+        price_objs = []
         
-        # for data in validated_data: 
-        #     products_objs.append(Product(
-        #         uid = create_uid('pro-'),
-        #         group_id = group_id,
-        #         brand = data['brand'],
-        #         category = data['category'],
-        #         subcategory = data['subcategory'],
-        #         title = data['title'],
-        #         description = data['description'],
-        #         quantity = data['quantity'],
-        #         sku = data['sku'],
-        #         isbn = data['isbn']
-        #     ))
+        for data in validated_data: 
+            price_objs.append(ProductPrice(
+                product = data['product'],
+                price = data['price']
+            ))
         
-        # instances = Product.objects.bulk_create(products_objs)
-        
-        # for ins in instances:        
-        #     stripe_product = stripe.Product.create(
-        #         name=ins.title,
-        #         metadata={ 'pk': ins.id }
-        #     )
+        instances = ProductPrice.objects.bulk_create(price_objs)
+        for data in zip(instances, stripe_product_ids):  
+            instance, stripe_product_id = data     
+            stripe_price = stripe.Price.create(
+                unit_amount=instance.price,
+                currency="usd",
+                product=stripe_product_id,
+            )
 
-        #     ins.stripe_product_id = stripe_product.id
-        #     ins.save()
-    
-        # return [str(ins.id) for ins in instances]
+            instance.stripe_price_id = stripe_price.id
+            instance.save()
+        return product_ids
 
 class ProductPagePriceSerializer(serializers.ModelSerializer):
     class Meta:

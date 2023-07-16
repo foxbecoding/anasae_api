@@ -64,7 +64,6 @@ class ProductPriceViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        print(request.data)
         Create_Product_Price_Serializer = CreateProductPriceSerializer(data=request.data, many=True)
         
         if not Create_Product_Price_Serializer.is_valid(): 
