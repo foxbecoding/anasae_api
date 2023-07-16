@@ -40,4 +40,4 @@ class ProductData:
     
     def __set_rel_data(self, value, rel_data):
         data = [ data for data in rel_data if str(value) == str(data['pk'])]
-        return data if len(data) > 0 else None
+        return data[0] if len(data) > 0 else None
