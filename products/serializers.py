@@ -38,6 +38,8 @@ class EditProductSerializer(serializers.ModelSerializer):
 
 class BulkCreateProductSerializer(serializers.ListSerializer):
     def create(validated_data):
+        group_id = create_uid('gid-')
+        for data in validated_data: data['group_id'] = group_id
         print(validated_data)    
     
 class CreateProductSerializer(serializers.ModelSerializer):
