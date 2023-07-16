@@ -164,6 +164,7 @@ class ProductPagePriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductPrice
         fields = [
+            'pk',
             'price'
         ]
 

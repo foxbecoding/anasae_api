@@ -19,17 +19,20 @@ class ProductData:
         brand_data = self.__get_rel_data(products_data, 'brand', Brand, BrandProductPageSerializer)
         category_data = self.__get_rel_data(products_data, 'category', Category, CategoryProductPageSerializer)
         subcategory_data = self.__get_rel_data(products_data, 'subcategory', Subcategory, SubcategoryProductPageSerializer)
+        price_data = self.__get_rel_data(products_data, 'price', ProductPrice, ProductPagePriceSerializer)
         
         for product in products_data:
             product['brand'] = self.__set_rel_data(product['brand'], brand_data)
             product['category'] = self.__set_rel_data(product['category'], category_data)
             product['subcategory'] = self.__set_rel_data(product['subcategory'], subcategory_data)
+            product['price'] = self.__set_rel_data(product['price'], price_data)
 
         self.products = products_data if self.many else products_data[0]
 
     def __get_rel_data(self, products, key, model, serializer):
         pks = []
         for product in products: 
+            if not product[key]: continue
             if str(product[key]) not in pks: pks.append(str(product[key]))
         instances = model.objects.filter(pk__in=pks)
         data = serializer(instances, many=True).data
