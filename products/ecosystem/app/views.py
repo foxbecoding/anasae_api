@@ -28,7 +28,7 @@ class ProductViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        # self.check_object_permissions(request=request, obj={'brand_pk': request.data['brand']})
+        self.check_object_permissions(request=request, obj={})
         Create_Product_Serializer = CreateProductSerializer(data=request.data, context={'request': request}, many=True)
         
         if not Create_Product_Serializer.is_valid(): 

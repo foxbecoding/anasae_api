@@ -77,7 +77,7 @@ class TestProductViewSet(TestCase):
         
         # product_res = self.client.post(
         #     reverse('product-list'), 
-        #     data=product_request_data, 
+        #     data=[product_request_data], 
         #     content_type='application/json',
         #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         # ) 
@@ -115,9 +115,9 @@ class TestProductViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        
-        # self.assertEqual(res.data['title'], "Business casual navy blue chinos for men")
-        # self.assertEqual(res.status_code, 201)
+
+        self.assertGreater(len(res.data), 1)
+        self.assertEqual(res.status_code, 201)
     
     # def test_product_create_permissions_failed(self):
     #     request_data = {
