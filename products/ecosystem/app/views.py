@@ -64,7 +64,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        print('FOX')
+        print(request.data)
         return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
