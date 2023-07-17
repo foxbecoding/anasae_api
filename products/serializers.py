@@ -188,11 +188,21 @@ class ProductPagePriceSerializer(serializers.ModelSerializer):
             'price'
         ]
 
-class ProductSpecificationsSerializer(serializers.ModelSerializer):
+class ProductSpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSpecification
         fields = [
             'pk',
+            'label',
+            'value',
+            'is_required',
+            'product'
+        ]
+
+class CreateProductSpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSpecification
+        fields = [
             'label',
             'value',
             'is_required',

@@ -95,7 +95,33 @@ class TestProductSpecificationViewSet(TestCase):
         self.products = res.data
 
     def test_product_specs_create(self):
-        pass    
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        for i, product in enumerate(self.products):
+            product_specs = []
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    spec_data, spec_value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': spec_data['item'],
+                        'is_required': spec_data['is_required'],
+                        'value': spec_value,
+                    })
+            print(product_specs)
+            # else:
+            #     specifications = self.categories['category']['product_specification']
+            #     for spec in list(zip(specifications, spec_values)):
+            #         spec_data, spec_value = spec[0], spec[1]
+            #         product_specs.append({
+            #             'label': spec_data['item'],
+            #             'is_required': spec_data['is_required'],
+            #             'value': spec_value,
+            #         })
+ 
+
     # spec_values = data['spec_values']
     #         product_specs = []
     #         if product['category'] and product['subcategory']:
