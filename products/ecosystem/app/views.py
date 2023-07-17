@@ -77,5 +77,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
             return Response(Edit_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
         validated_data = Edit_Product_Price_Serializer.validated_data
-        Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
+        pks = Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
+        data = ProductData(pks).products
+        print(data)
         return Response(None, status=status.HTTP_202_ACCEPTED)
