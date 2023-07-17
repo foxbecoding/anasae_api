@@ -16,6 +16,10 @@ def create_uid(prefix = '') -> str :
     uid_str = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(9)))
     return prefix+uid_str
 
+def list_to_str(list: list): return ','.join(list)
+
+def str_to_list(string: str): return string.split(',')
+
 def filter_obj(obj, filter=[]):
     if len(filter) == 0 or len(obj) == 0: return obj
     newDict = dict()

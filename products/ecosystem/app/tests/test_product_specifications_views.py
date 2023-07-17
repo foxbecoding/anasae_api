@@ -128,3 +128,8 @@ class TestProductSpecificationViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        product_pks = list(dict.fromkeys([ data['product'] for data in res.data ]))
+        print(product_pks)
+        print(res.data[0])
+        self.assertEqual(res.status_code, 201)
