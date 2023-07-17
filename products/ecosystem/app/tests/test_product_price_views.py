@@ -117,121 +117,122 @@ class TestProductPriceViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        # self.assertEqual(price_res.data[0]['price'], 2999)
-        # self.assertEqual(price_res.status_code, 201)
+        self.assertEqual(products_res.data[0]['price']['price'], 2999)
+        self.assertEqual(price_res.data[0]['price'], 2999)
+        self.assertEqual(price_res.status_code, 201)
     
-    # def test_product_price_create_errors(self):
-    #     request_data = []
-    #     for product in self.products:
-    #         request_data.append({
-    #             'price': '',
-    #             'product': product['pk']
-    #         })
+    def test_product_price_create_errors(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': '',
+                'product': product['pk']
+            })
         
-    #     res = self.client.post(
-    #         reverse('product-price-list'), 
-    #         data=request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
     
-    # def test_product_price_create_permissions_failed(self):
-    #     request_data = []
-    #     for product in self.products:
-    #         request_data.append({
-    #             'price': 2999,
-    #             'product': 158
-    #         })
+    def test_product_price_create_permissions_failed(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': 158
+            })
         
-    #     res = self.client.post(
-    #         reverse('product-price-list'), 
-    #         data=request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.status_code, 403)
+        self.assertEqual(res.status_code, 403)
 
-    # def test_product_price_update(self):
-    #     request_data = []
-    #     for product in self.products:
-    #         request_data.append({
-    #             'price': 2999,
-    #             'product': product['pk']
-    #         })
+    def test_product_price_update(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': product['pk']
+            })
         
-    #     price_data = self.client.post(
-    #         reverse('product-price-list'), 
-    #         data=request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ).data
-    #     price_data = price_data[0]
-    #     price_pk = price_data['pk']
-    #     product_pk = price_data['product']
+        price_data = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ).data
+        price_data = price_data[0]
+        price_pk = price_data['pk']
+        product_pk = price_data['product']
 
-    #     res = self.client.put(
-    #         reverse('product-price-detail', kwargs={'pk': price_pk}), 
-    #         data={'price': 3999, 'product': product_pk}, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.put(
+            reverse('product-price-detail', kwargs={'pk': price_pk}), 
+            data={'price': 3999, 'product': product_pk}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.data['price'], 3999)
-    #     self.assertEqual(res.status_code, 202)
+        self.assertEqual(res.data['price'], 3999)
+        self.assertEqual(res.status_code, 202)
     
-    # def test_product_price_update_errors(self):
-    #     request_data = []
-    #     for product in self.products:
-    #         request_data.append({
-    #             'price': 2999,
-    #             'product': product['pk']
-    #         })
+    def test_product_price_update_errors(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': product['pk']
+            })
         
-    #     price_data = self.client.post(
-    #         reverse('product-price-list'), 
-    #         data=request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ).data
-    #     price_data = price_data[0]
-    #     price_pk = price_data['pk']
-    #     product_pk = price_data['product']
+        price_data = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ).data
+        price_data = price_data[0]
+        price_pk = price_data['pk']
+        product_pk = price_data['product']
 
-    #     res = self.client.put(
-    #         reverse('product-price-detail', kwargs={'pk': price_pk}), 
-    #         data={'price': '', 'product': product_pk}, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.put(
+            reverse('product-price-detail', kwargs={'pk': price_pk}), 
+            data={'price': '', 'product': product_pk}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
     
-    # def test_product_price_update_permissions_failed(self):
-    #     request_data = []
-    #     for product in self.products:
-    #         request_data.append({
-    #             'price': 2999,
-    #             'product': product['pk']
-    #         })
+    def test_product_price_update_permissions_failed(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': product['pk']
+            })
         
-    #     price_data = self.client.post(
-    #         reverse('product-price-list'), 
-    #         data=request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ).data
-    #     price_data = price_data[0]
-    #     price_pk = price_data['pk']
-    #     product_pk = price_data['product']
+        price_data = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ).data
+        price_data = price_data[0]
+        price_pk = price_data['pk']
+        product_pk = price_data['product']
 
-    #     res = self.client.put(
-    #         reverse('product-price-detail', kwargs={'pk': price_pk}), 
-    #         data={'price': 3999}, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+        res = self.client.put(
+            reverse('product-price-detail', kwargs={'pk': price_pk}), 
+            data={'price': 3999}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     self.assertEqual(res.status_code, 403)
+        self.assertEqual(res.status_code, 403)
