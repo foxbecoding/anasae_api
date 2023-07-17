@@ -79,5 +79,4 @@ class ProductPriceViewSet(viewsets.ViewSet):
         validated_data = Edit_Product_Price_Serializer.validated_data
         pks = Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
         data = ProductData(pks).products
-        print(data)
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
