@@ -211,4 +211,15 @@ class CreateProductSpecificationSerializer(serializers.ModelSerializer):
 
 class BulkCreateProductSpecificationSerializer(serializers.ListSerializer):
     def create(validated_data):
-        print(validated_data)
+        instances = []
+        for data in validated_data:
+            instances.append(
+                ProductSpecification(
+                    product=data['product'], 
+                    label=data['label'], 
+                    value=data['value'],
+                    is_required=data['is_required']
+                )
+            )
+        instances = ProductSpecification.objects.bulk_create(instances)
+        return ProductSpecificationSerializer(instances, many=True).data
