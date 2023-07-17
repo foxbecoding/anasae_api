@@ -112,12 +112,11 @@ class TestProductPriceViewSet(TestCase):
         product_pks = [ str(data['product']) for data in price_res.data ]
         product_pks = ','.join(product_pks)
         products_res = self.client.get(
-            reverse('product-list')+f'?pks={product_pks}', 
+            reverse('product-list')+f'?pks=1,2,3', 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(products_res.data)
         # self.assertEqual(price_res.data[0]['price'], 2999)
         # self.assertEqual(price_res.status_code, 201)
     
