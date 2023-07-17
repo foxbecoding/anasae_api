@@ -70,6 +70,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
+        self.check_object_permissions(request=request, obj={'product_price_pk': pk})
         Product_Price_Instance = ProductPrice.objects.get(pk=pk)
         Edit_Product_Price_Serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
         
