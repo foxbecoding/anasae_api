@@ -5,7 +5,6 @@ from categories.serializers import *
 from products.models import *
 from products.serializers import *
 from pprint import pprint
-from utils.helpers import filter_obj
 
 class ProductData:
     def __init__(self, pks = [], many = False):
