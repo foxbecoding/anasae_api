@@ -3,7 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
-from utils.helpers import list_to_str, str_to_list
+from utils.helpers import list_to_str
 
 is_CSRF = True
 
