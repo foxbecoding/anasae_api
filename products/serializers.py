@@ -208,3 +208,7 @@ class CreateProductSpecificationSerializer(serializers.ModelSerializer):
             'is_required',
             'product'
         ]
+
+class BulkCreateProductSpecificationSerializer(serializers.ListSerializer):
+    def create(validated_data):
+        print(validated_data)
