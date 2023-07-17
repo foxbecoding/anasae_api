@@ -109,7 +109,7 @@ class TestProductSpecificationViewSet(TestCase):
                     product_specs.append({
                         'label': data['item'],
                         'is_required': data['is_required'],
-                        'value': value,
+                        'value': value.lower(),
                         'product': product['pk']
                     })
             else:
@@ -119,7 +119,7 @@ class TestProductSpecificationViewSet(TestCase):
                     product_specs.append({
                         'label': data['item'],
                         'is_required': data['is_required'],
-                        'value': value,
+                        'value': value.lower(),
                         'product': product['pk']
                     })
 
@@ -130,6 +130,12 @@ class TestProductSpecificationViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        product_pks = list(dict.fromkeys([ data['product'] for data in res.data ]))
-        print(list_to_str(product_pks))
+        product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in res.data ])))
+        products_res = self.client.get(
+            reverse('product-list')+f'?pks={product_pks}', 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        print(products_res)
+        self.assertEqual(res.data[0]['value'], 'blue')
         self.assertEqual(res.status_code, 201)

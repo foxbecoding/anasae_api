@@ -112,7 +112,7 @@ class TestProductPriceViewSet(TestCase):
         product_pks = [ str(data['product']) for data in price_res.data ]
         product_pks = ','.join(product_pks)
         products_res = self.client.get(
-            reverse('product-list')+f'?pks=1,2,3', 
+            reverse('product-list')+f'?pks={product_pks}', 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
