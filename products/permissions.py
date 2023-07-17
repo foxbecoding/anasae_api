@@ -12,6 +12,13 @@ class ProductPermission(BasePermission):
         data = request.data
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
+
+        if request.method == 'GET' and 'action' in obj:
+            if 'pks' not in obj['pks']: return False
+            if obj['action'] != 'list': return False
+            for pk in obj['pks']:
+                if not Product.objects.filter(pk=pk).exists(): return False
+
         if request.method == 'POST':
             brand_pks = [d['brand'] for d in data]
             for d in data:

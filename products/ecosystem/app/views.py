@@ -19,6 +19,14 @@ class ProductViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
+        query = request.query_params
+        pks = []
+        if 'pks' in query: 
+            pks = query.get('pks').split(',')
+            obj = {'pks': pks, 'action': self.action}
+            self.check_object_permissions(request=request, obj=obj)
+            data = ProductData(pks).products
+            print(data)
         return Response(None, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
