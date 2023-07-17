@@ -60,9 +60,9 @@ class ProductPricePermission(BasePermission):
         
         if not ProductPrice.objects.filter(pk=product_price_pk).exists(): return False
         if not Product.objects.filter(pk=product_pk).exists(): return False
-        
         Product_Instance = Product.objects.get(pk=product_pk)
         product_data = ProductSerializer(Product_Instance).data
+        
         brand_pk = str(product_data['brand'])
         brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
         if brand_pk not in brand_pks: return False
