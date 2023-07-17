@@ -26,8 +26,7 @@ class ProductViewSet(viewsets.ViewSet):
             obj = {'pks': pks, 'action': self.action}
             self.check_object_permissions(request=request, obj=obj)
             data = ProductData(pks, many=True).products
-            print(data)
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
     
     def retrieve(self, request, pk=None):
         data = ProductData([str(pk)]).products
