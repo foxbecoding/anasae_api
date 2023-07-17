@@ -51,6 +51,9 @@ class ProductPricePermission(BasePermission):
 
     def has_object_permission(self, request, view, obj) -> bool:
         data = request.data
+        if 'product' not in data: return False
+         
+        product_price_pk = obj['product_price_pk']
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         
