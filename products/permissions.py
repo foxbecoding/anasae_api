@@ -54,10 +54,10 @@ class ProductPricePermission(BasePermission):
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         
         data = request.data
+        if 'product' not in data: return False
         product_price_pk = obj['product_price_pk']
         product_pk = data['product']
         
-        if 'product' not in data: return False
         if not ProductPrice.objects.filter(pk=product_price_pk).exists(): return False
         if not Product.objects.filter(pk=product_pk).exists(): return False
         
