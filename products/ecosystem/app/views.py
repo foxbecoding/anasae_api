@@ -96,7 +96,7 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     def create(self, request):
         create_serializer = CreateProductSpecificationSerializer(data=request.data, many=True)
         if not create_serializer.is_valid(): return Response(None, status=status.HTTP_400_BAD_REQUEST)
-        print(create_serializer.validated_data)
+        data = create_serializer.create(create_serializer.validated_data)
         return Response(None, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
