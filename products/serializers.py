@@ -178,7 +178,7 @@ class EditProductPriceSerializer(serializers.ModelSerializer):
         instance.price = int(validated_data['price'])
         instance.stripe_price_id = stripe_price.id
         instance.save()
-        return [str(instance.product_id)]
+        return ProductPriceSerializer(instance).data
 
 class ProductPagePriceSerializer(serializers.ModelSerializer):
     class Meta:
