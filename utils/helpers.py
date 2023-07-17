@@ -16,7 +16,7 @@ def create_uid(prefix = '') -> str :
     uid_str = ''.join((secrets.choice(string.ascii_letters + string.digits) for i in range(9)))
     return prefix+uid_str
 
-def list_to_str(list: list): return ','.join(list)
+def list_to_str(list: list): return ','.join([ str(x) for x in list ])
 
 def str_to_list(string: str): return string.split(',')
 
