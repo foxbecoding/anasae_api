@@ -138,7 +138,6 @@ class CreateProductPriceSerializer(serializers.ModelSerializer):
 
 class BulkCreateProductPriceSerializer(serializers.ListSerializer):
     def create(validated_data):
-        product_ids = [ str(data['product'].id) for data in validated_data ]
         stripe_product_ids = [ data['product'].stripe_product_id for data in validated_data ]
         price_objs = []
         
@@ -159,7 +158,8 @@ class BulkCreateProductPriceSerializer(serializers.ListSerializer):
 
             instance.stripe_price_id = stripe_price.id
             instance.save()
-        return product_ids
+        
+        return ProductPriceSerializer(instances, many=True).data
     
 class EditProductPriceSerializer(serializers.ModelSerializer):
     class Meta:
