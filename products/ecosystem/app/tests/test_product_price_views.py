@@ -185,6 +185,33 @@ class TestProductPriceViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-        print(res.data)
-        # self.assertEqual(res.data[0]['price']['price'], 2999)
+
+        self.assertEqual(res.data['price']['price'], 3999)
         self.assertEqual(res.status_code, 202)
+    
+    def test_product_price_update_errors(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'price': 2999,
+                'product': product['pk']
+            })
+        
+        create_pro_res = self.client.post(
+            reverse('product-price-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+
+        product_pk = create_pro_res.data[0]['pk']
+        product_price_pk = create_pro_res.data[0]['price']['pk']
+
+        res = self.client.put(
+            reverse('product-price-detail', kwargs={'pk': product_price_pk}), 
+            data={'price': '', 'product': product_pk}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+
+        self.assertEqual(res.status_code, 400)
