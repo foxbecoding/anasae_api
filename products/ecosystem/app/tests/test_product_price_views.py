@@ -185,6 +185,6 @@ class TestProductPriceViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
-
+        print(res.data)
         # self.assertEqual(res.data[0]['price']['price'], 2999)
-        # self.assertEqual(res.status_code, 201)
+        self.assertEqual(res.status_code, 202)

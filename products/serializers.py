@@ -168,13 +168,13 @@ class EditProductPriceSerializer(serializers.ModelSerializer):
         ]
     
     def update(self, instance: ProductPrice, validated_data):
-        instance.price = int(validated_data['price'])
         Product_Instance = Product.objects.get(pk=instance.product_id)
         stripe_price = stripe.Price.create(
             unit_amount=int(validated_data['price']),
             currency="usd",
             product=str(Product_Instance.stripe_product_id),
         )
+        instance.price = int(validated_data['price'])
         instance.stripe_price_id = stripe_price.id
         instance.save()
         return [str(instance.product_id)]
