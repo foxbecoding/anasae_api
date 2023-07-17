@@ -72,7 +72,6 @@ class ProductPriceViewSet(viewsets.ViewSet):
         
         validated_data = Create_Product_Price_Serializer.validated_data
         data = BulkCreateProductPriceSerializer.create(validated_data)
-        # data = ProductData(pks, many=True).products
         return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)
@@ -87,3 +86,16 @@ class ProductPriceViewSet(viewsets.ViewSet):
         validated_data = Edit_Product_Price_Serializer.validated_data
         data = Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+
+class ProductSpecificationViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        return Response(None, status=status.HTTP_201_CREATED)
+    
+    @method_decorator(csrf_protect)
+    def update(self, request, pk=None):
+        return Response(None, status=status.HTTP_202_ACCEPTED)
