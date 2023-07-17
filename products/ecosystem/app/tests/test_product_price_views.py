@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
+from utils.helpers import list_to_str
 
 is_CSRF = True
 
@@ -109,8 +110,7 @@ class TestProductPriceViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
-        product_pks = [ str(data['product']) for data in price_res.data ]
-        product_pks = ','.join(product_pks)
+        product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
         products_res = self.client.get(
             reverse('product-list')+f'?pks={product_pks}', 
             content_type='application/json',
