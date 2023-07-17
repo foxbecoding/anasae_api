@@ -76,5 +76,6 @@ class ProductPriceViewSet(viewsets.ViewSet):
         if not Edit_Product_Price_Serializer.is_valid():
             return Response(Edit_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
-        
+        validated_data = Edit_Product_Price_Serializer.validated_data
+        Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
         return Response(None, status=status.HTTP_202_ACCEPTED)
