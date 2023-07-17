@@ -99,49 +99,32 @@ class TestProductSpecificationViewSet(TestCase):
             ['Blue', '34', 'Anasae'],
             ['Blue', '36', 'Anasae']
         ]
+        product_specs = []
         for i, product in enumerate(self.products):
-            product_specs = []
             if product['category'] and product['subcategory']:
                 specifications = self.categories['subcategory_data']['product_specification']
                 for spec in list(zip(specifications, spec_values[i])):
-                    spec_data, spec_value = spec[0], spec[1]
+                    data, value = spec[0], spec[1]
                     product_specs.append({
-                        'label': spec_data['item'],
-                        'is_required': spec_data['is_required'],
-                        'value': spec_value,
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value,
+                        'product': product['pk']
                     })
-            print(product_specs)
-            # else:
-            #     specifications = self.categories['category']['product_specification']
-            #     for spec in list(zip(specifications, spec_values)):
-            #         spec_data, spec_value = spec[0], spec[1]
-            #         product_specs.append({
-            #             'label': spec_data['item'],
-            #             'is_required': spec_data['is_required'],
-            #             'value': spec_value,
-            #         })
- 
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value,
+                        'product': product['pk']
+                    })
 
-    # spec_values = data['spec_values']
-    #         product_specs = []
-    #         if product['category'] and product['subcategory']:
-    #             specifications = self.categories['subcategory_data']['product_specification']
-    #             for spec in list(zip(specifications, spec_values)):
-    #                 spec_data, spec_value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': spec_data['item'],
-    #                     'is_required': spec_data['is_required'],
-    #                     'value': spec_value,
-    #                 })
-    #         else:
-    #             specifications = self.categories['category']['product_specification']
-    #             for spec in list(zip(specifications, spec_values)):
-    #                 spec_data, spec_value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': spec_data['item'],
-    #                     'is_required': spec_data['is_required'],
-    #                     'value': spec_value,
-    #                 })
-
-    #         product['specifications'] = product_specs
-    #         product['images'] = [tmp_image() for x in range(7)]
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
