@@ -124,7 +124,8 @@ class ProductPriceSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'price',
-            'stripe_price_id'
+            'stripe_price_id',
+            'product'
         ]
 
 class CreateProductPriceSerializer(serializers.ModelSerializer):
@@ -194,5 +195,6 @@ class ProductSpecificationsSerializer(serializers.ModelSerializer):
             'pk',
             'label',
             'value',
-            'is_required'
+            'is_required',
+            'product'
         ]
