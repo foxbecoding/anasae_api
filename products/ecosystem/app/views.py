@@ -10,6 +10,7 @@ from products.permissions import *
 from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
+from utils.helpers import str_to_list
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -22,7 +23,7 @@ class ProductViewSet(viewsets.ViewSet):
         query = request.query_params
         pks = []
         if 'pks' in query: 
-            pks = query.get('pks').split(',')
+            pks = str_to_list(query.get('pks'))
             obj = {'pks': pks, 'action': self.action}
             self.check_object_permissions(request=request, obj=obj)
             data = ProductData(pks, many=True).products
