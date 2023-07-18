@@ -36,12 +36,12 @@ class ProductViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
-        Create_Product_Serializer = CreateProductSerializer(data=request.data, many=True)
+        create_serializer = CreateProductSerializer(data=request.data, many=True)
         
-        if not Create_Product_Serializer.is_valid(): 
-            return Response(Create_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not create_serializer.is_valid(): 
+            return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        validated_data = Create_Product_Serializer.validated_data
+        validated_data = create_serializer.validated_data
         pks = BulkCreateProductSerializer.create(validated_data)
         data = ProductData(pks, many=True).products
         return Response(data, status=status.HTTP_201_CREATED)
@@ -50,12 +50,12 @@ class ProductViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'product_pk': pk})
         Product_Instance = Product.objects.get(pk=pk)
-        Edit_Product_Serializer = EditProductSerializer(Product_Instance, data=request.data)
+        edit_serializer = EditProductSerializer(Product_Instance, data=request.data)
         
-        if not Edit_Product_Serializer.is_valid(): 
-            return Response(Edit_Product_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not edit_serializer.is_valid(): 
+            return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        Edit_Product_Serializer.save()
+        edit_serializer.save()
         data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
@@ -66,12 +66,12 @@ class ProductPriceViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
-        Create_Product_Price_Serializer = CreateProductPriceSerializer(data=request.data, many=True)
+        create_serializer = CreateProductPriceSerializer(data=request.data, many=True)
         
-        if not Create_Product_Price_Serializer.is_valid(): 
-            return Response(Create_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not create_serializer.is_valid(): 
+            return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        validated_data = Create_Product_Price_Serializer.validated_data
+        validated_data = create_serializer.validated_data
         data = BulkCreateProductPriceSerializer.create(validated_data)
         return Response(data, status=status.HTTP_201_CREATED)
     
@@ -79,13 +79,13 @@ class ProductPriceViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'product_price_pk': pk})
         Product_Price_Instance = ProductPrice.objects.get(pk=pk)
-        Edit_Product_Price_Serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
+        edit_serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
         
-        if not Edit_Product_Price_Serializer.is_valid():
-            return Response(Edit_Product_Price_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+        if not edit_serializer.is_valid():
+            return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         
-        validated_data = Edit_Product_Price_Serializer.validated_data
-        data = Edit_Product_Price_Serializer.update(Product_Price_Instance, validated_data)
+        validated_data = edit_serializer.validated_data
+        data = edit_serializer.update(Product_Price_Instance, validated_data)
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 class ProductSpecificationViewSet(viewsets.ViewSet):
