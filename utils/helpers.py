@@ -1,7 +1,6 @@
 import string, secrets, os
 from PIL import Image
 import tempfile
-from rest_framework.utils.serializer_helpers import ReturnList
 
 def tmp_image(img_format = 'jpg'):
     image = Image.new('RGB', (100, 100))
@@ -31,4 +30,3 @@ def filter_obj(obj, filter=[]):
 def is_valid_square_img(img_file) -> bool: 
     img = Image.open(img_file)
     print(img.size)
-    pass
