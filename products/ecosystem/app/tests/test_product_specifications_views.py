@@ -138,6 +138,6 @@ class TestProductSpecificationViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        pprint(products_res.data[1])
+        # pprint(products_res.data[1])
         # self.assertEqual(res.data[0]['value'], 'blue')
         # self.assertEqual(res.status_code, 201)
