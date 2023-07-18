@@ -51,10 +51,7 @@ class ProductViewSet(viewsets.ViewSet):
         self.check_object_permissions(request=request, obj={'product_pk': pk})
         Product_Instance = Product.objects.get(pk=pk)
         edit_serializer = EditProductSerializer(Product_Instance, data=request.data)
-        
-        if not edit_serializer.is_valid(): 
-            return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+        if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         edit_serializer.save()
         data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_202_ACCEPTED)
@@ -67,10 +64,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         create_serializer = CreateProductPriceSerializer(data=request.data, many=True)
-        
-        if not create_serializer.is_valid(): 
-            return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+        if not create_serializer.is_valid(): return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         validated_data = create_serializer.validated_data
         data = BulkCreateProductPriceSerializer.create(validated_data)
         return Response(data, status=status.HTTP_201_CREATED)
@@ -80,10 +74,7 @@ class ProductPriceViewSet(viewsets.ViewSet):
         self.check_object_permissions(request=request, obj={'product_price_pk': pk})
         Product_Price_Instance = ProductPrice.objects.get(pk=pk)
         edit_serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
-        
-        if not edit_serializer.is_valid():
-            return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-        
+        if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         validated_data = edit_serializer.validated_data
         data = edit_serializer.update(Product_Price_Instance, validated_data)
         return Response(data, status=status.HTTP_202_ACCEPTED)
