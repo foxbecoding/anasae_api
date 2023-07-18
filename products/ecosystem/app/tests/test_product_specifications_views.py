@@ -136,6 +136,6 @@ class TestProductSpecificationViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(products_res)
+        print(products_res.data)
         self.assertEqual(res.data[0]['value'], 'blue')
         self.assertEqual(res.status_code, 201)
