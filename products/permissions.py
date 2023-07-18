@@ -3,6 +3,7 @@ from products.models import *
 from products.serializers import ProductSerializer
 from brands.models import BrandOwner
 from brands.serializers import BrandOwnerSerializer
+from utils.helpers import key_exists
 import re
 
 
@@ -45,8 +46,7 @@ class ProductPricePermission(BasePermission):
     message = "Access Denied!"   
 
     def has_permission(self, request, view):
-        for data in request.data: 
-            if 'product' not in data: return False
+        if not key_exists('product', request.data): return False
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         if request.method == 'POST':
@@ -84,8 +84,7 @@ class ProductSpecificationPermission(BasePermission):
     message = "Access Denied!"   
 
     def has_permission(self, request, view):
-        for data in request.data: 
-            if 'product' not in data: return False
+        if not key_exists('product', request.data): return False
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         product_pks = list(dict.fromkeys([str(data['product']) for data in request.data]))

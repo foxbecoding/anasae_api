@@ -178,3 +178,38 @@ class TestProductSpecificationViewSet(TestCase):
         )
 
         self.assertEqual(res.status_code, 400)
+
+    def test_product_specs_create_permissions_failed(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                    })
+
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 403)

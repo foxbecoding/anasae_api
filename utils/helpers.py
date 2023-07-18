@@ -19,6 +19,10 @@ def list_to_str(list: list): return ','.join([ str(x) for x in list ])
 
 def str_to_list(string: str): return string.split(',')
 
+def key_exists(key: str, list: list[dict]):
+    res = [i for i in list if key in i ]
+    return True if len(res) > 0 else False   
+
 def filter_obj(obj, filter=[]):
     if len(filter) == 0 or len(obj) == 0: return obj
     newDict = dict()
