@@ -97,7 +97,6 @@ class TestProductSpecificationViewSet(TestCase):
         self.products = res.data
 
     def test_product_specs_create(self):
-        pass
         spec_values = [
             ['Blue', '34', 'Anasae'],
             ['Blue', '36', 'Anasae']
@@ -138,6 +137,44 @@ class TestProductSpecificationViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        # pprint(products_res.data[1])
-        # self.assertEqual(res.data[0]['value'], 'blue')
-        # self.assertEqual(res.status_code, 201)
+
+        self.assertEqual(products_res.data[0]['specifications'][0]['value'], 'blue')
+        self.assertEqual(res.data[0]['value'], 'blue')
+        self.assertEqual(res.status_code, 201)
+    
+    def test_product_specs_create_errors(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': '',
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': '',
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
+
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
