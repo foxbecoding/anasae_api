@@ -93,4 +93,5 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
+        print(pk)
         return Response(None, status=status.HTTP_202_ACCEPTED)
