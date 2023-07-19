@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_protect
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from products.models import *
 from products.serializers import *
 from products.permissions import *
@@ -93,10 +93,10 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        print(pk)
-        # instance = ProductSpecification.objects.get(pk=pk)
-        # serializer = EditProductPriceSerializer(instance, data=request.data)
-        # if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # serializer.save()
+        pks = str_to_list(pk)
+        instances = ProductSpecification.objects.filter(pk__in=pks)
+        edit_serializer = EditProductPriceSerializer(instances, data=request.data, many=True)
+        if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print(edit_serializer.validated_data)
         # return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(None, status=status.HTTP_202_ACCEPTED)
