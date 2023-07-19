@@ -89,7 +89,7 @@ class ProductSpecificationPermission(BasePermission):
             if not ProductSpecification.objects.filter(pk=pk).exists(): return False
         
         Prod_Spec_Instances = ProductSpecification.objects.filter(pk__in=pks)
-        product_pks = list(dict.fromkeys([ str(instance.product_id) for instance in Prod_Spec_Instances ]))
+        product_pks = list(dict.fromkeys([ str(instance.product_id) for instance in Prod_Spec_Instances ])) 
         
         if not is_brand_product(request, product_pks): return False
         return True
