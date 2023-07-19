@@ -242,18 +242,25 @@ class TestProductSpecificationViewSet(TestCase):
                         'product': product['pk']
                     })
 
-        res = self.client.post(
+        specs_res = self.client.post(
             reverse('product-specification-list'), 
             data=product_specs, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in res.data ])))
+        product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in specs_res.data ])))
         products_res = self.client.get(
             reverse('product-list')+f'?pks={product_pks}', 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(products_res.data[1])
-        # print(res.data)
+        
+        specs = [ spec for spec in specs_res.data if not spec['is_required'] ]
+        spec_pk = specs[0]['pk']
+        specs_res = self.client.post(
+            reverse('product-specification-detail', kwargs={"pk":  spec_pk}), 
+            data={"value": 'Fenty Beauty'}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
