@@ -20,7 +20,8 @@ def list_to_str(list: list): return ','.join([ str(x) for x in list ])
 def str_to_list(string: str): return string.split(',')
 
 def key_exists(key: str, data: list[dict] | dict):
-    print(type(data))
+    allowed_types = [list, dict]
+    if type(data) not in allowed_types: raise TypeError("Only list & dict allowed")
     res = [i for i in data if key in i ]
     return True if len(res) > 0 else False   
 
