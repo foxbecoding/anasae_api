@@ -256,10 +256,9 @@ class TestProductSpecificationViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
-        specs = [ spec for spec in specs_res.data if not spec['is_required'] ]
-        spec_pk = specs[0]['pk']
+        spec_pks = [ spec['pk'] for spec in specs_res.data if not spec['is_required'] ]
         specs_res = self.client.put(
-            reverse('product-specification-detail', kwargs={"pk":  spec_pk}), 
+            reverse('product-specification-detail', kwargs={"pk":  spec_pks}), 
             data={"value": 'Fenty Beauty'}, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}

@@ -93,8 +93,10 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        instance = ProductSpecification.objects.get(pk=pk)
-        serializer = EditProductPriceSerializer(instance, data=request.data)
-        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        print(pk)
+        # instance = ProductSpecification.objects.get(pk=pk)
+        # serializer = EditProductPriceSerializer(instance, data=request.data)
+        # if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(None, status=status.HTTP_202_ACCEPTED)
