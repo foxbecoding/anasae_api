@@ -16,7 +16,7 @@ class ProductPermission(BasePermission):
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
 
         if request.method == 'GET' and 'action' in obj:
-            if 'pks' not in obj: return False
+            if not key_exists('pks', obj): return False
             if obj['action'] != 'list': return False
             for pk in obj['pks']:
                 if not bool(re.match('^[0-9]+$', pk)): return False
@@ -25,7 +25,7 @@ class ProductPermission(BasePermission):
         if request.method == 'POST':
             brand_pks = [d['brand'] for d in data]
             for d in data:
-                if 'brand' not in d: return False
+                if not key_exists('brand', d): return False
             
             pks = [ str(brand['brand']) for brand in brand_owner_data ]
             for pk in brand_pks: 
@@ -65,7 +65,7 @@ class ProductPricePermission(BasePermission):
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         
         data = request.data
-        if 'product' not in data: return False
+        if not key_exists('product', data): return False
         product_price_pk = obj['product_price_pk']
         product_pk = data['product']
         
