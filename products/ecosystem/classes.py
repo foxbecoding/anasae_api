@@ -50,5 +50,5 @@ class ProductData:
     
     def __set_rel_specs_data(self, rel_data):
         for x in zip(self.products, rel_data):
-            product, data = x[0], x[1]
+            product, data = x
             product['specifications'] = data
