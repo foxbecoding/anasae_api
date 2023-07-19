@@ -271,11 +271,5 @@ class TestProductSpecificationViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        pprint(specs_res.data)
-
-        products_res = self.client.get(
-            reverse('product-list')+f'?pks={product_pks}', 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
-        pprint(products_res.data[0])
+        self.assertEqual(specs_res.data[0]['value'], 'red')
+        self.assertEqual(specs_res.status_code, 202)
