@@ -99,5 +99,4 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
         edit_serializer = EditProductSpecificationSerializer(data=request.data, many=True)
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = BulkEditProductSpecificationSerializer(instances, edit_serializer.validated_data).specifications
-        print('FOX')
         return Response(data, status=status.HTTP_202_ACCEPTED)
