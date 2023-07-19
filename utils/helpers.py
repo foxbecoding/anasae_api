@@ -19,8 +19,9 @@ def list_to_str(list: list): return ','.join([ str(x) for x in list ])
 
 def str_to_list(string: str): return string.split(',')
 
-def key_exists(key: str, list: list[dict]):
-    res = [i for i in list if key in i ]
+def key_exists(key: str, data: list[dict] | dict):
+    print(type(data))
+    res = [i for i in data if key in i ]
     return True if len(res) > 0 else False   
 
 def filter_obj(obj, filter=[]):
