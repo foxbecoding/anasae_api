@@ -19,8 +19,7 @@ class ProductPermission(BasePermission):
             if not key_exists('pks', obj): return False
             if obj['action'] != 'list': return False
             for pk in obj['pks']:
-                if not bool(re.match('^[0-9]+$', pk)): return False
-                
+                if not bool(re.match('^[0-9]+$', pk)): return False             
 
         if request.method == 'POST':
             brand_pks = [d['brand'] for d in data]
@@ -84,22 +83,33 @@ class ProductSpecificationPermission(BasePermission):
     message = "Access Denied!"   
 
     def has_permission(self, request, view):
-        Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
-        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
         if request.method == 'POST':
             if not key_exists('product', request.data): return False
             product_pks = list(dict.fromkeys([str(data['product']) for data in request.data]))
-            for product_pk in product_pks:
-                if not Product.objects.filter(pk=product_pk).exists(): return False
-                Product_Instance = Product.objects.get(pk=product_pk)
-                product_data = ProductSerializer(Product_Instance).data
-                brand_pk = str(product_data['brand'])
-                brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
-                if brand_pk not in brand_pks: return False
+            if not self.is_brand_product(request, product_pks): return False
         return True
     
     def has_object_permission(self, request, view, obj):
         pks = obj['pks']
         if len(pks) == 0: return False
-        print(pks)
+        
+        for pk in pks:
+            if not ProductSpecification.objects.filter(pk=pk).exists(): return False
+        
+        Prod_Spec_Instances = ProductSpecification.objects.filter(pk__in=pks)
+        product_pks = list(dict.fromkeys([ str(instance.product_id) for instance in Prod_Spec_Instances ]))
+        
+        if not self.is_brand_product(request, product_pks): return False
+        return True
+    
+    def is_brand_product(self, request, product_pks):
+        Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
+        brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
+        for product_pk in product_pks:
+            if not Product.objects.filter(pk=product_pk).exists(): return False
+            Product_Instance = Product.objects.get(pk=product_pk)
+            product_data = ProductSerializer(Product_Instance).data
+            brand_pk = str(product_data['brand'])
+            brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
+            if brand_pk not in brand_pks: return False
         return True
