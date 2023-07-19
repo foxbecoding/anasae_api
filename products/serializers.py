@@ -199,6 +199,11 @@ class ProductSpecificationSerializer(serializers.ModelSerializer):
             'product'
         ]
 
+class EditProductSpecificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSpecification
+        fields = ['value']
+
 class CreateProductSpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSpecification
