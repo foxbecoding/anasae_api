@@ -270,3 +270,12 @@ class TestProductSpecificationViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+
+        pprint(specs_res.data)
+
+        products_res = self.client.get(
+            reverse('product-list')+f'?pks={product_pks}', 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        pprint(products_res.data[0])
