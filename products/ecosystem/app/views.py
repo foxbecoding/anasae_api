@@ -94,6 +94,7 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def update(self, request, pk=None):
         pks = str_to_list(pk)
+        self.check_object_permissions(request=request, obj={"pks": pks})
         instances = ProductSpecification.objects.filter(pk__in=pks)
         edit_serializer = EditProductSpecificationSerializer(data=request.data, many=True)
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
