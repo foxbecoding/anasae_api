@@ -204,6 +204,10 @@ class EditProductSpecificationSerializer(serializers.ModelSerializer):
         model = ProductSpecification
         fields = ['value']
 
+class BulkEditProductSpecificationSerializer(serializers.ListSerializer):
+    def update(self, instance, validated_data):
+        print(validated_data)
+
 class CreateProductSpecificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSpecification
