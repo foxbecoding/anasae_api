@@ -205,8 +205,23 @@ class EditProductSpecificationSerializer(serializers.ModelSerializer):
         fields = ['value']
 
 class BulkEditProductSpecificationSerializer(serializers.ListSerializer):
-    def update(self, instance, validated_data):
-        print(validated_data)
+    def __init__(self, instances, validated_data): 
+        self._instances = instances
+        self._validated_data = validated_data
+        self.specifications = []
+        self.__update()
+
+    def __update(self):
+        updated_instances = [ self.__set_instance_data(data) for data in zip(self._instances, self._validated_data) ]
+        ProductSpecification.objects.bulk_update(updated_instances, fields=['value'])
+        self.specifications = ProductSpecificationSerializer(updated_instances, many=True).data
+        
+    
+    def __set_instance_data(self, data):
+        instance, value = data
+        instance.value = value['value']
+        return instance 
+
 
 class CreateProductSpecificationSerializer(serializers.ModelSerializer):
     class Meta:

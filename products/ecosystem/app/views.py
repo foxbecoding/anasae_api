@@ -95,7 +95,7 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         pks = str_to_list(pk)
         instances = ProductSpecification.objects.filter(pk__in=pks)
-        edit_serializer = EditProductPriceSerializer(instances, data=request.data, many=True)
+        edit_serializer = EditProductSpecificationSerializer(data=request.data, many=True)
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         BulkEditProductSpecificationSerializer(instances, edit_serializer.validated_data)
         # return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
