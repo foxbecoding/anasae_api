@@ -97,3 +97,9 @@ class ProductSpecificationPermission(BasePermission):
                 brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
                 if brand_pk not in brand_pks: return False
         return True
+    
+    def has_object_permission(self, request, view, obj):
+        pks = obj['pks']
+        if len(pks) == 0: return False
+        print(pks)
+        return True
