@@ -96,123 +96,123 @@ class TestProductSpecificationViewSet(TestCase):
         )
         self.products = res.data
 
-    # def test_product_specs_create(self):
-    #     spec_values = [
-    #         ['Blue', '34', 'Anasae'],
-    #         ['Blue', '36', 'Anasae']
-    #     ]
-    #     product_specs = []
-    #     for i, product in enumerate(self.products):
-    #         if product['category'] and product['subcategory']:
-    #             specifications = self.categories['subcategory_data']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
-    #         else:
-    #             specifications = self.categories['category']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
+    def test_product_specs_create(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
 
-    #     res = self.client.post(
-    #         reverse('product-specification-list'), 
-    #         data=product_specs, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in res.data ])))
-    #     products_res = self.client.get(
-    #         reverse('product-list')+f'?pks={product_pks}', 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in res.data ])))
+        products_res = self.client.get(
+            reverse('product-list')+f'?pks={product_pks}', 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(products_res.data[0]['specifications'][0]['value'], 'blue')
-    #     self.assertEqual(res.data[0]['value'], 'blue')
-    #     self.assertEqual(res.status_code, 201)
+        self.assertEqual(products_res.data[0]['specifications'][0]['value'], 'blue')
+        self.assertEqual(res.data[0]['value'], 'blue')
+        self.assertEqual(res.status_code, 201)
     
-    # def test_product_specs_create_errors(self):
-    #     spec_values = [
-    #         ['Blue', '34', 'Anasae'],
-    #         ['Blue', '36', 'Anasae']
-    #     ]
-    #     product_specs = []
-    #     for i, product in enumerate(self.products):
-    #         if product['category'] and product['subcategory']:
-    #             specifications = self.categories['subcategory_data']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': '',
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
-    #         else:
-    #             specifications = self.categories['category']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': '',
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
+    def test_product_specs_create_errors(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': '',
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': '',
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
 
-    #     res = self.client.post(
-    #         reverse('product-specification-list'), 
-    #         data=product_specs, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)
 
-    # def test_product_specs_create_permissions_failed(self):
-    #     spec_values = [
-    #         ['Blue', '34', 'Anasae'],
-    #         ['Blue', '36', 'Anasae']
-    #     ]
-    #     product_specs = []
-    #     for i, product in enumerate(self.products):
-    #         if product['category'] and product['subcategory']:
-    #             specifications = self.categories['subcategory_data']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                 })
-    #         else:
-    #             specifications = self.categories['category']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                 })
+    def test_product_specs_create_permissions_failed(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                    })
 
-    #     res = self.client.post(
-    #         reverse('product-specification-list'), 
-    #         data=product_specs, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(res.status_code, 403)
+        self.assertEqual(res.status_code, 403)
 
     def test_product_specs_update(self):
         spec_values = [
@@ -274,61 +274,61 @@ class TestProductSpecificationViewSet(TestCase):
         self.assertEqual(specs_res.data[0]['value'], 'red')
         self.assertEqual(specs_res.status_code, 202)
 
-    # def test_product_specs_update_permissions_failed(self):
-    #     spec_values = [
-    #         ['Blue', '34', 'Anasae'],
-    #         ['Blue', '36', 'Anasae']
-    #     ]
-    #     product_specs = []
-    #     for i, product in enumerate(self.products):
-    #         if product['category'] and product['subcategory']:
-    #             specifications = self.categories['subcategory_data']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
-    #         else:
-    #             specifications = self.categories['category']['product_specification']
-    #             for spec in list(zip(specifications, spec_values[i])):
-    #                 data, value = spec[0], spec[1]
-    #                 product_specs.append({
-    #                     'label': data['item'],
-    #                     'is_required': data['is_required'],
-    #                     'value': value.lower(),
-    #                     'product': product['pk']
-    #                 })
+    def test_product_specs_update_permissions_failed(self):
+        spec_values = [
+            ['Blue', '34', 'Anasae'],
+            ['Blue', '36', 'Anasae']
+        ]
+        product_specs = []
+        for i, product in enumerate(self.products):
+            if product['category'] and product['subcategory']:
+                specifications = self.categories['subcategory_data']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
+            else:
+                specifications = self.categories['category']['product_specification']
+                for spec in list(zip(specifications, spec_values[i])):
+                    data, value = spec[0], spec[1]
+                    product_specs.append({
+                        'label': data['item'],
+                        'is_required': data['is_required'],
+                        'value': value.lower(),
+                        'product': product['pk']
+                    })
 
-    #     specs_res = self.client.post(
-    #         reverse('product-specification-list'), 
-    #         data=product_specs, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        specs_res = self.client.post(
+            reverse('product-specification-list'), 
+            data=product_specs, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in specs_res.data ])))
-    #     products_res = self.client.get(
-    #         reverse('product-list')+f'?pks={product_pks}', 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        product_pks = list_to_str(list(dict.fromkeys([ data['product'] for data in specs_res.data ])))
+        products_res = self.client.get(
+            reverse('product-list')+f'?pks={product_pks}', 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         
-    #     product_specs = products_res.data[0]['specifications']
-    #     spec_pks = list_to_str([spec['pk'] for spec in product_specs])
-    #     spec_values = [
-    #         {'value': 'red'},
-    #         {'value': '38'},
-    #         {'value': 'OVO'}
-    #     ]
+        product_specs = products_res.data[0]['specifications']
+        spec_pks = list_to_str([spec['pk'] for spec in product_specs])
+        spec_values = [
+            {'value': 'red'},
+            {'value': '38'},
+            {'value': 'OVO'}
+        ]
     
-    #     specs_res = self.client.put(
-    #         reverse('product-specification-detail', kwargs={"pk":  spec_pks}), 
-    #         data=spec_values, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        specs_res = self.client.put(
+            reverse('product-specification-detail', kwargs={"pk": '25'}), 
+            data=spec_values, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(specs_res.status_code, 403)
+        self.assertEqual(specs_res.status_code, 403)

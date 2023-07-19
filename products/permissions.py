@@ -84,7 +84,6 @@ class ProductSpecificationPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
         pks = obj['pks']
         if len(pks) == 0: return False
-        
         for pk in pks:
             if not ProductSpecification.objects.filter(pk=pk).exists(): return False
         
@@ -94,7 +93,7 @@ class ProductSpecificationPermission(BasePermission):
         if not is_brand_product(request, product_pks): return False
         return True
     
-def is_brand_product(self, request, product_pks):
+def is_brand_product(request, product_pks):
     Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
     brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
     for product_pk in product_pks:
