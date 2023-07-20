@@ -103,7 +103,6 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
 class ProductImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        # permission_classes = [AllowAny]
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
@@ -112,5 +111,5 @@ class ProductImageViewSet(viewsets.ViewSet):
         create_serializer = CreateProductImageSerializer(data=request.data)
         if not create_serializer.is_valid(): return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         validated_data = create_serializer.validated_data
-        BulkCreateProductImageSerializer(validated_data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        data = BulkCreateProductImageSerializer(validated_data)
+        return Response(data, status=status.HTTP_201_CREATED)
