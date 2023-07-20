@@ -113,3 +113,11 @@ class ProductImageViewSet(viewsets.ViewSet):
         validated_data = create_serializer.validated_data
         data = BulkCreateProductImageSerializer(validated_data).product_images
         return Response(data, status=status.HTTP_201_CREATED)
+    
+    @method_decorator(csrf_protect)
+    def destroy(self, request, pk=None):
+        pks = str_to_list(pk)
+        self.check_object_permissions(request=request, obj={"image_pks": pks})
+        # instances = ProductImage.objects.filter(pk__in=pks)
+        # instances.delete()
+        return Response(None, status=status.HTTP_202_ACCEPTED)
