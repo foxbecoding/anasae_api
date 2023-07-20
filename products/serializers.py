@@ -82,41 +82,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'isbn',
             'quantity'
         ]
-
-    # def validate(self, attrs):
-        
-        # Product_Instance.save()
-        
-        # if len(attrs.get('specifications')) > 0:
-        #     spec_instances = []
-        #     for spec in attrs.get('specifications'):
-        #         spec_instances.append(self.pro_specs_ins(Product_Instance, spec))
-        #     ProductSpecification.objects.bulk_create(spec_instances)
-
-        # stripe_price = stripe.Price.create(
-        #     unit_amount=attrs.get('price'),
-        #     currency="usd",
-        #     product=stripe_product.id,
-        # )
-
-        # Product_Price_Instance = ProductPrice.objects.create(
-        #     product = Product_Instance,
-        #     price=attrs.get('price'),
-        #     stripe_price_id=stripe_price.id
-        # )
-        # Product_Price_Instance.save()
-
-        # attrs['product_pk'] = Product_Instance.id
-        # return attrs
-
-    def pro_specs_ins(self, product, spec):
-        Product_Specification_Instance = ProductSpecification(
-            product=product, 
-            label=spec['label'], 
-            value=spec['value'],
-            is_required=spec['is_required']
-        )
-        return Product_Specification_Instance
     
 class ProductPriceSerializer(serializers.ModelSerializer):
     class Meta:
