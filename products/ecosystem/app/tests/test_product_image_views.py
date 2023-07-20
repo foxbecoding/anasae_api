@@ -5,6 +5,8 @@ from categories.ecosystem.methods import test_categories
 from datetime import datetime
 from utils.helpers import list_to_str, key_exists, tmp_image
 from pprint import pprint
+import json
+from PIL import Image
 
 is_CSRF = True
 
@@ -98,15 +100,16 @@ class TestProductImageViewSet(TestCase):
 
     def test_product_image_create(self):
         request_data = []
-        images = [ tmp_image() for i in range(7) ]
+        images = [ tmp_image('jpg') for i in range(7) ]
         for product in self.products:
-            [request_data.append({"image": image, "product": product['pk']}) for image in images]
+            request_data.append({'image': images, 'product': product['pk']})
 
-        self.client.post(
-            reverse('product-image-list'), 
-            data=request_data, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
+        for data in request_data[0:1]:
+            self.client.post(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
+
         # product_images = []
         # product_images = [{"product": product['pk']} for product in self.products]

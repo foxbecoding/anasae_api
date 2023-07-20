@@ -108,4 +108,7 @@ class ProductImageViewSet(viewsets.ViewSet):
     
     @method_decorator(csrf_protect)
     def create(self, request):
+        create_serializer = CreateProductImageSerializer(data=request.data)
+        if not create_serializer.is_valid(): return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print(create_serializer.validated_data)
         return Response(None, status=status.HTTP_201_CREATED)
