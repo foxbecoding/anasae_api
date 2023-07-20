@@ -118,6 +118,6 @@ class ProductImageViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         pks = str_to_list(pk)
         self.check_object_permissions(request=request, obj={"image_pks": pks})
-        # instances = ProductImage.objects.filter(pk__in=pks)
-        # instances.delete()
+        instances = ProductImage.objects.filter(pk__in=pks)
+        instances.delete()
         return Response(None, status=status.HTTP_202_ACCEPTED)
