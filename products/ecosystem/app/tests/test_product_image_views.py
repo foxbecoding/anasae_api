@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
+from categories.ecosystem.methods import test_categories
 from datetime import datetime
 from utils.helpers import list_to_str, key_exists, tmp_image
 from pprint import pprint
@@ -10,6 +11,7 @@ is_CSRF = True
 class TestProductImageViewSet(TestCase):
  
     def setUp(self):
+        self.categories = test_categories()
         self.client = Client(enforce_csrf_checks=is_CSRF)
         self.client.get(reverse('x-fct-list'))
         self.csrftoken = self.client.cookies['csrftoken'].value
@@ -95,5 +97,12 @@ class TestProductImageViewSet(TestCase):
         self.products = res.data
 
     def test_product_image_create(self):
-        images = [ tmp_image() for i in range(7) ]
-        print(images)
+        images = [
+            [ tmp_image() for i in range(7) ],
+            [ tmp_image() for i in range(7) ]
+        ]
+        for data in zip(self.products, images):
+            product, product_images = data
+            print(product['pk'])
+        # product_images = []
+        # product_images = [{"product": product['pk']} for product in self.products]
