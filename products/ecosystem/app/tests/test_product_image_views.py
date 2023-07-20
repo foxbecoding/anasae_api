@@ -155,10 +155,11 @@ class TestProductImageViewSet(TestCase):
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
-
-            pprint(res.data[0])
+            
+            image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in res.data[0:3] ])))
+            
             self.client.delete(
-                reverse('product-image-list'), 
+                reverse('product-image-detail', kwargs={"pk": image_pks}), 
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
