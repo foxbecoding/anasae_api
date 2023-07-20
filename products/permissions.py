@@ -104,3 +104,13 @@ def is_brand_product(request, product_pks):
         brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
         if brand_pk not in brand_pks: return False
     return True
+
+class ProductImagePermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            if not key_exists('product', request.data): return False
+            print(request.data['product'])
+            # if not is_brand_product(request, product_pks): return False
+        return True
