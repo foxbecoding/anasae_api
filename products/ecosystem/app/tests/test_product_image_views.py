@@ -150,16 +150,18 @@ class TestProductImageViewSet(TestCase):
             request_data.append({'images': images, 'product': product['pk']})
 
         for data in request_data[0:1]:
-            res = self.client.post(
+            create_res = self.client.post(
                 reverse('product-image-list'), 
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
             
-            image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in res.data[0:3] ])))
+            image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in create_res.data[0:3] ])))
             
-            self.client.delete(
+            delete_res = self.client.delete(
                 reverse('product-image-detail', kwargs={"pk": image_pks}), 
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
+
+            self.assertEqual(delete_res.status_code, 202)
