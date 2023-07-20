@@ -100,3 +100,15 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         data = BulkEditProductSpecificationSerializer(instances, edit_serializer.validated_data).specifications
         return Response(data, status=status.HTTP_202_ACCEPTED)
+    
+class ProductImageViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        create_serializer = CreateProductSpecificationSerializer(data=request.data, many=True)
+        if not create_serializer.is_valid(): return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        data = BulkCreateProductSpecificationSerializer.create(create_serializer.validated_data)
+        return Response(data, status=status.HTTP_201_CREATED)

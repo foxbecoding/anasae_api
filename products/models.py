@@ -42,11 +42,6 @@ class ProductImage(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
-class ProductImageLimit(models.Model):
-    limit = models.IntegerField(default=7)
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now_add=True, null=True)
-
 class ProductReview(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="product_reviews")
@@ -58,5 +53,10 @@ class ProductReview(models.Model):
 class ProductWishList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="wish_list", default="")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wish_list_items", default="")
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
+class ProductConfig(models.Model):
+    image_limit = models.IntegerField(default=7)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
