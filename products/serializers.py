@@ -249,10 +249,8 @@ class BulkCreateProductSpecificationSerializer(serializers.ListSerializer):
         return ProductSpecificationSerializer(instances, many=True).data
     
 class CreateProductImageSerializer(serializers.ModelSerializer):
-    images = serializers.ListField(write_only=True)
     class Meta:
         model = ProductImage
         fields = [
-            'images',
             'product'
         ]
