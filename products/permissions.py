@@ -93,6 +93,15 @@ class ProductSpecificationPermission(BasePermission):
         if not is_brand_product(request, product_pks): return False
         return True
     
+class ProductImagePermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            if not key_exists('product', request.data): return False
+            if not is_brand_product(request, [request.data['product']]): return False
+        return True
+        
 def is_brand_product(request, product_pks):
     Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
     brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
@@ -104,16 +113,3 @@ def is_brand_product(request, product_pks):
         brand_pks = [ str(brand['brand']) for brand in brand_owner_data ]
         if brand_pk not in brand_pks: return False
     return True
-
-class ProductImagePermission(BasePermission):
-    message = "Access Denied!"   
-
-    def has_permission(self, request, view):
-        if request.method == 'POST':
-            print('product' in request.data)
-            print(key_exists('product', request.data))
-              
-            # if not key_exists('product', request.data): return False
-            # print(request.data['product'])
-            # if not is_brand_product(request, product_pks): return False
-        return True
