@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from products.models import *
-from utils.helpers import create_uid
+from utils.helpers import create_uid, str_to_list
 from PIL import Image
 import stripe, requests, os, calendar, time, json
 
@@ -214,8 +214,16 @@ class BulkCreateProductSpecificationSerializer(serializers.ListSerializer):
         return ProductSpecificationSerializer(instances, many=True).data
     
 class CreateProductImageSerializer(serializers.ModelSerializer):
+    images = serializers.ListField(write_only=True)
     class Meta:
         model = ProductImage
         fields = [
-            'product'
+            'product',
+            'images'
         ]
+
+class BulkCreateProductImageSerializer(serializers.ListSerializer):
+    def __init__(self, request, product_instance): 
+        # self.images = request.data['images']
+        print((request.data['images']))
+  

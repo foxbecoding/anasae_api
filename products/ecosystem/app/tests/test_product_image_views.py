@@ -102,7 +102,7 @@ class TestProductImageViewSet(TestCase):
         request_data = []
         images = [ tmp_image('jpg') for i in range(7) ]
         for product in self.products:
-            request_data.append({'image': images, 'product': product['pk']})
+            request_data.append({'images': images, 'product': product['pk']})
 
         for data in request_data[0:1]:
             self.client.post(
