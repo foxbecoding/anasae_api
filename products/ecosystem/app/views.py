@@ -103,13 +103,12 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
 class ProductImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [AllowAny]
-        # permission_classes = [IsAuthenticated]
+        # permission_classes = [AllowAny]
+        permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    # @method_decorator(csrf_protect)
+    @method_decorator(csrf_protect)
     def create(self, request):
-        # print(request.data['images'])
         create_serializer = CreateProductImageSerializer(data=request.data)
         if not create_serializer.is_valid(): return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         validated_data = create_serializer.validated_data
