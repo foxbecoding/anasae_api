@@ -5,6 +5,7 @@ from brands.models import BrandOwner
 from brands.serializers import BrandOwnerSerializer
 from utils.helpers import key_exists
 import re
+from pprint import pprint
 
 
 class ProductPermission(BasePermission):
@@ -107,8 +108,8 @@ class ProductImagePermission(BasePermission):
         for pk in image_pks:
             if not ProductImage.objects.filter(pk=pk).exists(): return False
         instances = ProductImage.objects.filter(pk__in=image_pks)
-        product_pks = [ins['product_id'] for ins in instances]
-        print(product_pks)
+        product_pks = [ ins.product_id for ins in instances ]
+        if not is_brand_product(request, product_pks): return False
         return True
         
         
