@@ -142,3 +142,23 @@ class TestProductImageViewSet(TestCase):
             )
             
             self.assertEqual(res.status_code, 403)
+
+    def test_product_image_delete(self):
+        request_data = []
+        images = [ tmp_image('png') for i in range(7) ]
+        for product in self.products:
+            request_data.append({'images': images, 'product': product['pk']})
+
+        for data in request_data[0:1]:
+            res = self.client.post(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
+
+            pprint(res.data[0])
+            self.client.delete(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
