@@ -97,12 +97,16 @@ class TestProductImageViewSet(TestCase):
         self.products = res.data
 
     def test_product_image_create(self):
-        images = [
-            [ tmp_image() for i in range(7) ],
-            [ tmp_image() for i in range(7) ]
-        ]
-        for data in zip(self.products, images):
-            product, product_images = data
-            print(product['pk'])
+        request_data = []
+        images = [ tmp_image() for i in range(7) ]
+        for product in self.products:
+            [request_data.append({"image": image, "product": product['pk']}) for image in images]
+
+        self.client.post(
+            reverse('product-image-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
         # product_images = []
         # product_images = [{"product": product['pk']} for product in self.products]
