@@ -30,3 +30,13 @@ class TestProductSpecificationUrls(SimpleTestCase):
     def test_product_specification_detail_url_resolves(self):
         url = reverse('product-specification-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'product-specification-detail')
+
+class TestProductImageUrls(SimpleTestCase):
+    
+    def test_product_image_list_url_resolves(self):
+        url = reverse('product-image-list')
+        self.assertEqual(resolve(url).view_name, 'product-image-list')
+    
+    def test_product_specification_image_url_resolves(self):
+        url = reverse('product-image-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'product-image-detail')
