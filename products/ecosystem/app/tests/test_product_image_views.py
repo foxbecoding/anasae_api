@@ -105,11 +105,13 @@ class TestProductImageViewSet(TestCase):
             request_data.append({'images': images, 'product': product['pk']})
 
         for data in request_data[0:1]:
-            self.client.post(
+            res = self.client.post(
                 reverse('product-image-list'), 
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
+            print(res.data)
+
 
         # product_images = []
         # product_images = [{"product": product['pk']} for product in self.products]
