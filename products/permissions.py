@@ -101,6 +101,16 @@ class ProductImagePermission(BasePermission):
             if not key_exists('product', request.data): return False
             if not is_brand_product(request, [request.data['product']]): return False
         return True
+    
+    def has_object_permission(self, request, view, obj):
+        image_pks = obj['image_pks']
+        for pk in image_pks:
+            if not ProductImage.objects.filter(pk=pk).exists(): return False
+        instances = ProductImage.objects.filter(pk__in=image_pks)
+        product_pks = [ins['product_id'] for ins in instances]
+        print(product_pks)
+        return True
+        
         
 def is_brand_product(request, product_pks):
     Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
