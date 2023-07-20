@@ -103,7 +103,7 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
 class ProductImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, ProductImagePermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)

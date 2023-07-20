@@ -110,7 +110,10 @@ class ProductImagePermission(BasePermission):
 
     def has_permission(self, request, view):
         if request.method == 'POST':
-            if not key_exists('product', request.data): return False
-            print(request.data['product'])
+            print('product' in request.data)
+            print(key_exists('product', request.data))
+              
+            # if not key_exists('product', request.data): return False
+            # print(request.data['product'])
             # if not is_brand_product(request, product_pks): return False
         return True
