@@ -100,7 +100,7 @@ class TestProductImageViewSet(TestCase):
 
     def test_product_image_create(self):
         request_data = []
-        images = [ tmp_image('jpg') for i in range(7) ]
+        images = [ tmp_image('png') for i in range(7) ]
         for product in self.products:
             request_data.append({'images': images, 'product': product['pk']})
 
@@ -110,9 +110,20 @@ class TestProductImageViewSet(TestCase):
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
-            # print(res.data)
+
             self.assertEqual(res.status_code, 201)
 
+    # def test_product_image_create_errors(self):
+    #     request_data = []
+    #     images = [ tmp_image('gif') for i in range(7) ]
+    #     for product in self.products:
+    #         request_data.append({'images': images, 'product': product['pk']})
 
-        # product_images = []
-        # product_images = [{"product": product['pk']} for product in self.products]
+    #     for data in request_data[0:1]:
+    #         res = self.client.post(
+    #             reverse('product-image-list'), 
+    #             data=data,
+    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #         )
+            
+    #         self.assertEqual(res.status_code, 400)

@@ -232,6 +232,17 @@ class CreateProductImageSerializer(serializers.ModelSerializer):
             'images'
         ]
 
+    def validate(self, attrs):
+        images = attrs.get('images')
+        for image in images:
+            img = Image.open(image)
+            valid_formats = ['PNG', 'JPEG']
+            if img.format not in valid_formats:
+                msg = 'Image must be in PNG or JPEG format'
+                raise serializers.ValidationError({"image": msg}, code='authorization')
+            
+        return attrs
+
 class BulkCreateProductImageSerializer(serializers.ListSerializer):
     def __init__(self, validated_data): 
         self.image_data = validated_data
@@ -260,11 +271,6 @@ class BulkCreateProductImageSerializer(serializers.ListSerializer):
         image_paths = []
         for image in images:
             img = Image.open(image)
-            # valid_formats = ['PNG', 'JPEG']
-            # if img.format not in valid_formats:
-            #     msg = 'Image must be in PNG or JPEG format'
-            #     raise serializers.ValidationError({"image": msg}, code='authorization')
-            
             current_GMT = time.gmtime()
             time_stamp = calendar.timegm(current_GMT)
             image_name = create_uid('pi-')+f'-{time_stamp}.{img.format.lower()}'
