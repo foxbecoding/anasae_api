@@ -22,7 +22,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'category',
             'subcategory',
             'price',
-            'specifications'
+            'specifications',
+            'images'
         ]
 
 class EditProductSerializer(serializers.ModelSerializer):
