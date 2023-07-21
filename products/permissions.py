@@ -16,9 +16,8 @@ class ProductPermission(BasePermission):
         Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
         brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data
 
-        if request.method == 'GET' and 'action' in obj:
+        if request.method == 'GET':
             if not key_exists('pks', obj): return False
-            if obj['action'] != 'list': return False
             for pk in obj['pks']:
                 if not bool(re.match('^[0-9]+$', pk)): return False             
 

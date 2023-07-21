@@ -111,6 +111,12 @@ class TestProductImageViewSet(TestCase):
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
 
+            # product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
+            # products_res = self.client.get(
+            #     reverse('product-list')+f'?pks={product_pks}', 
+            #     content_type='application/json',
+            #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            # )
             self.assertEqual(res.status_code, 201)
 
     def test_product_image_create_errors(self):
