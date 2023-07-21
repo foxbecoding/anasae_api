@@ -116,7 +116,8 @@ class TestProductImageViewSet(TestCase):
                 content_type='application/json',
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
-            print(product_res.data)
+
+            self.assertEqual(len(images), len(product_res.data['images']))
             self.assertEqual(res.status_code, 201)
 
     # def test_product_image_create_errors(self):
@@ -149,25 +150,32 @@ class TestProductImageViewSet(TestCase):
             
     #         self.assertEqual(res.status_code, 403)
 
-    # def test_product_image_delete(self):
-    #     request_data = []
-    #     images = [ tmp_image('png') for i in range(7) ]
-    #     for product in self.products:
-    #         request_data.append({'images': images, 'product': product['pk']})
+    def test_product_image_delete(self):
+        request_data = []
+        images = [ tmp_image('png') for i in range(7) ]
+        for product in self.products:
+            request_data.append({'images': images, 'product': product['pk']})
 
-    #     for data in request_data[0:1]:
-    #         create_res = self.client.post(
-    #             reverse('product-image-list'), 
-    #             data=data,
-    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #         )
+        for data in request_data[0:1]:
+            create_res = self.client.post(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
             
-    #         image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in create_res.data[0:3] ])))
+            image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in create_res.data[0:3] ])))
             
-    #         delete_res = self.client.delete(
-    #             reverse('product-image-detail', kwargs={"pk": image_pks}), 
-    #             data=data,
-    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #         )
+            delete_res = self.client.delete(
+                reverse('product-image-detail', kwargs={"pk": image_pks}), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
 
-    #         self.assertEqual(delete_res.status_code, 202)
+            product_res = self.client.get(
+                reverse('product-detail', kwargs={"pk": self.products[0]['pk']}), 
+                content_type='application/json',
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
+            
+            self.assertLess(len(product_res.data['images']), len(images))
+            self.assertEqual(delete_res.status_code, 202)
