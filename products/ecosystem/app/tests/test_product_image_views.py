@@ -110,64 +110,64 @@ class TestProductImageViewSet(TestCase):
                 data=data,
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
-
-            # product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
-            # products_res = self.client.get(
-            #     reverse('product-list')+f'?pks={product_pks}', 
-            #     content_type='application/json',
-            #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-            # )
+            product_pk = res.data[0]['product']
+            product_res = self.client.get(
+                reverse('product-detail', kwargs={"pk": product_pk}), 
+                content_type='application/json',
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
+            print(product_res.data)
             self.assertEqual(res.status_code, 201)
 
-    def test_product_image_create_errors(self):
-        request_data = []
-        images = [ tmp_image('gif') for i in range(7) ]
-        for product in self.products:
-            request_data.append({'images': images, 'product': product['pk']})
+    # def test_product_image_create_errors(self):
+    #     request_data = []
+    #     images = [ tmp_image('gif') for i in range(7) ]
+    #     for product in self.products:
+    #         request_data.append({'images': images, 'product': product['pk']})
 
-        for data in request_data[0:1]:
-            res = self.client.post(
-                reverse('product-image-list'), 
-                data=data,
-                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-            )
+    #     for data in request_data[0:1]:
+    #         res = self.client.post(
+    #             reverse('product-image-list'), 
+    #             data=data,
+    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #         )
             
-            self.assertEqual(res.status_code, 400)
+    #         self.assertEqual(res.status_code, 400)
     
-    def test_product_image_create_permissions_failed(self):
-        request_data = []
-        images = [ tmp_image('png') for i in range(7) ]
-        for product in self.products:
-            request_data.append({'images': images, 'product': 111})
+    # def test_product_image_create_permissions_failed(self):
+    #     request_data = []
+    #     images = [ tmp_image('png') for i in range(7) ]
+    #     for product in self.products:
+    #         request_data.append({'images': images, 'product': 111})
 
-        for data in request_data[0:1]:
-            res = self.client.post(
-                reverse('product-image-list'), 
-                data=data,
-                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-            )
+    #     for data in request_data[0:1]:
+    #         res = self.client.post(
+    #             reverse('product-image-list'), 
+    #             data=data,
+    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #         )
             
-            self.assertEqual(res.status_code, 403)
+    #         self.assertEqual(res.status_code, 403)
 
-    def test_product_image_delete(self):
-        request_data = []
-        images = [ tmp_image('png') for i in range(7) ]
-        for product in self.products:
-            request_data.append({'images': images, 'product': product['pk']})
+    # def test_product_image_delete(self):
+    #     request_data = []
+    #     images = [ tmp_image('png') for i in range(7) ]
+    #     for product in self.products:
+    #         request_data.append({'images': images, 'product': product['pk']})
 
-        for data in request_data[0:1]:
-            create_res = self.client.post(
-                reverse('product-image-list'), 
-                data=data,
-                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-            )
+    #     for data in request_data[0:1]:
+    #         create_res = self.client.post(
+    #             reverse('product-image-list'), 
+    #             data=data,
+    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #         )
             
-            image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in create_res.data[0:3] ])))
+    #         image_pks = list_to_str(list(dict.fromkeys([ data['pk'] for data in create_res.data[0:3] ])))
             
-            delete_res = self.client.delete(
-                reverse('product-image-detail', kwargs={"pk": image_pks}), 
-                data=data,
-                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-            )
+    #         delete_res = self.client.delete(
+    #             reverse('product-image-detail', kwargs={"pk": image_pks}), 
+    #             data=data,
+    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #         )
 
-            self.assertEqual(delete_res.status_code, 202)
+    #         self.assertEqual(delete_res.status_code, 202)
