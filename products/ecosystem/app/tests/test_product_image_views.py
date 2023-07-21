@@ -3,10 +3,8 @@ from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
-from utils.helpers import list_to_str, key_exists, tmp_image
+from utils.helpers import list_to_str, tmp_image
 from pprint import pprint
-import json
-from PIL import Image
 
 is_CSRF = True
 
@@ -120,35 +118,35 @@ class TestProductImageViewSet(TestCase):
             self.assertEqual(len(images), len(product_res.data['images']))
             self.assertEqual(res.status_code, 201)
 
-    # def test_product_image_create_errors(self):
-    #     request_data = []
-    #     images = [ tmp_image('gif') for i in range(7) ]
-    #     for product in self.products:
-    #         request_data.append({'images': images, 'product': product['pk']})
+    def test_product_image_create_errors(self):
+        request_data = []
+        images = [ tmp_image('gif') for i in range(7) ]
+        for product in self.products:
+            request_data.append({'images': images, 'product': product['pk']})
 
-    #     for data in request_data[0:1]:
-    #         res = self.client.post(
-    #             reverse('product-image-list'), 
-    #             data=data,
-    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #         )
+        for data in request_data[0:1]:
+            res = self.client.post(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
             
-    #         self.assertEqual(res.status_code, 400)
+            self.assertEqual(res.status_code, 400)
     
-    # def test_product_image_create_permissions_failed(self):
-    #     request_data = []
-    #     images = [ tmp_image('png') for i in range(7) ]
-    #     for product in self.products:
-    #         request_data.append({'images': images, 'product': 111})
+    def test_product_image_create_permissions_failed(self):
+        request_data = []
+        images = [ tmp_image('png') for i in range(7) ]
+        for product in self.products:
+            request_data.append({'images': images, 'product': 111})
 
-    #     for data in request_data[0:1]:
-    #         res = self.client.post(
-    #             reverse('product-image-list'), 
-    #             data=data,
-    #             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #         )
+        for data in request_data[0:1]:
+            res = self.client.post(
+                reverse('product-image-list'), 
+                data=data,
+                **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+            )
             
-    #         self.assertEqual(res.status_code, 403)
+            self.assertEqual(res.status_code, 403)
 
     def test_product_image_delete(self):
         request_data = []
@@ -176,6 +174,6 @@ class TestProductImageViewSet(TestCase):
                 content_type='application/json',
                 **{'HTTP_X_CSRFTOKEN': self.csrftoken}
             )
-            
+
             self.assertLess(len(product_res.data['images']), len(images))
             self.assertEqual(delete_res.status_code, 202)
