@@ -39,18 +39,19 @@ if env('ENVIRONMENT') == 'production':
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    '192.168.1.235'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',   
-    'http://127.0.0.1:3001',  
+    'http://127.0.0.1:3000',  
+    'http://192.168.1.235:3000'  
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:3000',   
-    'http://127.0.0.1:3001', 
+    'http://127.0.0.1:3000', 
+    'http://192.168.1.235:3000' 
 )
 
 
@@ -75,7 +76,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'brands.apps.BrandsConfig',
     'categories.apps.CategoriesConfig',
-    'products.apps.ProductsConfig'
+    'products.apps.ProductsConfig',
+    'sliders.apps.SlidersConfig'
 ]
 
 REST_FRAMEWORK = {
