@@ -28,7 +28,7 @@ class SliderImageSerializer(serializers.ModelSerializer):
         model = SliderImage
         fields = [
             'pk',
-            'name',
+            'image',
             'is_active'
         ]
 
@@ -36,4 +36,20 @@ class CreateSliderImageSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = SliderImage
-        fields = [ 'name' ]
+        fields = [ 
+            'slider',
+            'image' 
+        ]
+
+    def validate(self, attrs):
+        image = attrs.get('image')
+        img = Image.open(image)
+        valid_formats = ['PNG', 'JPEG']
+        if img.format not in valid_formats:
+            msg = 'Image must be in PNG or JPEG format'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+            
+        return attrs
+    
+    def create(self, validated_data):
+        print(validated_data)
