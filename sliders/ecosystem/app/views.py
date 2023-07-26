@@ -15,4 +15,6 @@ class SliderViewSet(viewsets.ViewSet):
         if not Slider.objects.filter(pk=pk).exists: return Response([], status=status.HTTP_200_OK)
         instance = Slider.objects.get(pk=pk)
         data = SliderSerializer(instance).data
+        image_instances = SliderImage.objects.filter(pk__in=data['images'])
+        data['images'] = SliderImageSerializer(image_instances, many=True).data
         return Response(data, status=status.HTTP_200_OK)
