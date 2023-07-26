@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
-from sliders.serializers import SliderSerializer, CreateSliderSerializer
+from sliders.serializers import *
 from pprint import pprint
 
 class AdminSliderViewSet(viewsets.ViewSet):
@@ -27,5 +27,7 @@ class AdminSliderImageViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        print('SliderImage')
+        serializer = CreateSliderImageSerializer(data=request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = serializer.create(serializer.data)
         return Response(None, status=status.HTTP_201_CREATED)
