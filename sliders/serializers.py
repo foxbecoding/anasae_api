@@ -13,7 +13,8 @@ class SliderSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'name',
-            'is_active'
+            'is_active',
+            'images'
         ]
 
 class CreateSliderSerializer(serializers.ModelSerializer):
