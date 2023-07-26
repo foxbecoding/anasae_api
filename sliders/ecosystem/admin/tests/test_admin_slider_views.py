@@ -61,5 +61,6 @@ class TestAdminSliderViewSet(TestCase):
             {'name': 'Home page slider'}, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res)
-        # self.assertEqual(res.status_code, 201)      
+        
+        self.assertEqual(res.data['name'], 'Home page slider')      
+        self.assertEqual(res.status_code, 201)      
