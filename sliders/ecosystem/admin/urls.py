@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
-from .views import SliderViewSet, SliderImageViewSet
+from .views import AdminSliderViewSet, AdminSliderImageViewSet
 
 router = DefaultRouter()
-router.register(r"slider", SliderViewSet, basename="slider")
-router.register(r"slider-image", SliderImageViewSet, basename="slider-image")
+router.register(r"admin-slider", AdminSliderViewSet, basename="admin-slider")
+router.register(r"admin-slider-image", AdminSliderImageViewSet, basename="admin-slider-image")
 urlpatterns = router.urls
