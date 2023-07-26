@@ -9,11 +9,11 @@ from pprint import pprint
 
 class AdminSliderViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [AllowAny]
-        # permission_classes = [IsAuthenticated, IsAdminUser]
+        # permission_classes = [AllowAny]
+        permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in permission_classes]
 
-    # @method_decorator(csrf_protect)
+    @method_decorator(csrf_protect)
     def create(self, request):
         serializer = CreateSliderSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -23,11 +23,11 @@ class AdminSliderViewSet(viewsets.ViewSet):
     
 class AdminSliderImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [AllowAny]
-        # permission_classes = [IsAuthenticated, IsAdminUser]
+        # permission_classes = [AllowAny]
+        permission_classes = [IsAuthenticated, IsAdminUser]
         return [permission() for permission in permission_classes]
 
-    # @method_decorator(csrf_protect)
+    @method_decorator(csrf_protect)
     def create(self, request):
         serializer = CreateSliderImageSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
