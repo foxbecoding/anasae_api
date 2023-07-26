@@ -126,8 +126,8 @@ class TestAdminSliderImageViewSet(TestCase):
 
         res = self.client.post(
             reverse('admin-slider-image-list'),
-            data={'image': tmp_image(), 'slider': slider_pk},
+            data={'upload': tmp_image(), 'slider': slider_pk},
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        print(res)
+        print(res.data)

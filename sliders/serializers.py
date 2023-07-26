@@ -33,23 +33,50 @@ class SliderImageSerializer(serializers.ModelSerializer):
         ]
 
 class CreateSliderImageSerializer(serializers.ModelSerializer):
-    
+    upload = serializers.ImageField(write_only=True)
     class Meta:
         model = SliderImage
         fields = [ 
             'slider',
-            'image' 
+            'upload' 
         ]
 
     def validate(self, attrs):
-        image = attrs.get('image')
+        image = attrs.get('upload')
         img = Image.open(image)
         valid_formats = ['PNG', 'JPEG']
         if img.format not in valid_formats:
             msg = 'Image must be in PNG or JPEG format'
             raise serializers.ValidationError({"image": msg}, code='authorization')
-            
         return attrs
     
     def create(self, validated_data):
-        print(validated_data)
+        image = self.__get_image(validated_data['upload'])
+        instance = SliderImage.objects.create(
+            slider = validated_data['slider'],
+            image = image
+        )
+        data = SliderImageSerializer(instance).data
+        print(data)
+
+    def __get_image(self, image):
+        img = Image.open(image)
+        current_GMT = time.gmtime()
+        time_stamp = calendar.timegm(current_GMT)
+        image_name = create_uid('slide-')+f'-{time_stamp}.{img.format.lower()}'
+        image_path = str(env('CDN_SLIDER_DIR')+image_name)
+    
+        upload = requests.post(
+            f'{env("CDN_HOST_API")}{env("CDN_UPLOAD_IMAGE")}',
+            data = {
+                "file_path": env('CDN_SLIDER_DIR'),
+                "image_name": image_name
+            },
+            files={ "image": image.file.getvalue() }
+        )
+
+        if upload.status_code != 200:
+            msg = 'Please try again'
+            raise serializers.ValidationError({"image": msg}, code='authorization')
+        
+        return image_path
