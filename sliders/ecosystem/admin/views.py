@@ -29,5 +29,5 @@ class AdminSliderImageViewSet(viewsets.ViewSet):
     def create(self, request):
         serializer = CreateSliderImageSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        data = serializer.create(request.data), 
-        return Response(None, status=status.HTTP_201_CREATED)
+        data = serializer.create(request.data)
+        return Response(data, status=status.HTTP_201_CREATED)

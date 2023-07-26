@@ -52,12 +52,13 @@ class CreateSliderImageSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         image = self.__get_image(validated_data['upload'])
+        slider_instance = Slider.objects.get(pk=str(validated_data['slider']))
         instance = SliderImage.objects.create(
-            slider = validated_data['slider'],
+            slider = slider_instance,
             image = image
         )
-        data = SliderImageSerializer(instance).data
-        print(data)
+        instance.save()
+        return SliderImageSerializer(instance).data
 
     def __get_image(self, image):
         img = Image.open(image)
