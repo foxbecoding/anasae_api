@@ -3,6 +3,7 @@ from django.urls import reverse
 from datetime import datetime
 from users.models import UserGender
 from users.models import User
+from utils.helpers import tmp_image
 
 is_CSRF = True
 
@@ -122,3 +123,11 @@ class TestAdminSliderImageViewSet(TestCase):
         )   
 
         slider_pk = slider_res.data['pk']  
+
+        res = self.client.post(
+            reverse('admin-slider-image-list'),
+            data={'image': tmp_image(), 'slider': slider_pk},
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        print(res)
