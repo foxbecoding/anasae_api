@@ -15,4 +15,4 @@ class SliderViewSet(viewsets.ViewSet):
         if not Slider.objects.filter(pk=pk).exists: return Response([], status=status.HTTP_200_OK)
         instance = Slider.objects.get(pk=pk)
         data = SliderSerializer(instance).data
-        print(data)
+        return Response(data, status=status.HTTP_200_OK)
