@@ -25,7 +25,7 @@ class CreateSliderSerializer(serializers.ModelSerializer):
 class SliderImageSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Slider
+        model = SliderImage
         fields = [
             'pk',
             'name',
@@ -35,5 +35,5 @@ class SliderImageSerializer(serializers.ModelSerializer):
 class CreateSliderImageSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = Slider
+        model = SliderImage
         fields = [ 'name' ]
