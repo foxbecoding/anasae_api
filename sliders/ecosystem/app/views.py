@@ -12,7 +12,7 @@ class SliderViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
-        if not Slider.objects.filter(pk=pk).exists: return Response([], status=status.HTTP_200_OK)
+        if not Slider.objects.filter(pk=pk).exists(): return Response([], status=status.HTTP_200_OK)
         instance = Slider.objects.get(pk=pk)
         data = SliderSerializer(instance).data
         image_instances = SliderImage.objects.filter(pk__in=data['images'])
