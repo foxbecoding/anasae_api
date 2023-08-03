@@ -57,3 +57,14 @@ class UserAuthValidateDetailsViewSet(viewsets.ViewSet):
         serializer = UserAuthValidateDetailsSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_202_ACCEPTED)
+    
+class UserAuthValidatePasswordViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        serializer = UserAuthValidatePasswordSerializer(data=request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_202_ACCEPTED)

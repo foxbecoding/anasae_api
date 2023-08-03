@@ -244,19 +244,24 @@ class UserAuthValidateDetailsSerializer(serializers.ModelSerializer):
             'birth_year'
         ]
 
-    # def validate(self, attrs):
-    #     username = attrs.get('username').lower()
-    #     email = attrs.get('email').lower()
-       
-    #     if User.objects.filter(username=username).exists():
-    #         msg = 'user with this username already exists'
-    #         raise serializers.ValidationError({'username': msg}, code='authorization')
+class UserAuthValidatePasswordSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
-    #     if User.objects.filter(email=email).exists():
-    #         msg = 'user with this email already exists.'
-    #         raise serializers.ValidationError({'email': msg}, code='authorization')
+    class Meta:
+        model = User
+        fields = [
+            'password',
+            'confirm_password'
+        ]
+    
+    def validate(self, attrs):
+        password = attrs.get('password')
+        confirm_password = attrs.get('confirm_password')
         
-    #     return attrs
+        # Check if passwords matches
+        if password != confirm_password:
+            msg = 'Passwords must match.'
+            raise serializers.ValidationError({"password": msg}, code='authorization')
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
