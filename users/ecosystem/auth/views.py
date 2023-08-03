@@ -43,5 +43,6 @@ class UserAuthValidateViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        
+        serializer = UserAuthValidateSerializer(data=request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_202_ACCEPTED)
