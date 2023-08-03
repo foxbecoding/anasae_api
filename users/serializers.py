@@ -263,6 +263,8 @@ class UserAuthValidatePasswordSerializer(serializers.ModelSerializer):
             msg = 'Passwords must match.'
             raise serializers.ValidationError({"password": msg}, code='authorization')
         
+        return attrs
+        
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserLogin
