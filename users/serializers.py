@@ -87,7 +87,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             'password',
             'confirm_password',
             'date_of_birth',
-            'agreed_to_toa',
             'gender'
         ]
         extra_kwargs = {
@@ -95,9 +94,18 @@ class CreateUserSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        agreed_to_toa = attrs.get('agreed_to_toa')
         password = attrs.get('password')
         confirm_password = attrs.get('confirm_password')
+        username = attrs.get('username').lower()
+        email = attrs.get('email').lower()
+       
+        if User.objects.filter(username=username).exists():
+            msg = 'user with this username already exists'
+            raise serializers.ValidationError({'username': msg}, code='authorization')
+
+        if User.objects.filter(email=email).exists():
+            msg = 'user with this email already exists.'
+            raise serializers.ValidationError({'email': msg}, code='authorization')
 
         # Check if passwords matches
         if password != confirm_password:
@@ -105,9 +113,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": msg}, code='authorization')
         
         #Check if user agreed to terms of agreement
-        if not agreed_to_toa:
-            msg = 'Please agree to our Terms.'
-            raise serializers.ValidationError({"agreed_to_toa": msg}, code='authorization')
+        # if not agreed_to_toa:
+        #     msg = 'Please agree to our Terms.'
+        #     raise serializers.ValidationError({"agreed_to_toa": msg}, code='authorization')
 
         uid = create_uid('u-')
         stripe_customer = stripe.Customer.create(
@@ -127,7 +135,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             email = attrs.get('email').lower(),
             username = attrs.get('username').lower(),
             password = make_password(attrs.get('password')),
-            agreed_to_toa = attrs.get('agreed_to_toa'), 
+            agreed_to_toa = True, 
             date_of_birth = attrs.get('date_of_birth'), 
             stripe_customer_id = stripe_customer_id
         )
