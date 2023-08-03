@@ -35,3 +35,13 @@ class UserAuthLogOutViewSet(viewsets.ViewSet):
     def create(self, request):
         logout(request)
         return Response(None, status=status.HTTP_200_OK) 
+    
+class UserAuthValidateViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        
+        return Response(None, status=status.HTTP_202_ACCEPTED)

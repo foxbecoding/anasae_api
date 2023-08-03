@@ -199,6 +199,14 @@ class UserAuthSerializer(serializers.ModelSerializer):
         if not check_password(password, User_Instance.password):
             return None
         return User_Instance
+
+class UserAuthValidateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email'
+        ]
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
