@@ -227,3 +227,48 @@ class TestAuthValidateDetailsViewSet(TestCase):
         )
 
         self.assertEqual(res.status_code, 202)
+    
+    def test_auth_validate_details_create_first_name_error(self):
+        request_data = {
+            'first_name': '',
+            'last_name': 'fox',
+            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-details-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
+    
+    def test_auth_validate_details_create_last_name_error(self):
+        request_data = {
+            'first_name': 'desmond',
+            'last_name': '',
+            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-details-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
+    
+    def test_auth_validate_details_create_date_of_birth_error(self):
+        request_data = {
+            'first_name': 'desmond',
+            'last_name': 'fox',
+            'date_of_birth': ''
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-details-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        print(res.data)
+        self.assertEqual(res.status_code, 400)
