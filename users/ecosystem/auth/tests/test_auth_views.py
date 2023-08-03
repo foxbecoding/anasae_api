@@ -145,7 +145,7 @@ class TestAuthValidateViewSet(TestCase):
     def test_auth_validate_create(self):
         request_data = {
             'username': 'Slugga',
-            'email': 'slugga@gmail.com'
+            'email': 'fox@foxbecoding.com'
         }
 
         res = self.client.post(
