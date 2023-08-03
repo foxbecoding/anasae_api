@@ -324,3 +324,17 @@ class TestAuthValidatePasswordViewSet(TestCase):
         )
 
         self.assertEqual(res.status_code, 202)
+
+    def test_auth_validate_password_create_error(self):
+        request_data = {
+            'password': '123456',
+            'confirm_password': '1234567'
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-password-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 400)
