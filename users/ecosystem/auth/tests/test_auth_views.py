@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
 
+
 is_CSRF = True
 
 class TestAuthLogInViewSet(TestCase):
@@ -217,7 +218,9 @@ class TestAuthValidateDetailsViewSet(TestCase):
         request_data = {
             'first_name': 'desmond',
             'last_name': 'fox',
-            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+            'birth_month': '12', 
+            'birth_day': '31', 
+            'birth_year': '1990'
         }
 
         res = self.client.post(
@@ -232,7 +235,9 @@ class TestAuthValidateDetailsViewSet(TestCase):
         request_data = {
             'first_name': '',
             'last_name': 'fox',
-            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+            'birth_month': '12', 
+            'birth_day': '31', 
+            'birth_year': '1990'
         }
 
         res = self.client.post(
@@ -247,7 +252,9 @@ class TestAuthValidateDetailsViewSet(TestCase):
         request_data = {
             'first_name': 'desmond',
             'last_name': '',
-            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+            'birth_month': '12', 
+            'birth_day': '31', 
+            'birth_year': '1990'
         }
 
         res = self.client.post(
@@ -262,7 +269,9 @@ class TestAuthValidateDetailsViewSet(TestCase):
         request_data = {
             'first_name': 'desmond',
             'last_name': 'fox',
-            'date_of_birth': ''
+            'birth_month': '', 
+            'birth_day': '31', 
+            'birth_year': '1990'
         }
 
         res = self.client.post(
@@ -270,5 +279,5 @@ class TestAuthValidateDetailsViewSet(TestCase):
             request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res.data)
+        
         self.assertEqual(res.status_code, 400)

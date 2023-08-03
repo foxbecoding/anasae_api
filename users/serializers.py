@@ -231,12 +231,17 @@ class UserAuthValidateSerializer(serializers.ModelSerializer):
         return attrs
     
 class UserAuthValidateDetailsSerializer(serializers.ModelSerializer):
+    birth_month = serializers.CharField(write_only=True)
+    birth_day = serializers.CharField(write_only=True)
+    birth_year = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = [
             'first_name',
             'last_name',
-            'date_of_birth'
+            'birth_month',
+            'birth_day',
+            'birth_year'
         ]
 
     # def validate(self, attrs):
