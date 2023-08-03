@@ -239,19 +239,19 @@ class UserAuthValidateDetailsSerializer(serializers.ModelSerializer):
             'date_of_birth'
         ]
 
-    def validate(self, attrs):
-        username = attrs.get('username').lower()
-        email = attrs.get('email').lower()
+    # def validate(self, attrs):
+    #     username = attrs.get('username').lower()
+    #     email = attrs.get('email').lower()
        
-        if User.objects.filter(username=username).exists():
-            msg = 'user with this username already exists'
-            raise serializers.ValidationError({'username': msg}, code='authorization')
+    #     if User.objects.filter(username=username).exists():
+    #         msg = 'user with this username already exists'
+    #         raise serializers.ValidationError({'username': msg}, code='authorization')
 
-        if User.objects.filter(email=email).exists():
-            msg = 'user with this email already exists.'
-            raise serializers.ValidationError({'email': msg}, code='authorization')
+    #     if User.objects.filter(email=email).exists():
+    #         msg = 'user with this email already exists.'
+    #         raise serializers.ValidationError({'email': msg}, code='authorization')
         
-        return attrs
+    #     return attrs
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
