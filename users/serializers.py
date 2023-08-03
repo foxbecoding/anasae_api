@@ -212,7 +212,7 @@ class UserAuthValidateSerializer(serializers.ModelSerializer):
         username = attrs.get('username').lower()
         email = attrs.get('email').lower()
        
-        if User.objects.filter(username_validation=username).exists():
+        if User.objects.filter(username=username).exists():
             msg = 'user with this username already exists'
             raise serializers.ValidationError({'username': msg}, code='authorization')
 

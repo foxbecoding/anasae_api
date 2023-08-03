@@ -156,10 +156,24 @@ class TestAuthValidateViewSet(TestCase):
     
         self.assertEqual(res.status_code, 202)
     
-    def test_auth_validate_create_username_exists(self):
+    def test_auth_validate_create_username_exists_error(self):
         request_data = {
-            'username': 'slugga',
+            'username': 'Slugga',
             'email': 'fox@foxbecoding.com'
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+    
+        self.assertEqual(res.status_code, 400)
+    
+    def test_auth_validate_create_email_exists_error(self):
+        request_data = {
+            'username': 'fox',
+            'email': 'slugga@gmail.com'
         }
 
         res = self.client.post(
