@@ -9,7 +9,6 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
     username = models.CharField(max_length=30, blank=False, unique=True, default='')
-    username_validation = models.CharField(max_length=30, blank=False, unique=True, default='')
     email = models.EmailField(blank=False, unique=True, default='')
     stripe_customer_id = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)

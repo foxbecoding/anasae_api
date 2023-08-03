@@ -125,8 +125,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             first_name = attrs.get('first_name'),
             last_name = attrs.get('last_name'),
             email = attrs.get('email').lower(),
-            username = attrs.get('username'),
-            username_validation = attrs.get('username').lower(),
+            username = attrs.get('username').lower(),
             password = make_password(attrs.get('password')),
             agreed_to_toa = attrs.get('agreed_to_toa'), 
             date_of_birth = attrs.get('date_of_birth'), 
@@ -214,12 +213,14 @@ class UserAuthValidateSerializer(serializers.ModelSerializer):
         email = attrs.get('email').lower()
        
         if User.objects.filter(username_validation=username).exists():
-            msg = 'username already exists.'
+            msg = 'user with this username already exists'
             raise serializers.ValidationError({'username': msg}, code='authorization')
 
         if User.objects.filter(email=email).exists():
-            msg = 'email already exists.'
+            msg = 'user with this email already exists.'
             raise serializers.ValidationError({'email': msg}, code='authorization')
+        
+        return attrs
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:

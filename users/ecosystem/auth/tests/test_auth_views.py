@@ -144,7 +144,7 @@ class TestAuthValidateViewSet(TestCase):
 
     def test_auth_validate_create(self):
         request_data = {
-            'username': 'Slugga',
+            'username': 'fox',
             'email': 'fox@foxbecoding.com'
         }
 
@@ -153,5 +153,19 @@ class TestAuthValidateViewSet(TestCase):
             request_data, 
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(res.data)
+    
         self.assertEqual(res.status_code, 202)
+    
+    def test_auth_validate_create_username_exists(self):
+        request_data = {
+            'username': 'slugga',
+            'email': 'fox@foxbecoding.com'
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+    
+        self.assertEqual(res.status_code, 400)
