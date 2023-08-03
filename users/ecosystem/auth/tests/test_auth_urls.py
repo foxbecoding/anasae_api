@@ -12,3 +12,9 @@ class TestAuthLogOutUrls(SimpleTestCase):
     def test_auth_log_out_list_url_resolves(self):
         url = reverse('auth-log-out-list')
         self.assertEqual(resolve(url).view_name, 'auth-log-out-list')
+
+class TestAuthValidateUrls(SimpleTestCase):
+    
+    def test_auth_validate_list_url_resolves(self):
+        url = reverse('auth-validate-list')
+        self.assertEqual(resolve(url).view_name, 'auth-validate-list')
