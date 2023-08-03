@@ -18,3 +18,9 @@ class TestAuthValidateUrls(SimpleTestCase):
     def test_auth_validate_list_url_resolves(self):
         url = reverse('auth-validate-list')
         self.assertEqual(resolve(url).view_name, 'auth-validate-list')
+
+class TestAuthValidateDetailsUrls(SimpleTestCase):
+    
+    def test_auth_validate_details_list_url_resolves(self):
+        url = reverse('auth-validate-details-list')
+        self.assertEqual(resolve(url).view_name, 'auth-validate-details-list')

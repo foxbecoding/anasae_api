@@ -183,3 +183,47 @@ class TestAuthValidateViewSet(TestCase):
         )
     
         self.assertEqual(res.status_code, 400)
+
+class TestAuthValidateDetailsViewSet(TestCase):
+    
+    def setUp(self):
+        self.client = Client(enforce_csrf_checks=is_CSRF)
+        self.client.get(reverse('x-fct-list'))
+        self.csrftoken = self.client.cookies['csrftoken'].value
+        self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
+        self.User_Gender_Instance.save()
+
+        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
+
+        user_data = {
+            'first_name': "Desmond",
+            'last_name': 'Fox',
+            'email': 'slugga@gmail.com',
+            'username': 'slugga',
+            'password': '123456',
+            'confirm_password': '123456',
+            'date_of_birth': date_time_obj.date(),
+            'agreed_to_toa': True,
+            'gender': self.User_Gender_Instance.id
+        }
+
+        self.user_data = self.client.post(
+            reverse('user-list'), 
+            user_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+    def test_auth_validate_details_create(self):
+        request_data = {
+            'first_name': 'desmond',
+            'last_name': 'fox',
+            'date_of_birth': datetime.strptime('12/31/1990', '%m/%d/%Y').date()
+        }
+
+        res = self.client.post(
+            reverse('auth-validate-details-list'), 
+            request_data, 
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(res.status_code, 202)
