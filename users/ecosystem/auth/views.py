@@ -82,7 +82,7 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
 
     # @method_decorator(csrf_protect)
     def create(self, request):
-        if key_exists(request.data['otp_code']):
+        if key_exists(request.data):
             if not UserVerifyEmail.objects.filter(email=email).filter(otp_code=otp_code).exists():
                 return Response({'error': 'An error has occured.'}, status=status.HTTP_400_BAD_REQUEST)
             
