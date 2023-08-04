@@ -89,13 +89,14 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
         ctx = {
             'email': email,
             'message': message,
+            'logo': os.getenv('EMAIL_LOGO')
         }
 
         try:
             msg = EmailMessage(
                 'Verify Email',
                 get_template(os.getenv('VERIFY_EMAIL_HTML')).render(ctx),
-                os.getenv('EMAIL_HOST_USER'),
+                os.getenv('NO_REPLY_EMAIL'),
                 [email],
             )
             msg.content_subtype ="html"
