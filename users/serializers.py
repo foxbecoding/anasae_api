@@ -292,10 +292,12 @@ class EditUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
         if not UserVerifyEmail.objects.filter(email=email).filter(otp_code=otp_code).exists():
             msg = 'Email verification failed, please try again.'
             raise serializers.ValidationError({'error': msg}, code='authorization')
-        return super().validate(attrs)
+        return attrs
     
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+    def update(self, instance: UserVerifyEmail, validated_data):
+        instance.verified_status = True
+        instance.save()
+        return {'pk': instance.pk}
 
 class CreateUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
     class Meta:

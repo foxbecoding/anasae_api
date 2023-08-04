@@ -86,13 +86,9 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
     
     # @method_decorator(csrf_protect)
     def update(self, request, pk=None):
-        email, otp_code = [ request.data['email'], request.data['otp_code'] ]
-        if not UserVerifyEmail.objects.filter(email=email).filter(otp_code=otp_code).exists(): return Response({'error': 'An error has occured.'}, status=status.HTTP_400_BAD_REQUEST)
-        instance = UserVerifyEmail.objects.get(email=email)
-        if instance.otp_code != otp_code: return Response({'error': 'Verification failed, please try again.'}, status=status.HTTP_400_BAD_REQUEST)    
-        instance.verified_status = True
-        instance.save()
-        return Response({'success': 'Email verified!'}, status=status.HTTP_202_ACCEPTED)
-
-    
-    
+        instance = UserVerifyEmail.objects.get(pk=pk)
+        serializer = EditUserAuthVerifyEmailSerializer(data=request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        validated_data = serializer.validated_data
+        data = serializer.update(instance, validated_data)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
