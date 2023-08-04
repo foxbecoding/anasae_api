@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import *
 from users.ecosystem.methods import get_user_data
+from users.models import UserVerifyEmail
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
-import os
+import os, pyotp
     
 class UserAuthLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -79,19 +80,35 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
 
     # @method_decorator(csrf_protect)
     def create(self, request):
+        totp = pyotp.TOTP('base32secret3232')
+        email, otp_code = [ request.data['email'], totp.now() ]
+
+        if not UserVerifyEmail.objects.filter(email=email).exists():
+            instance = UserVerifyEmail.objects.create(
+                email=email,
+                otp_code=otp_code,
+                verified_status=False
+            )
+            instance.save()
+        else:
+            instance = UserVerifyEmail.objects.get(email=email)
+            instance.otp_code = otp_code
+            instance.save()
+
         self.send_mail(
-            request.data['email'],
+            email,
+            otp_code,
             'Here is your verification code'
         )
         return Response(None, status=status.HTTP_200_OK) 
     
-    def send_mail(self, email, message):
+    def send_mail(self, email, otp_code, message):
         ctx = {
-            'email': email,
             'message': message,
+            'otp_code': otp_code,
             'logo': os.getenv('EMAIL_LOGO')
         }
-
+        print(ctx)
         try:
             msg = EmailMessage(
                 'Verify Email',

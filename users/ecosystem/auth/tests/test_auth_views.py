@@ -370,8 +370,7 @@ class TestAuthVerifyEmailViewSet(TestCase):
 
     def test_auth_validate_password_create(self):
         request_data = {
-            # 'email': 'soslugga@gmail.com',
-            'email': 'fox@foxbecoding.com',
+            'email': 'soslugga@gmail.com',
         }
 
         res = self.client.post(

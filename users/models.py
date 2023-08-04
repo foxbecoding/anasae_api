@@ -65,3 +65,11 @@ class UserPaymentMethod(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
+
+class UserVerifyEmail(models.Model):
+    email = models.EmailField(blank=False, unique=True)
+    otp_code = models.CharField(max_length=6, blank=False)
+    verified_status = models.BooleanField(blank=False, default=False)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
