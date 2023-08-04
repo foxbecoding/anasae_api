@@ -10,6 +10,7 @@ from users.ecosystem.methods import get_user_data
 from users.models import UserVerifyEmail
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
+from utils.helpers import key_exists
 import os, pyotp
     
 class UserAuthLogInViewSet(viewsets.ViewSet):
@@ -78,8 +79,22 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
 
+
     # @method_decorator(csrf_protect)
     def create(self, request):
+        if key_exists(request.data['otp_code']):
+            if not UserVerifyEmail.objects.filter(email=email).filter(otp_code=otp_code).exists():
+                return Response({'error': 'An error has occured.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            instance = UserVerifyEmail.objects.get(email=email)
+            if instance.otp_code != request.data['otp_code']:
+                return Response({'error': 'Verification failed, please try again.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            instance.verified_status = True
+            instance.save()
+            
+            return Response({'success': 'Email verified!'}, status=status.HTTP_202_ACCEPTED)
+
         email, otp_code = [ request.data['email'], pyotp.TOTP('base32secret3232').now() ]
 
         if not UserVerifyEmail.objects.filter(email=email).exists():
@@ -94,20 +109,17 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
             instance.otp_code = otp_code
             instance.save()
 
-        self.send_mail(
-            email,
-            otp_code,
-            'Here is your verification code'
-        )
-        return Response(None, status=status.HTTP_200_OK) 
-    
-    def send_mail(self, email, otp_code, message):
         ctx = {
-            'message': message,
+            'message': 'Verification code',
+            'message2': 'Use this code to complete your account creation.',
             'otp_code': otp_code,
             'logo': os.getenv('EMAIL_LOGO')
         }
-        
+
+        self.send_mail(email, ctx)
+        return Response(None, status=status.HTTP_200_OK) 
+    
+    def send_mail(self, email, ctx):
         try:
             msg = EmailMessage(
                 'Verify Email',
