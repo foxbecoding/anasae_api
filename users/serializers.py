@@ -286,6 +286,13 @@ class EditUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
             'email',
             'otp_code'
         ]
+
+    def validate(self, attrs):
+        email, otp_code = [ attrs.get('email').lower(), attrs.get('otp_code') ]
+        if not UserVerifyEmail.objects.filter(email=email).filter(otp_code=otp_code).exists():
+            msg = 'Email verification failed, please try again.'
+            raise serializers.ValidationError({'error': msg}, code='authorization')
+        return super().validate(attrs)
     
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
@@ -300,7 +307,7 @@ class CreateUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         email, otp_code = [ validated_data['email'], pyotp.TOTP('base32secret3232').now() ]
         
-        instance = UserVerifyEmail.objects.create(email=email, otp_code=otp_code)
+        instance = UserVerifyEmail.objects.create(email=email.lower(), otp_code=otp_code)
         instance.save()
         
         ctx = {
@@ -311,7 +318,7 @@ class CreateUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
         }
 
         self.send_mail(email, ctx)
-        return UserAuthVerifyEmailSerializer(instance).data
+        return {'pk': instance.pk, "email": instance.email}
     
     def send_mail(self, email, ctx):
         try:
