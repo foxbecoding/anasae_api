@@ -80,8 +80,7 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
 
     # @method_decorator(csrf_protect)
     def create(self, request):
-        totp = pyotp.TOTP('base32secret3232')
-        email, otp_code = [ request.data['email'], totp.now() ]
+        email, otp_code = [ request.data['email'], pyotp.TOTP('base32secret3232').now() ]
 
         if not UserVerifyEmail.objects.filter(email=email).exists():
             instance = UserVerifyEmail.objects.create(
