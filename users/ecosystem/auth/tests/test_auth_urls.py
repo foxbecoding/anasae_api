@@ -30,3 +30,9 @@ class TestAuthValidatePasswordUrls(SimpleTestCase):
     def test_auth_validate_details_list_url_resolves(self):
         url = reverse('auth-validate-password-list')
         self.assertEqual(resolve(url).view_name, 'auth-validate-password-list')
+
+class TestVerifyEmailUrls(SimpleTestCase):
+    
+    def test_auth_verify_email_list_url_resolves(self):
+        url = reverse('auth-verify-email-list')
+        self.assertEqual(resolve(url).view_name, 'auth-verify-email-list')

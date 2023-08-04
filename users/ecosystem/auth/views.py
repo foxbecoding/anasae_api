@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import *
 from users.ecosystem.methods import get_user_data
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
+import os
     
 class UserAuthLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -68,3 +71,34 @@ class UserAuthValidatePasswordViewSet(viewsets.ViewSet):
         serializer = UserAuthValidatePasswordSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(None, status=status.HTTP_202_ACCEPTED)
+    
+class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    # @method_decorator(csrf_protect)
+    def create(self, request):
+        self.send_mail(
+            request.data['email'],
+            'Here is your verification code'
+        )
+        return Response(None, status=status.HTTP_200_OK) 
+    
+    def send_mail(self, email, message):
+        ctx = {
+            'email': email,
+            'message': message,
+        }
+
+        try:
+            msg = EmailMessage(
+                'Verify Email',
+                get_template(os.getenv('VERIFY_EMAIL_HTML')).render(ctx),
+                os.getenv('EMAIL_HOST_USER'),
+                [email],
+            )
+            msg.content_subtype ="html"
+            msg.send()
+        except Exception as e: 
+            print(f'This shit will work soon: {e}')
