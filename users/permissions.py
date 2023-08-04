@@ -51,3 +51,11 @@ class UserPaymentMethodPermission(BasePermission):
                 return False
 
         return True
+    
+class UserAuthVerifyEmailPermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_object_permission(self, request, view, obj) -> bool:
+        pk = obj['pk']
+        if not UserVerifyEmail.objects.filter(pk=pk).exists(): return False
+        return True

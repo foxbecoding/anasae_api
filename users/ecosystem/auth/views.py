@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import *
+from users.permissions import *
 from users.ecosystem.methods import get_user_data
 from users.models import UserVerifyEmail
     
@@ -72,7 +73,7 @@ class UserAuthValidatePasswordViewSet(viewsets.ViewSet):
     
 class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [AllowAny]
+        permission_classes = [AllowAny, UserAuthVerifyEmailPermission]
         return [permission() for permission in permission_classes]
 
 
@@ -86,6 +87,7 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
     
     # @method_decorator(csrf_protect)
     def update(self, request, pk=None):
+        self.check_object_permissions(request, {'pk': pk})
         instance = UserVerifyEmail.objects.get(pk=pk)
         serializer = EditUserAuthVerifyEmailSerializer(data=request.data)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
