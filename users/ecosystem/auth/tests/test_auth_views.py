@@ -368,7 +368,7 @@ class TestAuthVerifyEmailViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-    def test_auth_validate_password_create(self):
+    def test_auth_verify_email_create(self):
         request_data = {
             'email': 'soslugga@gmail.com',
         }

@@ -36,3 +36,7 @@ class TestVerifyEmailUrls(SimpleTestCase):
     def test_auth_verify_email_list_url_resolves(self):
         url = reverse('auth-verify-email-list')
         self.assertEqual(resolve(url).view_name, 'auth-verify-email-list')
+    
+    def test_auth_verify_email_detail_url_resolves(self):
+        url = reverse('auth-verify-email-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'auth-verify-email-detail')

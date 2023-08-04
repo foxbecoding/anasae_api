@@ -3,7 +3,12 @@ from rest_framework import serializers
 from users.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe, requests, os, calendar, time
+from users.models import UserVerifyEmail
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from utils.helpers import key_exists
+import stripe, requests, os, calendar, time, pyotp
+
 
 env = os.getenv
 
@@ -264,6 +269,61 @@ class UserAuthValidatePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": msg}, code='authorization')
         
         return attrs
+
+class UserAuthVerifyEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserVerifyEmail
+        fields = [
+            'pk',
+            'email',
+            'otp_code'
+        ]
+
+class EditUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserVerifyEmail
+        fields = [
+            'email',
+            'otp_code'
+        ]
+    
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+class CreateUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserVerifyEmail
+        fields = [
+            'email',
+        ]
+
+    def create(self, validated_data):
+        email, otp_code = [ validated_data['email'], pyotp.TOTP('base32secret3232').now() ]
+        
+        instance = UserVerifyEmail.objects.create(email=email, otp_code=otp_code)
+        instance.save()
+        
+        ctx = {
+            'message': 'Verification code',
+            'message2': 'Use this code to complete your account creation.',
+            'otp_code': otp_code,
+            'logo': os.getenv('EMAIL_LOGO')
+        }
+
+        self.send_mail(email, ctx)
+        return UserAuthVerifyEmailSerializer(instance).data
+    
+    def send_mail(self, email, ctx):
+        try:
+            msg = EmailMessage(
+                'Verify Email',
+                get_template(os.getenv('VERIFY_EMAIL_HTML')).render(ctx),
+                os.getenv('NO_REPLY_EMAIL'),
+                [email],
+            )
+            msg.content_subtype ="html"
+            msg.send()
+        except Exception as e: print(e)
         
 class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
