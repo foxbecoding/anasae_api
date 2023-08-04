@@ -107,7 +107,7 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
             'otp_code': otp_code,
             'logo': os.getenv('EMAIL_LOGO')
         }
-        print(ctx)
+        
         try:
             msg = EmailMessage(
                 'Verify Email',
@@ -117,5 +117,4 @@ class UserAuthVerifyEmailViewSet(viewsets.ViewSet):
             )
             msg.content_subtype ="html"
             msg.send()
-        except Exception as e: 
-            print(f'This shit will work soon: {e}')
+        except Exception as e: print(e)
