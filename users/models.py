@@ -67,6 +67,7 @@ class UserPaymentMethod(models.Model):
     deleted = models.DateTimeField(null=True)
 
 class UserVerifyEmail(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="verified_email", null=True, blank=True, default='')
     email = models.EmailField(blank=False)
     otp_code = models.CharField(max_length=6, blank=False)
     verified_status = models.BooleanField(blank=False, default=False)
