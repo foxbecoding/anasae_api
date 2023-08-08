@@ -188,7 +188,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
        
         if username and password:
 
-            # Find user with username/email and password combination
+            # Find user with username and password combination
             user = self.authenticate(username, password)
     
             if not user:
@@ -244,7 +244,7 @@ class UserAuthEmailSerializer(serializers.ModelSerializer):
        
         if email and password:
 
-            # Find user with username/email and password combination
+            # Find user with email and password combination
             user = self.authenticate(email, password)
     
             if not user:
