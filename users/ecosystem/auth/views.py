@@ -9,6 +9,7 @@ from users.serializers import *
 from users.permissions import *
 from users.ecosystem.methods import get_user_data
 from users.models import UserVerifyEmail
+from utils.helpers import key_exists
     
 class UserAuthLogInViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -17,7 +18,10 @@ class UserAuthLogInViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        User_Auth_Serializer = UserAuthSerializer(data=request.data, context={ 'request': request })
+        if key_exists('email', request.data):
+            User_Auth_Serializer = UserAuthEmailSerializer(data=request.data, context={ 'request': request })
+        else:
+            User_Auth_Serializer = UserAuthSerializer(data=request.data, context={ 'request': request })
         
         if not User_Auth_Serializer.is_valid():
             return Response(User_Auth_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)

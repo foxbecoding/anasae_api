@@ -212,6 +212,62 @@ class UserAuthSerializer(serializers.ModelSerializer):
         if not check_password(password, User_Instance.password):
             return None
         return User_Instance
+    
+class UserAuthEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'password',
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
+
+    email = serializers.EmailField(
+        label="Email",
+        write_only=True
+    )
+    
+    password = serializers.CharField(
+        label="Password",
+        # This will be used when the DRF browsable API is enabled
+        style={'input_type': 'password'},
+        trim_whitespace=True,
+        write_only=True
+    )
+
+    def validate(self, attrs):
+        # Set email and password from attrs
+        email = attrs.get('email')
+        password = attrs.get('password')
+       
+        if email and password:
+
+            # Find user with username/email and password combination
+            user = self.authenticate(email, password)
+    
+            if not user:
+                # If we don't have a regular user, raise a ValidationError
+                msg = 'Invalid authentication credentials.'
+                raise serializers.ValidationError({"error": msg}, code='authorization')
+        else:
+            msg = 'Both "email" and "password" are required.'
+            raise serializers.ValidationError({"error": msg}, code='authorization')
+
+        User_Login_Instance = UserLogin.objects.create(user = user)
+        User_Login_Instance.save()
+        
+        attrs['user'] = user
+        return attrs
+    
+    def authenticate(self, email, password) -> User:
+        if not User.objects.filter(email=email).exists():
+            return None
+        User_Instance = User.objects.get(email=email)     
+        if not check_password(password, User_Instance.password):
+            return None
+        return User_Instance
 
 class UserAuthValidateSerializer(serializers.ModelSerializer):
     class Meta:
