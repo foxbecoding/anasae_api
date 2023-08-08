@@ -250,10 +250,10 @@ class UserAuthEmailSerializer(serializers.ModelSerializer):
             if not user:
                 # If we don't have a regular user, raise a ValidationError
                 msg = 'Invalid authentication credentials.'
-                raise serializers.ValidationError({"error": msg}, code='authorization')
+                raise serializers.ValidationError({"errors": msg}, code='authorization')
         else:
             msg = 'Both "email" and "password" are required.'
-            raise serializers.ValidationError({"error": msg}, code='authorization')
+            raise serializers.ValidationError({"errors": msg}, code='authorization')
 
         User_Login_Instance = UserLogin.objects.create(user = user)
         User_Login_Instance.save()
