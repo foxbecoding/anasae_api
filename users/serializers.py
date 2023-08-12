@@ -290,6 +290,7 @@ class UserAuthValidateDetailsSerializer(serializers.ModelSerializer):
     birth_month = serializers.CharField(write_only=True)
     birth_day = serializers.CharField(write_only=True)
     birth_year = serializers.CharField(write_only=True)
+    gender = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = [
@@ -297,8 +298,18 @@ class UserAuthValidateDetailsSerializer(serializers.ModelSerializer):
             'last_name',
             'birth_month',
             'birth_day',
-            'birth_year'
+            'birth_year',
+            'gender'
         ]
+    
+    def validate(self, attrs):
+        gender = attrs.get('gender')
+       
+        if not UserGender.objects.filter(pk=gender).exists():
+            msg = 'Gender invalid'
+            raise serializers.ValidationError({'gender': msg}, code='authorization')
+        
+        return attrs
 
 class UserAuthValidatePasswordSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)

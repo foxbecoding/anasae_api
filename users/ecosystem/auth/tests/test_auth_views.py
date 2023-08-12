@@ -220,7 +220,8 @@ class TestAuthValidateDetailsViewSet(TestCase):
             'last_name': 'fox',
             'birth_month': '12', 
             'birth_day': '31', 
-            'birth_year': '1990'
+            'birth_year': '1990',
+            'gender': self.User_Gender_Instance.id
         }
 
         res = self.client.post(
@@ -237,7 +238,8 @@ class TestAuthValidateDetailsViewSet(TestCase):
             'last_name': 'fox',
             'birth_month': '12', 
             'birth_day': '31', 
-            'birth_year': '1990'
+            'birth_year': '1990',
+            'gender': self.User_Gender_Instance.id
         }
 
         res = self.client.post(
@@ -254,7 +256,8 @@ class TestAuthValidateDetailsViewSet(TestCase):
             'last_name': '',
             'birth_month': '12', 
             'birth_day': '31', 
-            'birth_year': '1990'
+            'birth_year': '1990',
+            'gender': self.User_Gender_Instance.id
         }
 
         res = self.client.post(
@@ -271,7 +274,8 @@ class TestAuthValidateDetailsViewSet(TestCase):
             'last_name': 'fox',
             'birth_month': '', 
             'birth_day': '31', 
-            'birth_year': '1990'
+            'birth_year': '1990',
+            'gender': self.User_Gender_Instance.id
         }
 
         res = self.client.post(
