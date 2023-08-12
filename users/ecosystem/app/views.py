@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
@@ -150,3 +150,13 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         stripe.PaymentMethod.detach(User_Payment_Method_Instance.stripe_pm_id)
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+    
+class UserGenderViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [ AllowAny ]
+        return [ permission() for permission in permission_classes ]
+
+    def list(self, request):
+        instance = UserGender.objects.all()
+        serializer = UserGenderSerializer(instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

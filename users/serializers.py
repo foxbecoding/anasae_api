@@ -117,11 +117,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             msg = 'Passwords must match.'
             raise serializers.ValidationError({"password": msg}, code='authorization')
         
-        #Check if user agreed to terms of agreement
-        # if not agreed_to_toa:
-        #     msg = 'Please agree to our Terms.'
-        #     raise serializers.ValidationError({"agreed_to_toa": msg}, code='authorization')
-
         uid = create_uid('u-')
         stripe_customer = stripe.Customer.create(
             email = attrs.get('email').lower(),
