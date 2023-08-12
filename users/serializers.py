@@ -370,7 +370,7 @@ class CreateUserAuthVerifyEmailSerializer(serializers.ModelSerializer):
         
         ctx = {
             'message': 'Verification code',
-            'message2': 'Use this code to complete your account creation.',
+            'message2': 'Use this code to verify your email. You can copy and paste this code.',
             'otp_code': otp_code,
             'logo': os.getenv('EMAIL_LOGO')
         }
