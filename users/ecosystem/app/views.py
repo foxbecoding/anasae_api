@@ -9,6 +9,7 @@ from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
 from users.ecosystem.methods import get_user_data
+from datetime import datetime
 
 class UserViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -19,6 +20,7 @@ class UserViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
+        request.data['date_of_birth'] = datetime.strptime(request.data['date_of_birth'], '%m/%d/%Y').date()
         Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
         if not Create_User_Serializer.is_valid():
             return Response(Create_User_Serializer.errors, status=status.HTTP_400_BAD_REQUEST)    

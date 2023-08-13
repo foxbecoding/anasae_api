@@ -7,7 +7,7 @@ from users.models import UserVerifyEmail
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from utils.helpers import key_exists
-import stripe, requests, os, calendar, time, pyotp
+import stripe, requests, os, calendar, time, pyotp, re
 
 
 env = os.getenv
@@ -107,6 +107,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=username).exists():
             msg = 'user with this username already exists'
             raise serializers.ValidationError({'username': msg}, code='authorization')
+        
+        if not re.match("^[A-Za-z0-9_-]*$", username):
+            msg = 'Only letters, numbers and underscores are allowed'
+            raise serializers.ValidationError({"username": msg}, code='authorization')
 
         if User.objects.filter(email=email).exists():
             msg = 'user with this email already exists.'
@@ -180,7 +184,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
         # Set username and password from attrs
         username = attrs.get('username')
         password = attrs.get('password')
-       
+
         if username and password:
 
             # Find user with username and password combination
@@ -190,6 +194,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
                 # If we don't have a regular user, raise a ValidationError
                 msg = 'Invalid authentication credentials.'
                 raise serializers.ValidationError({"errors": msg}, code='authorization')
+
         else:
             msg = 'Both "username" and "password" are required.'
             raise serializers.ValidationError({"errors": msg}, code='authorization')
@@ -279,6 +284,10 @@ class UserAuthValidateSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=username).exists():
             msg = 'user with this username already exists'
             raise serializers.ValidationError({'username': msg}, code='authorization')
+        
+        if not re.match("^[A-Za-z0-9_-]*$", username):
+            msg = 'Only letters, numbers and underscores are allowed'
+            raise serializers.ValidationError({"username": msg}, code='authorization')
 
         if User.objects.filter(email=email).exists():
             msg = 'user with this email already exists.'
