@@ -11,12 +11,22 @@ from users.permissions import *
 from users.ecosystem.methods import get_user_data
 from datetime import datetime
 
+
 class UserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated, UserPermission]
         if self.action == 'create':
             permission_classes = [UserPermission]
+        elif self.action == 'list':
+            permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        if str(request.user) == 'AnonymousUser':  
+            return Response({'user': {}, 'status': False}, status=status.HTTP_200_OK)
+        data = get_user_data(request.user)
+        return Response({'user': data, 'status': True}, status=status.HTTP_200_OK)
+        
 
     @method_decorator(csrf_protect)
     def create(self, request):
@@ -162,3 +172,22 @@ class UserGenderViewSet(viewsets.ViewSet):
         instance = UserGender.objects.all()
         serializer = UserGenderSerializer(instance, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserProfileViewSet(viewsets.ViewSet):
+    lookup_field = 'uid'
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def retrieve(self, request, uid=None):
+        if not User.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_200_OK)
+        
+        instance = User.objects.get(uid=uid)
+        user_data = get_user_data(instance)
+
+        if str(request.user) == 'AnonymousUser': 
+            return Response({'user': user_data, 'owner': False}, status=status.HTTP_200_OK)
+        elif str(instance.id) == str(request.user.id):
+            return Response({'user': user_data, 'owner': True}, status=status.HTTP_200_OK)
+
+        return Response({'user': user_data, 'owner': False}, status=status.HTTP_200_OK)
