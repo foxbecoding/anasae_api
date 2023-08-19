@@ -9,6 +9,7 @@ from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
 from users.ecosystem.methods import get_user_data
+from utils.helpers import filter_obj
 from datetime import datetime
 
 
@@ -184,10 +185,13 @@ class UserProfileViewSet(viewsets.ViewSet):
         
         instance = User.objects.get(uid=uid)
         user_data = get_user_data(instance)
+        filter = ["pk", "uid", "first_name", "last_name", "username", "image"]
+        filtered_user_data = filter_obj(user_data, filter=filter)
+
 
         if str(request.user) == 'AnonymousUser': 
-            return Response({'user': user_data, 'owner': False}, status=status.HTTP_200_OK)
+            return Response({'user': filtered_user_data, 'owner': False}, status=status.HTTP_200_OK)
         elif str(instance.id) == str(request.user.id):
             return Response({'user': user_data, 'owner': True}, status=status.HTTP_200_OK)
 
-        return Response({'user': user_data, 'owner': False}, status=status.HTTP_200_OK)
+        return Response({'user': filtered_user_data, 'owner': False}, status=status.HTTP_200_OK)
