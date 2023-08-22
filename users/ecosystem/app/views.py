@@ -11,6 +11,7 @@ from users.permissions import *
 from users.ecosystem.methods import get_user_data
 from utils.helpers import filter_obj
 from datetime import datetime
+from pprint import pprint
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -187,7 +188,6 @@ class UserProfileViewSet(viewsets.ViewSet):
         user_data = get_user_data(instance)
         filter = ["pk", "uid", "first_name", "last_name", "username", "image"]
         filtered_user_data = filter_obj(user_data, filter=filter)
-
 
         if str(request.user) == 'AnonymousUser': 
             return Response({'user': filtered_user_data, 'owner': False}, status=status.HTTP_200_OK)
