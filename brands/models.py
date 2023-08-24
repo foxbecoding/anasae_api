@@ -4,8 +4,8 @@ from users.models import User
 class Brand(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="brands", default='')
     uid = models.CharField(max_length=20, blank=False, unique=True)
-    name = models.CharField(max_length=200, blank=False)
-    bio = models.CharField(max_length=2000, blank=False)
+    name = models.CharField(max_length=30, blank=False)
+    bio = models.CharField(max_length=300, blank=False)
     stripe_account_id = models.CharField(max_length=120, blank=True, unique=True, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)

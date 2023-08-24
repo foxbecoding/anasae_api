@@ -31,7 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
             'logins',
             'gender_choice',
             'image',
-            'payment_methods'
+            'payment_methods',
+            'owned_brands'
         ]
 
 class EditUserSerializer(serializers.ModelSerializer):
