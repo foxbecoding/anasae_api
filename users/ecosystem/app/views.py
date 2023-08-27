@@ -191,8 +191,10 @@ class UserProfileViewSet(viewsets.ViewSet):
         filtered_user_data = filter_obj(user_data, filter=filter)
 
         if str(request.user) == 'AnonymousUser': 
-            return Response({'user': filtered_user_data, 'owner': False}, status=status.HTTP_200_OK)
+            filtered_user_data['isOwner'] = False
+            return Response(filtered_user_data, status=status.HTTP_200_OK)
         elif str(instance.id) == str(request.user.id):
-            return Response({'user': user_data, 'owner': True}, status=status.HTTP_200_OK)
+            user_data['isOwner'] = True
+            return Response(user_data, status=status.HTTP_200_OK)
 
-        return Response({'user': filtered_user_data, 'owner': False}, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_200_OK)

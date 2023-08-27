@@ -8,7 +8,7 @@ from brands.models import *
 from brands.serializers import *
 from brands.permissions import *
 from brands.ecosystem.methods import *
-from utils.helpers import str_to_list
+from utils.helpers import str_to_list, filter_obj
 from pprint import pprint
 
 class BrandViewSet(viewsets.ViewSet):
@@ -117,6 +117,15 @@ class BrandPageViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, uid=None):
         if not Brand.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_400_BAD_REQUEST)
-        instance = Brand.objects.get(uid=uid)
-        data = get_brand_data(instance)
-        return Response(data, status=status.HTTP_200_OK)
+        brand_ins = Brand.objects.get(uid=uid)
+        data = get_brand_data(brand_ins)
+        owners = [ str(owner['user']) for owner in data['owners'] ]
+        if str(request.user) == 'AnonymousUser': 
+            filter = [ "pk", "uid", "name", "bio", "owners", "followers", "logo"]
+            data = filter_obj(data, filter)
+            data['isOwner'] = False
+            return Response(data, status=status.HTTP_200_OK)
+        elif str(request.user.id) in owners:
+            data['isOwner'] = True
+            return Response(data, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_200_OK)
