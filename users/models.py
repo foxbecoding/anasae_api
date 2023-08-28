@@ -5,7 +5,7 @@ class User(AbstractUser):
     uid = models.CharField(max_length=20, blank=True, unique=True)
     agreed_to_toa = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True, blank=False)
-    display_name = models.CharField(max_length=50, blank=True, null=True, default='')
+    display_name = models.CharField(max_length=30, blank=True, null=True, default='')
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=30, blank=False)
     username = models.CharField(max_length=30, blank=False, unique=True, default='')

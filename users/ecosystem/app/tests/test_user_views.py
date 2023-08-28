@@ -32,6 +32,7 @@ class TestUserViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -69,6 +70,7 @@ class TestUserViewSet(TestCase):
         res = self.client.post(
             reverse('user-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
