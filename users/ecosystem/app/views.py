@@ -183,7 +183,7 @@ class UserProfileViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, uid=None):
-        if not User.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_200_OK)
+        if not User.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_404_NOT_FOUND)
         
         instance = User.objects.get(uid=uid)
         user_data = get_user_data(instance)
@@ -197,4 +197,4 @@ class UserProfileViewSet(viewsets.ViewSet):
             user_data['isOwner'] = True
             return Response(user_data, status=status.HTTP_200_OK)
 
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)

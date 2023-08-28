@@ -116,7 +116,7 @@ class BrandPageViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, uid=None):
-        if not Brand.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        if not Brand.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_404_NOT_FOUND)
         brand_ins = Brand.objects.get(uid=uid)
         data = get_brand_data(brand_ins)
         owners = [ str(owner['user']) for owner in data['owners'] ]
@@ -128,4 +128,4 @@ class BrandPageViewSet(viewsets.ViewSet):
         elif str(request.user.id) in owners:
             data['isOwner'] = True
             return Response(data, status=status.HTTP_200_OK)
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_404_NOT_FOUND)
