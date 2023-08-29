@@ -109,6 +109,12 @@ class BrandFollowerViewSet(viewsets.ViewSet):
         data = get_brand_data(Brand_Instance)
         return Response(data, status=status.HTTP_201_CREATED)
     
+    @method_decorator(csrf_protect)
+    def destroy(self, request, pk=None):
+        instance = BrandFollower.objects.filter(brand_id=pk).filter(user_id=str(request.user.id)).first()
+        instance.delete()
+        return Response(None, status=status.HTTP_200_OK)
+    
 class BrandPageViewSet(viewsets.ViewSet):
     lookup_field = 'uid'
     def get_permissions(self):
@@ -117,8 +123,12 @@ class BrandPageViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, uid=None):
         if not Brand.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_404_NOT_FOUND)
-        brand_ins = Brand.objects.get(uid=uid)
-        data = get_brand_data(brand_ins)
+        instance = Brand.objects.get(uid=uid)
+        brand_serializer = BrandSerializer(instance)
+        brand_followers_ins = BrandFollower.objects.filter(pk__in=brand_serializer.data['followers'])
+        brand_follower_serializer = BrandFollowerSerializer(brand_followers_ins, many=True)
+        brand_followers = [ str(brand['follower']) for brand in brand_follower_serializer.data ]
+        data = get_brand_data(instance)
         owners = [ str(owner['user']) for owner in data['owners'] ]
 
         if str(request.user.id) in owners:
@@ -127,15 +137,6 @@ class BrandPageViewSet(viewsets.ViewSet):
         else:
             filter = [ "pk", "uid", "name", "bio", "owners", "followers", "logo"]
             data = filter_obj(data, filter)
+            data['isFollowing'] = str(request.user.id) in brand_followers
             data['isOwner'] = False
             return Response(data, status=status.HTTP_200_OK)
-
-        # if str(request.user) == 'AnonymousUser': 
-        #     filter = [ "pk", "uid", "name", "bio", "owners", "followers", "logo"]
-        #     data = filter_obj(data, filter)
-        #     data['isOwner'] = False
-        #     return Response(data, status=status.HTTP_200_OK)
-        # elif str(request.user.id) in owners:
-        #     data['isOwner'] = True
-        #     return Response(data, status=status.HTTP_200_OK)
-        # return Response(None, status=status.HTTP_404_NOT_FOUND)
