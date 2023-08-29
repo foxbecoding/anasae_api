@@ -123,6 +123,7 @@ class BrandPageViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, uid=None):
         if not Brand.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_404_NOT_FOUND)
+        
         instance = Brand.objects.get(uid=uid)
         brand_serializer = BrandSerializer(instance)
         brand_followers_ins = BrandFollower.objects.filter(pk__in=brand_serializer.data['followers'])
