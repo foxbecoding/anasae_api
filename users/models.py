@@ -14,6 +14,12 @@ class User(AbstractUser):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
+class UserFollower(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed_users")
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
 class UserImage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="image")
     image = models.CharField(max_length=200, blank=False, null=False, default='')

@@ -198,3 +198,19 @@ class UserProfileViewSet(viewsets.ViewSet):
             return Response(user_data, status=status.HTTP_200_OK)
 
         return Response(None, status=status.HTTP_404_NOT_FOUND)
+    
+class UserFollowerViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        # permission_classes = [IsAuthenticated, BrandFollowerPermission]
+        return [ permission() for permission in permission_classes ]
+
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        create_serializer = CreateBrandFollowerSerializer(data=request.data, context={'request': request})
+        if not create_serializer.is_valid():
+            return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        instance = Brand.objects.get(pk=request.data['brand'])
+        data = get_user_data(instance)
+        return Response(data, status=status.HTTP_201_CREATED)
