@@ -1,7 +1,5 @@
 from users.serializers import *
 from users.models import *
-from brands.models import BrandOwner
-from brands.serializers import * 
 
 def get_user_data(instance: User, filter = []):
     User_Serializer = UserSerializer(instance)
