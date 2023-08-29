@@ -187,17 +187,16 @@ class UserProfileViewSet(viewsets.ViewSet):
         
         instance = User.objects.get(uid=uid)
         user_data = get_user_data(instance)
-        filter = ["pk", "uid", "first_name", "last_name", "username", "image"]
-        filtered_user_data = filter_obj(user_data, filter=filter)
-
-        if str(request.user) == 'AnonymousUser': 
-            filtered_user_data['isOwner'] = False
-            return Response(filtered_user_data, status=status.HTTP_200_OK)
-        elif str(instance.id) == str(request.user.id):
+        
+        if str(instance.id) == str(request.user.id):
             user_data['isOwner'] = True
             return Response(user_data, status=status.HTTP_200_OK)
+        else:
+            filter = ["pk", "uid", "first_name", "last_name", "username", "image", "followers"]
+            filtered_user_data = filter_obj(user_data, filter=filter)
+            filtered_user_data['isOwner'] = False
+            return Response(filtered_user_data, status=status.HTTP_200_OK)
 
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
     
 class UserFollowerViewSet(viewsets.ViewSet):
     def get_permissions(self):

@@ -77,9 +77,19 @@ class TestUserFollowerViewSet(TestCase):
         post_data = {
             'user': self.user2['pk']
         }
-        self.client.post(
+        res1 = self.client.post(
             reverse('user-follower-list'), 
             post_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
+        print(self.user2['uid'])
+        res2 = self.client.get(
+            reverse('user-profile-detail', kwargs={'uid': self.user2['uid']}),
+            content_type='application/json'
+        )
+
+        pprint(res2.data)
+        print(res2.status_code)
+        self.assertEquals(res1.data['followed_users'], 1)
+        self.assertEquals(res1.status_code, 201)
