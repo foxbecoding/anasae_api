@@ -187,7 +187,9 @@ class UserProfileViewSet(viewsets.ViewSet):
         
         instance = User.objects.get(uid=uid)
         user_serializer = UserSerializer(instance)
-        user_followers = user_serializer.data['followers']
+        user_followers_ins = UserFollower.objects.filter(pk__in=user_serializer.data['followers'])
+        user_follower_serializer = UserFollowerSerializer(user_followers_ins, many=True)
+        user_followers = [ str(user['follower']) for user in user_follower_serializer.data ]
         user_data = get_user_data(instance)
         
         if str(instance.id) == str(request.user.id):
