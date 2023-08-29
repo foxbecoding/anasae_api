@@ -208,9 +208,6 @@ class UserFollowerViewSet(viewsets.ViewSet):
         permission_classes = [IsAuthenticated]
         return [ permission() for permission in permission_classes ]
 
-    def retrieve(self, request, pk=None):
-        return Response(None, status=status.HTTP_200_OK)
-
     @method_decorator(csrf_protect)
     def create(self, request):
         request.data['follower'] = str(request.user.id)
@@ -220,3 +217,12 @@ class UserFollowerViewSet(viewsets.ViewSet):
         
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, pk=None):
+        return Response(None, status=status.HTTP_200_OK)
+    
+    @method_decorator(csrf_protect)
+    def destroy(self, request, pk=None):
+        instance = UserFollower.objects.filter(user_id=pk).filter(follower_id=str(request.user.id)).first()
+        instance.delete()
+        return Response(None, status=status.HTTP_200_OK)
