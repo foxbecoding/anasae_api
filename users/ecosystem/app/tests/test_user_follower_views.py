@@ -72,8 +72,6 @@ class TestUserFollowerViewSet(TestCase):
         self.user2 = res2.data
 
     def test_user_follower_create(self):
-        # pprint(self.user)
-        # pprint(self.user2)
         post_data = {
             'user': self.user2['pk']
         }
@@ -83,13 +81,34 @@ class TestUserFollowerViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
-        print(self.user2['uid'])
+        
         res2 = self.client.get(
             reverse('user-profile-detail', kwargs={'uid': self.user2['uid']}),
             content_type='application/json'
         )
 
-        pprint(res2.data)
-        print(res2.status_code)
         self.assertEquals(res1.data['followed_users'], 1)
         self.assertEquals(res1.status_code, 201)
+        self.assertEquals(res2.data['followers'], 1)
+        self.assertEquals(res2.status_code, 200)
+
+    def test_user_follower_create_error(self):
+        post_data = {
+            'user': self.user2['pk']
+        }
+        
+        self.client.post(
+            reverse('user-follower-list'), 
+            post_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        res = self.client.post(
+            reverse('user-follower-list'), 
+            post_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEquals(res.status_code, 400)

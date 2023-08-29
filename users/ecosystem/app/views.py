@@ -192,7 +192,7 @@ class UserProfileViewSet(viewsets.ViewSet):
             user_data['isOwner'] = True
             return Response(user_data, status=status.HTTP_200_OK)
         else:
-            filter = ["pk", "uid", "first_name", "last_name", "username", "image", "followers"]
+            filter = ["pk", "uid", "first_name", "last_name", "username", "image", "followers", "display_name"]
             filtered_user_data = filter_obj(user_data, filter=filter)
             filtered_user_data['isOwner'] = False
             return Response(filtered_user_data, status=status.HTTP_200_OK)

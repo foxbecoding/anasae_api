@@ -120,12 +120,22 @@ class BrandPageViewSet(viewsets.ViewSet):
         brand_ins = Brand.objects.get(uid=uid)
         data = get_brand_data(brand_ins)
         owners = [ str(owner['user']) for owner in data['owners'] ]
-        if str(request.user) == 'AnonymousUser': 
+
+        if str(request.user.id) in owners:
+            data['isOwner'] = True
+            return Response(data, status=status.HTTP_200_OK)
+        else:
             filter = [ "pk", "uid", "name", "bio", "owners", "followers", "logo"]
             data = filter_obj(data, filter)
             data['isOwner'] = False
             return Response(data, status=status.HTTP_200_OK)
-        elif str(request.user.id) in owners:
-            data['isOwner'] = True
-            return Response(data, status=status.HTTP_200_OK)
-        return Response(None, status=status.HTTP_404_NOT_FOUND)
+
+        # if str(request.user) == 'AnonymousUser': 
+        #     filter = [ "pk", "uid", "name", "bio", "owners", "followers", "logo"]
+        #     data = filter_obj(data, filter)
+        #     data['isOwner'] = False
+        #     return Response(data, status=status.HTTP_200_OK)
+        # elif str(request.user.id) in owners:
+        #     data['isOwner'] = True
+        #     return Response(data, status=status.HTTP_200_OK)
+        # return Response(None, status=status.HTTP_404_NOT_FOUND)
