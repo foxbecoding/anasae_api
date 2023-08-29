@@ -14,8 +14,7 @@ class TestUserViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.date_time_str = '12/31/1990'
 
         user_data = {
             'first_name': "Lavell",
@@ -24,7 +23,7 @@ class TestUserViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -52,8 +51,6 @@ class TestUserViewSet(TestCase):
         self.csrftoken = self.client.cookies['csrftoken'].value
 
     def test_user_create(self):
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
         request_data = {
             'first_name': "Desmond",
@@ -62,7 +59,7 @@ class TestUserViewSet(TestCase):
             'username': 'foxbecoding',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -78,8 +75,6 @@ class TestUserViewSet(TestCase):
         self.assertEqual(res.status_code, 201)
     
     def test_user_create_permissions_failed(self):
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
         request_data = {
             'first_name': "Desmond",
@@ -88,7 +83,7 @@ class TestUserViewSet(TestCase):
             'username': 'foxbecoding',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True
         }
 
@@ -101,9 +96,7 @@ class TestUserViewSet(TestCase):
         self.assertEqual(res.status_code, 403)
     
     def test_user_create_errors(self):
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
-
+        
         request_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -111,7 +104,7 @@ class TestUserViewSet(TestCase):
             'username': 'foxbecoding',
             'password': '123456',
             'confirm_password': '1234567',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }

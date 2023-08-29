@@ -205,12 +205,16 @@ class UserFollowerViewSet(viewsets.ViewSet):
         # permission_classes = [IsAuthenticated, BrandFollowerPermission]
         return [ permission() for permission in permission_classes ]
 
+    def retrieve(self, request, pk=None):
+        return Response(None, status=status.HTTP_200_OK)
+
     @method_decorator(csrf_protect)
     def create(self, request):
-        create_serializer = CreateBrandFollowerSerializer(data=request.data, context={'request': request})
+        create_serializer = CreateUserFollowerSerializer(data=request.data, context={'request': request})
         if not create_serializer.is_valid():
             return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        instance = Brand.objects.get(pk=request.data['brand'])
-        data = get_user_data(instance)
+        instance = create_serializer.validated_data['user_follower']
+        # data = get_user_data(instance)
+        data = None
         return Response(data, status=status.HTTP_201_CREATED)

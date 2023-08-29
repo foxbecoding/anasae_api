@@ -15,7 +15,6 @@ class TestBrandFollowerViewSet(TestCase):
         self.User_Gender_Instance.save()
 
         date_time_str = '12/31/1990'
-        self.date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
         user_data = {
             'first_name': "Desmond",
@@ -24,7 +23,7 @@ class TestBrandFollowerViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': self.date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -32,6 +31,7 @@ class TestBrandFollowerViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 

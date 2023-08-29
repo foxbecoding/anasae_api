@@ -11,6 +11,17 @@ class TestUserUrls(SimpleTestCase):
         url = reverse('user-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'user-detail')
 
+class TestUserFollowerUrls(SimpleTestCase):
+    
+    def test_user_follower_list_url_resolves(self):
+        url = reverse('user-follower-list')
+        self.assertEqual(resolve(url).view_name, 'user-follower-list')
+    
+    def test_user_follower_detail_url_resolves(self):
+        url = reverse('user-follower-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'user-follower-detail')
+
+
 class TestUserImageUrls(SimpleTestCase):
 
     def test_user_image_list_url_resolves(self):
