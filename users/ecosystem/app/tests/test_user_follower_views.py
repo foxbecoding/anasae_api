@@ -72,5 +72,14 @@ class TestUserFollowerViewSet(TestCase):
         self.user2 = res2.data
 
     def test_user_follower_create(self):
-        pprint(self.user)
-        pprint(self.user2)
+        # pprint(self.user)
+        # pprint(self.user2)
+        post_data = {
+            'user': self.user2['pk']
+        }
+        self.client.post(
+            reverse('user-follower-list'), 
+            post_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
