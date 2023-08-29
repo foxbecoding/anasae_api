@@ -186,6 +186,8 @@ class UserProfileViewSet(viewsets.ViewSet):
         if not User.objects.filter(uid=uid).exists(): return Response(None, status=status.HTTP_404_NOT_FOUND)
         
         instance = User.objects.get(uid=uid)
+        user_serializer = UserSerializer(instance)
+        user_followers = user_serializer.data['followers']
         user_data = get_user_data(instance)
         
         if str(instance.id) == str(request.user.id):
@@ -194,6 +196,7 @@ class UserProfileViewSet(viewsets.ViewSet):
         else:
             filter = ["pk", "uid", "first_name", "last_name", "username", "image", "followers", "display_name"]
             filtered_user_data = filter_obj(user_data, filter=filter)
+            filtered_user_data['isFollowing'] = str(request.user.id) in user_followers
             filtered_user_data['isOwner'] = False
             return Response(filtered_user_data, status=status.HTTP_200_OK)
 
@@ -201,7 +204,6 @@ class UserProfileViewSet(viewsets.ViewSet):
 class UserFollowerViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
-        # permission_classes = [IsAuthenticated, BrandFollowerPermission]
         return [ permission() for permission in permission_classes ]
 
     def retrieve(self, request, pk=None):
