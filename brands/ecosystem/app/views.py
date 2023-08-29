@@ -96,7 +96,7 @@ class BrandOwnerViewSet(viewsets.ViewSet):
     
 class BrandFollowerViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, BrandFollowerPermission]
+        permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
@@ -128,7 +128,7 @@ class BrandPageViewSet(viewsets.ViewSet):
         brand_serializer = BrandSerializer(instance)
         brand_followers_ins = BrandFollower.objects.filter(pk__in=brand_serializer.data['followers'])
         brand_follower_serializer = BrandFollowerSerializer(brand_followers_ins, many=True)
-        brand_followers = [ str(brand['follower']) for brand in brand_follower_serializer.data ]
+        brand_followers = [ str(brand['user']) for brand in brand_follower_serializer.data ]
         data = get_brand_data(instance)
         owners = [ str(owner['user']) for owner in data['owners'] ]
 
