@@ -225,4 +225,4 @@ class UserFollowerViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         instance = UserFollower.objects.filter(user_id=pk).filter(follower_id=str(request.user.id)).first()
         instance.delete()
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_202_ACCEPTED)

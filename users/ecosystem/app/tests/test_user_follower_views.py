@@ -112,3 +112,33 @@ class TestUserFollowerViewSet(TestCase):
         )
 
         self.assertEquals(res.status_code, 400)
+
+    def test_user_follower_destroy(self):
+
+        self.client.post(
+            reverse('user-follower-list'), 
+            { 'user': self.user2['pk'] }, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.client.post(
+            reverse('user-follower-list'), 
+            { 'user': self.user2['pk'] }, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        del_res = self.client.delete(
+            reverse('user-follower-detail', kwargs={ 'pk': self.user2['pk'] }),  
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        profile_res = self.client.get(
+            reverse('user-profile-detail', kwargs={'uid': self.user2['uid']}),
+            content_type='application/json'
+        )
+        
+        self.assertEquals(profile_res.data['followers'], 0)
+        self.assertEquals(del_res.status_code, 202)
