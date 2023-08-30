@@ -13,3 +13,4 @@
 # from users.ecosystem.app.tests.test_user_image_views import TestUserImageViewSet
 # from users.ecosystem.app.tests.test_user_address_views import TestUserAddressViewSet
 # from users.ecosystem.app.tests.test_user_payment_method_views import TestUserPaymentMethodViewSet
+from users.ecosystem.app.tests.test_user_profile_views import TestUserProfileViewSet

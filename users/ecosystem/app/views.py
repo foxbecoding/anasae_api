@@ -200,7 +200,6 @@ class UserProfileViewSet(viewsets.ViewSet):
             filtered_user_data['isOwner'] = False
             return Response(filtered_user_data, status=status.HTTP_200_OK)
 
-    
 class UserFollowerViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
