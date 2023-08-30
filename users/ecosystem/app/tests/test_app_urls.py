@@ -47,3 +47,9 @@ class TestUserPaymentMethodUrls(SimpleTestCase):
     def test_user_payment_method_detail_url_resolves(self):
         url = reverse('user-payment-method-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'user-payment-method-detail')
+
+class TestUserGenderUrls(SimpleTestCase):
+
+    def test_user_gender_list_url_resolves(self):
+        url = reverse('user-gender-list')
+        self.assertEqual(resolve(url).view_name, 'user-gender-list')
