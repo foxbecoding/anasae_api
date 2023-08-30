@@ -45,6 +45,7 @@ class TestUserViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = res.data
@@ -90,6 +91,7 @@ class TestUserViewSet(TestCase):
         res = self.client.post(
             reverse('user-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -112,6 +114,7 @@ class TestUserViewSet(TestCase):
         res = self.client.post(
             reverse('user-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
@@ -136,8 +139,8 @@ class TestUserViewSet(TestCase):
 
         res = self.client.patch(
             reverse('user-detail', kwargs={'pk': self.user['pk']}),
-            content_type='application/json',
             data=request_data,
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -152,8 +155,8 @@ class TestUserViewSet(TestCase):
 
         res = self.client.patch(
             reverse('user-detail', kwargs={'pk': self.user['pk']}),
-            content_type='application/json',
             data=request_data,
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -167,8 +170,8 @@ class TestUserViewSet(TestCase):
 
         res = self.client.patch(
             reverse('user-detail', kwargs={'pk': self.user['pk']}),
-            content_type='application/json',
             data=request_data,
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 

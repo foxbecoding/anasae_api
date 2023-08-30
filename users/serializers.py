@@ -61,7 +61,7 @@ class EditUserSerializer(serializers.ModelSerializer):
         is_password_change = 'password' in attrs or 'confirm_password' in attrs
         both_passwords_exists = 'password' in attrs and 'confirm_password' in attrs
         
-        if not re.match("^[A-Za-z0-9_-]*$", attrs.get('username')):
+        if attrs.get('username') and not re.match("^[A-Za-z0-9_-]*$", attrs.get('username')):
             msg = 'Only letters, numbers and underscores are allowed'
             raise serializers.ValidationError({"username": msg}, code='authorization')
 

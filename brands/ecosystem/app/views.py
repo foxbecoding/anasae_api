@@ -113,7 +113,7 @@ class BrandFollowerViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         instance = BrandFollower.objects.filter(brand_id=pk).filter(user_id=str(request.user.id)).first()
         instance.delete()
-        return Response(None, status=status.HTTP_200_OK)
+        return Response(None, status=status.HTTP_202_ACCEPTED)
     
 class BrandPageViewSet(viewsets.ViewSet):
     lookup_field = 'uid'

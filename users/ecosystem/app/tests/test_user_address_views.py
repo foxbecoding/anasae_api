@@ -14,8 +14,7 @@ class TestUserAddressViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.date_time_str = '12/31/1990'
 
         user_data = {
             'first_name': "Anasae",
@@ -24,7 +23,7 @@ class TestUserAddressViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -32,6 +31,7 @@ class TestUserAddressViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -43,6 +43,7 @@ class TestUserAddressViewSet(TestCase):
         login_res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = login_res.data
@@ -61,6 +62,7 @@ class TestUserAddressViewSet(TestCase):
         user_address_res = self.client.post(
             reverse('user-address-list'), 
             data=user_address_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -81,6 +83,7 @@ class TestUserAddressViewSet(TestCase):
         res = self.client.post(
             reverse('user-address-list'), 
             data=request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
@@ -101,6 +104,7 @@ class TestUserAddressViewSet(TestCase):
         res = self.client.post(
             reverse('user-address-list'), 
             data=request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.assertEqual(res.status_code, 400)

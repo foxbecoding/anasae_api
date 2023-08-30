@@ -6,6 +6,8 @@ from datetime import datetime
 
 is_CSRF = True
 
+date_time_str = '12/31/1990'
+
 class TestAuthLogInViewSet(TestCase):
     
     def setUp(self):
@@ -15,8 +17,6 @@ class TestAuthLogInViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -24,7 +24,7 @@ class TestAuthLogInViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -32,6 +32,7 @@ class TestAuthLogInViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -44,6 +45,7 @@ class TestAuthLogInViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken})
 
         self.assertGreater(len(res.data['logins']), 0)
@@ -58,6 +60,7 @@ class TestAuthLogInViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -72,8 +75,6 @@ class TestAuthLogOutViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -81,7 +82,7 @@ class TestAuthLogOutViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -89,6 +90,7 @@ class TestAuthLogOutViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -101,6 +103,7 @@ class TestAuthLogOutViewSet(TestCase):
         self.client.post(
             reverse('auth-log-in-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
@@ -109,6 +112,7 @@ class TestAuthLogOutViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-out-list'), 
             {}, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': csrftoken}
         )
 
@@ -123,8 +127,6 @@ class TestAuthValidateViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -132,7 +134,7 @@ class TestAuthValidateViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -140,6 +142,7 @@ class TestAuthValidateViewSet(TestCase):
         self.user_data = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -152,6 +155,7 @@ class TestAuthValidateViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
     
@@ -166,6 +170,7 @@ class TestAuthValidateViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
     
@@ -180,6 +185,7 @@ class TestAuthValidateViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
     
@@ -194,8 +200,6 @@ class TestAuthValidateDetailsViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -203,7 +207,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -211,6 +215,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
         self.user_data = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -227,6 +232,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-details-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -245,6 +251,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-details-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -263,6 +270,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-details-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -281,6 +289,7 @@ class TestAuthValidateDetailsViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-details-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -295,8 +304,6 @@ class TestAuthValidatePasswordViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -304,7 +311,7 @@ class TestAuthValidatePasswordViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -312,6 +319,7 @@ class TestAuthValidatePasswordViewSet(TestCase):
         self.user_data = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -324,6 +332,7 @@ class TestAuthValidatePasswordViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-password-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -338,6 +347,7 @@ class TestAuthValidatePasswordViewSet(TestCase):
         res = self.client.post(
             reverse('auth-validate-password-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -352,8 +362,6 @@ class TestAuthVerifyEmailViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_obj = datetime.strptime('12/31/1990', '%m/%d/%Y')
-
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -361,7 +369,7 @@ class TestAuthVerifyEmailViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -369,6 +377,7 @@ class TestAuthVerifyEmailViewSet(TestCase):
         self.user_data = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -380,5 +389,6 @@ class TestAuthVerifyEmailViewSet(TestCase):
         res = self.client.post(
             reverse('auth-verify-email-list'), 
             request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )

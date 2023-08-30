@@ -15,8 +15,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         self.User_Gender_Instance = UserGender.objects.create(gender = 'Male')
         self.User_Gender_Instance.save()
 
-        date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
+        self.date_time_str = '12/31/1990'
 
         user_data = {
             'first_name': "Lavell",
@@ -25,7 +24,7 @@ class TestUserPaymentMethodViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': self.date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -33,6 +32,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -46,6 +46,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = res.data
@@ -69,6 +70,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         res = self.client.post(
             reverse('user-payment-method-list'),
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -79,6 +81,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         create_res = self.client.post(
             reverse('user-payment-method-list'),
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
@@ -97,6 +100,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         self.client.post(
             reverse('user-payment-method-list'),
             data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 

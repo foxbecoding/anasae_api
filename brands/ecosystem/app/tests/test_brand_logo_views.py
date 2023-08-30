@@ -16,8 +16,7 @@ class TestBrandLogoViewSet(TestCase):
         self.User_Gender_Instance.save()
 
         date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
-
+        
         user_data = {
             'first_name': "Desmond",
             'last_name': 'Fox',
@@ -25,7 +24,7 @@ class TestBrandLogoViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -33,6 +32,7 @@ class TestBrandLogoViewSet(TestCase):
         self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -44,6 +44,7 @@ class TestBrandLogoViewSet(TestCase):
         login_res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = login_res.data
@@ -57,6 +58,7 @@ class TestBrandLogoViewSet(TestCase):
         brand_res = self.client.post(
             reverse('brand-list'), 
             data=brand_request_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
         self.brand_data = brand_res.data

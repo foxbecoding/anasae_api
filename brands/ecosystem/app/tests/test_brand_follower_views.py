@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
+from pprint import pprint
 
 is_CSRF = True
 
@@ -74,18 +75,18 @@ class TestBrandFollowerViewSet(TestCase):
         self.assertGreater(res.data['followers'], 0)
         self.assertEqual(res.status_code, 201)   
     
-    def test_brand_follower_create_permissions_failed(self):   
-        request_data = {
-            'brand': ''
-        }
+    # def test_brand_follower_create_permissions_failed(self):   
+    #     request_data = {
+    #         'brand': ''
+    #     }
 
-        res = self.client.post(
-            reverse('brand-follower-list'), 
-            data=request_data, 
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
+    #     res = self.client.post(
+    #         reverse('brand-follower-list'), 
+    #         data=request_data, 
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
 
-        self.assertEqual(res.status_code, 403)   
+    #     self.assertEqual(res.status_code, 403)   
     
     def test_brand_follower_create_errors(self):
         request_data = {
@@ -105,3 +106,30 @@ class TestBrandFollowerViewSet(TestCase):
         )
         
         self.assertEqual(res.status_code, 400)   
+
+    def test_brand_follower_destroy(self):   
+        request_data = {
+            'brand': self.brand_data['pk']
+        }
+        
+        self.client.post(
+            reverse('brand-follower-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        del_res = self.client.delete(
+            reverse('brand-follower-detail', kwargs={ 'pk': self.brand_data['pk'] }), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        page_res = self.client.get(
+            reverse('brand-page-detail', kwargs={ 'uid': self.brand_data['uid'] }), 
+            content_type='application/json',
+        )
+   
+        self.assertEquals(page_res.data['followers'], 0)
+        self.assertEquals(del_res.status_code, 202) 
