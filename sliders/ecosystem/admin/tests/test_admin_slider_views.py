@@ -17,7 +17,6 @@ class TestAdminSliderViewSet(TestCase):
         self.User_Gender_Instance.save()
 
         date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
         user_data = {
             'first_name': "Lavell",
@@ -26,7 +25,7 @@ class TestAdminSliderViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -34,6 +33,7 @@ class TestAdminSliderViewSet(TestCase):
         user = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -51,6 +51,7 @@ class TestAdminSliderViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = res.data
@@ -60,6 +61,7 @@ class TestAdminSliderViewSet(TestCase):
         res = self.client.post(
             reverse('admin-slider-list'), 
             {'name': 'Home page slider'}, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         
@@ -76,7 +78,6 @@ class TestAdminSliderImageViewSet(TestCase):
         self.User_Gender_Instance.save()
 
         date_time_str = '12/31/1990'
-        date_time_obj = datetime.strptime(date_time_str, '%m/%d/%Y')
 
         user_data = {
             'first_name': "Lavell",
@@ -85,7 +86,7 @@ class TestAdminSliderImageViewSet(TestCase):
             'username': 'slugga',
             'password': '123456',
             'confirm_password': '123456',
-            'date_of_birth': date_time_obj.date(),
+            'date_of_birth': date_time_str,
             'agreed_to_toa': True,
             'gender': self.User_Gender_Instance.id
         }
@@ -93,6 +94,7 @@ class TestAdminSliderImageViewSet(TestCase):
         user = self.client.post(
             reverse('user-list'), 
             user_data, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
@@ -110,6 +112,7 @@ class TestAdminSliderImageViewSet(TestCase):
         res = self.client.post(
             reverse('auth-log-in-list'), 
             login_credentials, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
         self.user = res.data
@@ -119,6 +122,7 @@ class TestAdminSliderImageViewSet(TestCase):
         slider_res = self.client.post(
             reverse('admin-slider-list'), 
             {'name': 'Home page slider'}, 
+            content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )   
 
