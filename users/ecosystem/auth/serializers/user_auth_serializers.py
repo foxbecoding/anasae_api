@@ -57,11 +57,9 @@ class UserAuthSerializer(serializers.ModelSerializer):
         return attrs
     
     def authenticate(self, username, password) -> User:
-        if not User.objects.filter(username=username).exists():
-            return None
-        User_Instance = User.objects.get(username=username)     
-        if not check_password(password, User_Instance.password):
-            return None
+        if not User.objects.filter(username=username).exists(): return None
+        User_Instance = User.objects.get(username=username)  
+        if not check_password(password, User_Instance.password): return None
         return User_Instance
     
 class UserAuthEmailSerializer(serializers.ModelSerializer):

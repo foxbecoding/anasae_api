@@ -13,6 +13,12 @@ class TestAuthLogOutUrls(SimpleTestCase):
         url = reverse('auth-log-out-list')
         self.assertEqual(resolve(url).view_name, 'auth-log-out-list')
 
+class TestAuthForgotPasswordUrls(SimpleTestCase):
+    
+    def test_auth_log_out_list_url_resolves(self):
+        url = reverse('auth-forgot-password-list')
+        self.assertEqual(resolve(url).view_name, 'auth-forgot-password-list')
+
 class TestAuthValidateUrls(SimpleTestCase):
     
     def test_auth_validate_list_url_resolves(self):
