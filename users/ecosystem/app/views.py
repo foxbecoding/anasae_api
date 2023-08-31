@@ -32,7 +32,6 @@ class UserViewSet(viewsets.ViewSet):
 
     @method_decorator(csrf_protect)
     def create(self, request):
-        # request.data._mutable = True
         request.data['date_of_birth'] = datetime.strptime(request.data['date_of_birth'], '%m/%d/%Y').date()
         Create_User_Serializer = CreateUserSerializer(data=request.data, context={'request': request})
         if not Create_User_Serializer.is_valid():
