@@ -48,7 +48,7 @@ class UserAuthForgotPasswordViewSet(viewsets.ViewSet):
         permission_classes = [AllowAny]
         return [permission() for permission in permission_classes]
     
-    # @method_decorator(csrf_protect)
+    @method_decorator(csrf_protect)
     def create(self, request):
         req_msg = "Information containing password assistance has been emailed to you."
         if 'email' not in request.data: return Response(req_msg, status=status.HTTP_200_OK) 
