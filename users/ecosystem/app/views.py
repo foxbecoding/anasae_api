@@ -133,7 +133,7 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
     def list(self, request):
         setup_intent_res = stripe.SetupIntent.create(
             customer=request.user.stripe_customer_id,
-            payment_method_types=["card"],
+            payment_method_types=["card","cashapp"],
         )
         return Response(setup_intent_res.client_secret, status=status.HTTP_200_OK)
 
