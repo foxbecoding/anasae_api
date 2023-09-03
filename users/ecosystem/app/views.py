@@ -9,9 +9,10 @@ from users.serializers import *
 from users.models import UserImage
 from users.permissions import *
 from users.ecosystem.methods import get_user_data
-from utils.helpers import filter_obj
+from utils.helpers import filter_obj, str_to_list
 from datetime import datetime
 from pprint import pprint
+import stripe
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -133,7 +134,7 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
     def list(self, request):
         setup_intent_res = stripe.SetupIntent.create(
             customer=request.user.stripe_customer_id,
-            payment_method_types=["card","cashapp"],
+            payment_method_types=["card"],
         )
         return Response(setup_intent_res.client_secret, status=status.HTTP_200_OK)
 
@@ -155,11 +156,18 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
     
+    def retrieve(self, request, pk=None):
+        pks = str_to_list(pk)
+        instances =  UserPaymentMethod.objects.filter(pk__in=pks).filter(user=str(request.user.id))
+        serialize_data = UserPaymentMethodSerializer(instances, many=True).data
+        payment_methods = [ stripe.PaymentMethod.retrieve(data['stripe_pm_id']) for data in serialize_data]
+        return Response(payment_methods, status=status.HTTP_200_OK)
+
     def destroy(self, request, pk=None):
         self.check_object_permissions(request=request, obj={'payment_method_pk': pk})
         User_Payment_Method_Instance = UserPaymentMethod.objects.get(pk=str(pk))
-        User_Payment_Method_Instance.delete()
         stripe.PaymentMethod.detach(User_Payment_Method_Instance.stripe_pm_id)
+        User_Payment_Method_Instance.delete()
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
