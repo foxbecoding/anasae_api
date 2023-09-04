@@ -192,14 +192,17 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
-class UserPaymentMethodBillingAddressViewSet(viewsets.ViewSet):
+class UserBillingAddressViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [ IsAuthenticated, UserPaymentMethodPermission ]
+        permission_classes = [ IsAuthenticated ]
         return [ permission() for permission in permission_classes ]
     
     def create(self, request):
-        print(request.data)
-        return Response(None, status=status.HTTP_201_CREATED)
+        request.data['user'] = str(request.user.id)
+        serializer = UserBillingAddressSerializer(request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = get_user_data(request.user)
+        return Response(data, status=status.HTTP_201_CREATED)
 
 class UserGenderViewSet(viewsets.ViewSet):
     def get_permissions(self):

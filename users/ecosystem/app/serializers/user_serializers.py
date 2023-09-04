@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             'is_active',
             'stripe_customer_id',
             'addresses',
+            'billing_addresses',
             'logins',
             'gender_choice',
             'image',

@@ -5,10 +5,10 @@ import os
 
 env = os.getenv
 
-class UserPaymentMethodBillingAddressSerializer(serializers.ModelSerializer):
+class UserBillingAddressSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = UserPaymentMethodBillingAddress
+        model = UserBillingAddress
         fields = [
             'pk',
             'user',
@@ -16,10 +16,10 @@ class UserPaymentMethodBillingAddressSerializer(serializers.ModelSerializer):
             'address'
         ]
 
-class CreateUserPaymentMethodSerializer(serializers.ModelSerializer):
+class CreateUserBillingAddressSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = UserPaymentMethodBillingAddress
+        model = UserBillingAddress
         fields = [
             'user',
             'payment_method',

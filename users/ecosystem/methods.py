@@ -8,6 +8,8 @@ def get_user_data(instance: User, filter = []):
     User_Account_Login_Serializer = UserLoginSerializer(User_Login_Instances, many=True)
     User_Address_Instance = UserAddress.objects.filter(pk__in=user_data['addresses'])
     User_Address_Serializer = UserAddressSerializer(User_Address_Instance, many=True)
+    User_Billing_Address_Instance = UserBillingAddress.objects.filter(pk__in=user_data['billing_addresses'])
+    User_Billing_Address_Serializer = UserBillingAddressSerializer(User_Billing_Address_Instance, many=True)
     User_Payment_Method_Instance = UserPaymentMethod.objects.filter(pk__in=user_data['payment_methods'])
     User_Payment_Method_Serializer = UserPaymentMethodSerializer(User_Payment_Method_Instance, many=True)
 
@@ -17,6 +19,7 @@ def get_user_data(instance: User, filter = []):
 
     data = {
         'addresses': User_Address_Serializer.data,
+        'billing_addresses': User_Billing_Address_Serializer.data,
         'display_name': user_data['display_name'],
         'email': user_data['email'],
         'first_name': user_data['first_name'],
