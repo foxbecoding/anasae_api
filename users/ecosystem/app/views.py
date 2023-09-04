@@ -163,11 +163,25 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
     
+    # def update(self, request, pk=None):
+    #     if not UserPaymentMethod.objects.filter(pk=pk).filter(user_id=str(request.user.id)).exists():
+    #         return Response(None, status=status.HTTP_403_FORBIDDEN)
+        
+
+    #     instance = UserPaymentMethod.objects.get(pk=pk)
+    #     serializer_data = UserPaymentMethodSerializer(instance).data
+    #     print(serializer_data)
+    #     stripe.PaymentMethod.modify(
+    #         serializer_data['stripe_pm_id']
+    #     )
+    #     return Response(None, status=status.HTTP_200_OK)
+
+
     def retrieve(self, request, pk=None):
         pks = str_to_list(pk)
         instances =  UserPaymentMethod.objects.filter(pk__in=pks).filter(user=str(request.user.id))
         serialize_data = UserPaymentMethodSerializer(instances, many=True).data
-        payment_methods = [ stripe.PaymentMethod.retrieve(data['stripe_pm_id']) for data in serialize_data]
+        payment_methods = [ stripe.PaymentMethod.retrieve(data['stripe_pm_id']) for data in serialize_data ]
         return Response(payment_methods, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
@@ -178,6 +192,15 @@ class UserPaymentMethodViewSet(viewsets.ViewSet):
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
+class UserPaymentMethodBillingAddressViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [ IsAuthenticated, UserPaymentMethodPermission ]
+        return [ permission() for permission in permission_classes ]
+    
+    def create(self, request):
+        print(request.data)
+        return Response(None, status=status.HTTP_201_CREATED)
+
 class UserGenderViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [ AllowAny ]

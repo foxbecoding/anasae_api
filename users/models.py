@@ -72,6 +72,14 @@ class UserPaymentMethod(models.Model):
     updated = models.DateTimeField(auto_now_add=True, null=True)
     deleted = models.DateTimeField(null=True)
 
+class UserPaymentMethodBillingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="billing_addresses", default='')
+    payment_method = models.OneToOneField(UserPaymentMethod, on_delete=models.CASCADE, related_name="billing_address", default='')
+    address = models.ForeignKey(UserAddress, on_delete=models.CASCADE, related_name="for_payment_methods", default='')
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+    deleted = models.DateTimeField(null=True)
+
 class UserVerifyEmail(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="verified_email", null=True, blank=True, default='')
     email = models.EmailField(blank=False)
