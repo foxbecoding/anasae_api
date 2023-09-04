@@ -199,8 +199,33 @@ class UserBillingAddressViewSet(viewsets.ViewSet):
     
     def create(self, request):
         request.data['user'] = str(request.user.id)
-        serializer = UserBillingAddressSerializer(request.data)
+        serializer = CreateUserBillingAddressSerializer(data=request.data)
+        
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        
+        payment_method_instance = UserPaymentMethod.objects.get(pk=request.data['payment_method'])
+        payment_method_serializer_data = UserPaymentMethodSerializer(payment_method_instance).data
+        
+        address_instance = UserAddress.objects.get(pk=request.data['address'])
+        address_serializer_data = UserAddressSerializer(address_instance).data
+
+        stripe.PaymentMethod.modify(
+            payment_method_serializer_data['stripe_pm_id'],
+            billing_details = {
+                "address": {
+                    "city": address_serializer_data['city'],
+                    "country": address_serializer_data['country'],
+                    "line1": address_serializer_data['street_address'],
+                    "line2": address_serializer_data['street_address_ext'],
+                    "postal_code": address_serializer_data['postal_code'],
+                    "state": address_serializer_data['state']
+                },
+                "name": address_serializer_data['full_name'],
+                "phone": address_serializer_data['phone_number']
+            },
+        )
+
         data = get_user_data(request.user)
         return Response(data, status=status.HTTP_201_CREATED)
 

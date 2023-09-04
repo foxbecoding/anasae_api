@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
 import stripe
+from pprint import pprint
 
 is_CSRF = True
 
@@ -69,13 +70,38 @@ class TestUserBillingAddressViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
-        self.payment_methods = payment_method_res.data['payment_methods']
+        user_address_data = { 
+            'full_name': 'Desmond Fox',
+            'phone_number': '(504)366-7899',
+            'street_address': '1912 Pailet',
+            'street_address_ext': '',
+            'country': 'US',
+            'state': 'Louisiana',
+            'city': 'Harvey',
+            'postal_code': '70058'
+        }
+        user_address_res = self.client.post(
+            reverse('user-address-list'), 
+            data=user_address_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.user_address_pk = user_address_res.data['addresses'][0]['pk']
+        self.payment_method_pk = payment_method_res.data['payment_methods'][0]['pk']
 
     def test_user_billing_address_create(self):
-        # res = self.client.post(
-        #     reverse('user-billing-address-list'),
-        #     data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
-        #     content_type='application/json',
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
-        print(self.payment_methods)
+        request_data = {
+            'address': self.user_address_pk,
+            'payment_method': self.payment_method_pk
+        }
+
+        res = self.client.post(
+            reverse('user-billing-address-list'),
+            data = request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertGreater(len(res.data['billing_addresses']), 0)
+        self.assertEqual(res.status_code, 201)

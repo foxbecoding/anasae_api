@@ -12,6 +12,7 @@
 # from users.ecosystem.app.tests.test_user_follower_views import TestUserFollowerViewSet
 # from users.ecosystem.app.tests.test_user_image_views import TestUserImageViewSet
 # from users.ecosystem.app.tests.test_user_address_views import TestUserAddressViewSet
+from users.ecosystem.app.tests.test_user_billing_address_views import TestUserBillingAddressViewSet
 # from users.ecosystem.app.tests.test_user_payment_method_views import TestUserPaymentMethodViewSet
 # from users.ecosystem.app.tests.test_user_profile_views import TestUserProfileViewSet
-from users.ecosystem.app.tests.test_user_gender_views import TestUserGenderViewSet
+# from users.ecosystem.app.tests.test_user_gender_views import TestUserGenderViewSet
