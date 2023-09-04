@@ -90,6 +90,13 @@ class UserAddressViewSet(viewsets.ViewSet):
         permission_classes = [IsAuthenticated, UserAddressPermission]
         return [permission() for permission in permission_classes]
     
+    def list(self, request):
+        setup_intent_res = stripe.SetupIntent.create(
+            customer=request.user.stripe_customer_id,
+            payment_method_types=["card"],
+        )
+        return Response(setup_intent_res.client_secret, status=status.HTTP_200_OK)
+
     @method_decorator(csrf_protect)
     def create(self, request):
         data = request.data
