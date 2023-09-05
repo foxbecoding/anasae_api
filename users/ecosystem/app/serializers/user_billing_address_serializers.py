@@ -25,3 +25,12 @@ class CreateUserBillingAddressSerializer(serializers.ModelSerializer):
             'payment_method',
             'address'
         ]
+
+class EditUserBillingAddressSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UserBillingAddress
+        fields = [
+            'payment_method',
+            'address'
+        ]

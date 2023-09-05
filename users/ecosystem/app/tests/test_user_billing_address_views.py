@@ -87,7 +87,25 @@ class TestUserBillingAddressViewSet(TestCase):
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
 
+        user_address_data2 = { 
+            'full_name': 'Desmond Fox',
+            'phone_number': '(504)729-8617',
+            'street_address': '4024 Crossmoor Dr',
+            'street_address_ext': '',
+            'country': 'US',
+            'state': 'Louisiana',
+            'city': 'Marrero',
+            'postal_code': '70072'
+        }
+        user_address_res2 = self.client.post(
+            reverse('user-address-list'), 
+            data=user_address_data2, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
         self.user_address_pk = user_address_res.data['addresses'][0]['pk']
+        self.user_address2_pk = user_address_res2.data['addresses'][1]['pk']
         self.payment_method_pk = payment_method_res.data['payment_methods'][0]['pk']
 
     def test_user_billing_address_create(self):
@@ -105,3 +123,30 @@ class TestUserBillingAddressViewSet(TestCase):
 
         self.assertGreater(len(res.data['billing_addresses']), 0)
         self.assertEqual(res.status_code, 201)
+    
+    def test_user_billing_address_update(self):
+        request_data = {
+            'address': self.user_address_pk,
+            'payment_method': self.payment_method_pk
+        }
+
+        res = self.client.post(
+            reverse('user-billing-address-list'),
+            data = request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        billing_address_pk = res.data['billing_addresses'][0]['pk']
+  
+        edit_res = self.client.put(
+            reverse('user-billing-address-detail', kwargs={'pk': billing_address_pk}),
+            data = {
+                'address': self.user_address2_pk,
+                'payment_method': self.payment_method_pk,
+            },
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertNotEqual(edit_res.data['billing_addresses'][0]['address'], self.user_address_pk)
+        self.assertEqual(edit_res.status_code, 202)
