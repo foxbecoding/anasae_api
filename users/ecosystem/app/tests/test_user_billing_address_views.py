@@ -150,3 +150,54 @@ class TestUserBillingAddressViewSet(TestCase):
         
         self.assertNotEqual(edit_res.data['billing_addresses'][0]['address'], self.user_address_pk)
         self.assertEqual(edit_res.status_code, 202)
+    
+    def test_user_billing_address_update_forbidden(self):
+        request_data = {
+            'address': self.user_address_pk,
+            'payment_method': self.payment_method_pk
+        }
+
+        res = self.client.post(
+            reverse('user-billing-address-list'),
+            data = request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+  
+        edit_res = self.client.put(
+            reverse('user-billing-address-detail', kwargs={'pk': 69}),
+            data = {
+                'address': self.user_address2_pk,
+                'payment_method': self.payment_method_pk,
+            },
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+        self.assertEqual(edit_res.status_code, 403)
+
+    def test_user_billing_address_update_errors(self):
+        request_data = {
+            'address': self.user_address_pk,
+            'payment_method': self.payment_method_pk
+        }
+
+        res = self.client.post(
+            reverse('user-billing-address-list'),
+            data = request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        billing_address_pk = res.data['billing_addresses'][0]['pk']
+  
+        edit_res = self.client.put(
+            reverse('user-billing-address-detail', kwargs={'pk': billing_address_pk}),
+            data = {
+                'address': '',
+                'payment_method': self.payment_method_pk,
+            },
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+
+        self.assertEqual(edit_res.status_code, 400)
