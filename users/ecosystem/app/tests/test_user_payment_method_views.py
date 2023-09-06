@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from datetime import datetime
 import stripe
+from pprint import pprint
 
 is_CSRF = True
 
@@ -62,6 +63,13 @@ class TestUserPaymentMethodViewSet(TestCase):
             payment_method="pm_card_visa"
         )
 
+        self.payment_method = self.client.post(
+            reverse('user-payment-method-list'),
+            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ).data['payment_methods']
+
     def test_user_payment_method_get_client_secret_list(self):
         res = self.client.get(reverse('user-payment-method-list'))
         self.assertEqual(res.status_code, 200)
@@ -77,18 +85,22 @@ class TestUserPaymentMethodViewSet(TestCase):
         self.assertGreater(len(res.data['payment_methods']), 0)
         self.assertEqual(res.status_code, 201)
 
-    def test_user_payment_method_destroy(self):
-        create_res = self.client.post(
-            reverse('user-payment-method-list'),
-            data = {'payment_method_id': self.setup_intent_confirm_res.payment_method},
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    def test_user_payment_method_retrieve(self):
+        payment_method = self.payment_method[0]
+        res = self.client.get(
+            reverse('user-payment-method-detail', kwargs={'pk': payment_method['pk']}),
+            content_type='application/json'
         )
-        
+
+        self.assertEqual(res.data[0].id, payment_method['stripe_pm_id'])
+        self.assertEqual(res.status_code, 200)
+
+    def test_user_payment_method_destroy(self):
+        payment_method = self.payment_method[0]
         delete_res = self.client.delete(
             reverse(
                 'user-payment-method-detail',
-                kwargs={'pk': create_res.data['payment_methods'][0]['pk']}
+                kwargs={'pk': payment_method['pk']}
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
@@ -107,7 +119,7 @@ class TestUserPaymentMethodViewSet(TestCase):
         delete_res = self.client.delete(
             reverse(
                 'user-payment-method-detail',
-                kwargs={'pk': 18}
+                kwargs={'pk': 504}
             ),
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         )
