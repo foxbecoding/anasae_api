@@ -14,4 +14,6 @@ class CategoryViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        return Response(None, status=status.HTTP_200_OK)
+        instances = Category.objects.all()
+        serializer_data = CategorySerializer(instances, many=True).data
+        return Response(serializer_data, status=status.HTTP_200_OK)
