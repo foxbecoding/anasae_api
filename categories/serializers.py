@@ -2,7 +2,7 @@ from rest_framework import serializers
 from categories.models import *
 from utils.helpers import create_uid
 from PIL import Image
-import stripe, requests, os, calendar, time
+import os
 
 env = os.getenv
 
@@ -15,7 +15,8 @@ class CategorySerializer(serializers.ModelSerializer):
             'title',
             'description',
             'subcategories',
-            'product_specification'
+            'product_specification',
+            'products'
         ]
 
 class CategoryProductPageSerializer(serializers.ModelSerializer):
