@@ -24,6 +24,10 @@ class CategoryProductSpecificationViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def retrieve(self, request, pk=None):
-        print(pk)
-        return Response(None, status=status.HTTP_200_OK)
-        # return Response(serializer_data, status=status.HTTP_200_OK)
+        if not CategoryProductSpecification.objects.filter(pk=pk).exists():
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        instance = CategoryProductSpecification.objects.get(pk=pk)
+        serializer_data = CategoryProductSpecificationSerializer(instance).data
+        instances = CategoryProductSpecificationItem.objects.filter(pk__in=serializer_data['items'])
+        specifications_serializer_data = CategoryProductSpecificationItemSerializer(instances, many=True).data
+        return Response(specifications_serializer_data, status=status.HTTP_200_OK)
