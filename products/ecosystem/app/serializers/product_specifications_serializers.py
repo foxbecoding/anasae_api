@@ -35,7 +35,7 @@ class BulkEditProductSpecificationSerializer(serializers.ListSerializer):
     
     def __set_instance_data(self, data):
         instance, value = data
-        instance.value = value['value']
+        instance.value = value['value'].lower()
         return instance 
 
 
@@ -57,7 +57,7 @@ class BulkCreateProductSpecificationSerializer(serializers.ListSerializer):
                 ProductSpecification(
                     product=data['product'], 
                     label=data['label'], 
-                    value=data['value'],
+                    value=data['value'].lower(),
                     is_required=data['is_required']
                 )
             )

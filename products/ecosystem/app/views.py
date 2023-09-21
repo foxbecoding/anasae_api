@@ -11,6 +11,7 @@ from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
 from utils.helpers import str_to_list
+import json
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -103,7 +104,8 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
 class ProductImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, ProductImagePermission]
+        permission_classes = [IsAuthenticated]
+        # permission_classes = [IsAuthenticated, ProductImagePermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
