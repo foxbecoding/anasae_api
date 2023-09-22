@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from products.models import *
+from brands.models import Brand
 from products.serializers import *
 from products.permissions import *
 from products.ecosystem.classes import ProductData
@@ -123,3 +124,18 @@ class ProductImageViewSet(viewsets.ViewSet):
         instances = ProductImage.objects.filter(pk__in=pks)
         instances.delete()
         return Response(None, status=status.HTTP_202_ACCEPTED)
+    
+class BrandCenterProductViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def list(self, request):
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator = str(request.user.id)).exists(): 
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        brand_id = str(Brand.objects.get(creator = str(user_id)).id)
+        product_ins = Product.objects.filter(brand_id=brand_id)
+        product_pks = [ str(prod.id) for prod in product_ins]
+        data = ProductData(product_pks, many=True).products
+        return Response(data, status=status.HTTP_200_OK)

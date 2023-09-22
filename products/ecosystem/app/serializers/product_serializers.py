@@ -12,6 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'pk',
             'uid',
             'title',
+            'group_id',
             'description',
             'sku',
             'isbn',
