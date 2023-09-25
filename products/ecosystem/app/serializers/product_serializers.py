@@ -15,15 +15,15 @@ class ProductSerializer(serializers.ModelSerializer):
             'group_id',
             'description',
             'sku',
-            'isbn',
             'stripe_product_id',
             'quantity',
+            'is_active',
             'brand',
             'category',
             'subcategory',
             'price',
             'specifications',
-            'images'
+            'images',
         ]
 
 class EditProductSerializer(serializers.ModelSerializer):
@@ -33,7 +33,6 @@ class EditProductSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'sku',
-            'isbn',
             'quantity'
         ]
 
@@ -53,7 +52,7 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
                 description = data['description'],
                 quantity = data['quantity'],
                 sku = data['sku'],
-                isbn = data['isbn']
+                is_active = data['is_active']
             ))
         
         instances = Product.objects.bulk_create(products_objs)
@@ -80,6 +79,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'subcategory',
             'description',
             'sku',
-            'isbn',
-            'quantity'
+            'quantity',
+            'is_active'
         ]
