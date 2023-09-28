@@ -45,6 +45,13 @@ class CategoryProductSpecificationItem(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
+class CategoryProductSpecificationItemOption(models.Model):
+    category_product_specification_item = models.ForeignKey(CategoryProductSpecificationItem, on_delete=models.CASCADE, related_name="options")
+    option = models.CharField(max_length=50, blank=False, default='')
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
 class SubcategoryProductSpecification(models.Model):
     subcategory = models.OneToOneField(Subcategory, on_delete=models.CASCADE, related_name="product_specification")
     is_active = models.BooleanField(default=True)
