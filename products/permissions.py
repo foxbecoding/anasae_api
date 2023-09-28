@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 from products.models import *
-from products.serializers import ProductSerializer
+from products.serializers import ProductSerializer, ProductDimensionSerializer
 from brands.models import BrandOwner
 from brands.serializers import BrandOwnerSerializer
 from utils.helpers import key_exists
@@ -112,6 +112,15 @@ class ProductImagePermission(BasePermission):
         if not is_brand_product(request, product_pks): return False
         return True
         
+
+class ProductDimensionPermission(BasePermission):
+    message = "Access Denied!"   
+    
+    def has_object_permission(self, request, view, obj):
+        instance=obj['instance']
+        data = ProductDimensionSerializer(instance).data
+        if not is_brand_product(request, [data['product']]): return False
+        return True
         
 def is_brand_product(request, product_pks):
     Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))

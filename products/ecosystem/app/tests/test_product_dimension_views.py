@@ -4,7 +4,7 @@ from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
 from utils.helpers import list_to_str
-
+from pprint import pprint
 is_CSRF = True
 
 class TestProductDimensionViewSet(TestCase):
@@ -108,136 +108,105 @@ class TestProductDimensionViewSet(TestCase):
                 'product': product['pk']
             })
         
-        price_res = self.client.post(
+        res = self.client.post(
+            reverse('product-dimension-list'), 
+            data=request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        
+        self.assertGreater(len(res.data), 0)
+        self.assertEqual(res.status_code, 201)
+    
+    def test_product_dimension_create_errors(self):
+        request_data = []
+        for product in self.products:
+            request_data.append({
+                'length': '',
+                'width': '9in',
+                'height': '2in',
+                'weight': '15.2oz',
+                'product': product['pk']
+            })
+        
+        res = self.client.post(
             reverse('product-dimension-list'), 
             data=request_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
-        # product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
-        # products_res = self.client.get(
-        #     reverse('product-list')+f'?pks={product_pks}', 
-        #     content_type='application/json',
-        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        # )
-
-        # self.assertEqual(products_res.data[0]['price']['price'], 2999)
-        # self.assertEqual(price_res.data[0]['price'], 2999)
-        # self.assertEqual(price_res.status_code, 201)
-    
-    def test_product_price_create_errors(self):
-        request_data = []
-        for product in self.products:
-            request_data.append({
-                'price': '',
-                'product': product['pk']
-            })
-        
-        res = self.client.post(
-            reverse('product-price-list'), 
-            data=request_data, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
-
         self.assertEqual(res.status_code, 400)
     
-    def test_product_price_create_permissions_failed(self):
+
+    def test_product_dimension_update(self):
         request_data = []
         for product in self.products:
             request_data.append({
-                'price': 2999,
-                'product': 158
-            })
-        
-        res = self.client.post(
-            reverse('product-price-list'), 
-            data=request_data, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
-
-        self.assertEqual(res.status_code, 403)
-
-    def test_product_price_update(self):
-        request_data = []
-        for product in self.products:
-            request_data.append({
-                'price': 2999,
+                'length': '11in',
+                'width': '9in',
+                'height': '2in',
+                'weight': '15.2oz',
                 'product': product['pk']
             })
         
-        price_data = self.client.post(
-            reverse('product-price-list'), 
+        dimension_data = self.client.post(
+            reverse('product-dimension-list'), 
             data=request_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ).data
-        price_data = price_data[0]
-        price_pk = price_data['pk']
-        product_pk = price_data['product']
+        ).data 
+
+        dimension_data = dimension_data[0]
+        dimension_pk = dimension_data['pk']
 
         res = self.client.put(
-            reverse('product-price-detail', kwargs={'pk': price_pk}), 
-            data={'price': 3999, 'product': product_pk}, 
+            reverse('product-dimension-detail', kwargs={'pk': dimension_pk}), 
+            data={
+                'length': '11in',
+                'width': '9in',
+                'height': '2in',
+                'weight': '14oz'
+            }, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
-        self.assertEqual(res.data['price'], 3999)
+        self.assertEqual(res.data['weight'], '14oz')
         self.assertEqual(res.status_code, 202)
     
-    def test_product_price_update_errors(self):
+    def test_product_dimension_update_errors(self):
         request_data = []
         for product in self.products:
             request_data.append({
-                'price': 2999,
+                'length': '11in',
+                'width': '9in',
+                'height': '2in',
+                'weight': '15.2oz',
                 'product': product['pk']
             })
         
-        price_data = self.client.post(
-            reverse('product-price-list'), 
+        dimension_data = self.client.post(
+            reverse('product-dimension-list'), 
             data=request_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ).data
-        price_data = price_data[0]
-        price_pk = price_data['pk']
-        product_pk = price_data['product']
+        ).data 
+
+        dimension_data = dimension_data[0]
+        dimension_pk = dimension_data['pk']
 
         res = self.client.put(
-            reverse('product-price-detail', kwargs={'pk': price_pk}), 
-            data={'price': '', 'product': product_pk}, 
+            reverse('product-dimension-detail', kwargs={'pk': dimension_pk}), 
+            data={
+                'length': None,
+                'width': '9in',
+                'height': '2in',
+                'weight': '14oz'
+            }, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
         self.assertEqual(res.status_code, 400)
     
-    def test_product_price_update_permissions_failed(self):
-        request_data = []
-        for product in self.products:
-            request_data.append({
-                'price': 2999,
-                'product': product['pk']
-            })
-        
-        price_data = self.client.post(
-            reverse('product-price-list'), 
-            data=request_data, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ).data
-        price_data = price_data[0]
-        price_pk = price_data['pk']
-        product_pk = price_data['product']
-
-        res = self.client.put(
-            reverse('product-price-detail', kwargs={'pk': price_pk}), 
-            data={'price': 3999}, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
-
-        self.assertEqual(res.status_code, 403)

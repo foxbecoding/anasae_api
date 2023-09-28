@@ -22,6 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'category',
             'subcategory',
             'price',
+            'dimension',
             'specifications',
             'images',
         ]
