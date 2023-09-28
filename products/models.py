@@ -3,19 +3,34 @@ from users.models import User
 from categories.models import Category, Subcategory
 from brands.models import Brand
 
+class ProductListing(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="product_listings")
+    uid = models.CharField(max_length=20, blank=False, unique=True)
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
 class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="products")
+    listing = models.ForeignKey(ProductListing, on_delete=models.CASCADE, related_name="products", default='')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="products", null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, related_name="products", blank=True, null=True)
     uid = models.CharField(max_length=20, blank=False, unique=True)
-    group_id = models.CharField(max_length=50, blank=True, null=True, default="")
-    stripe_product_id = models.CharField(max_length=50, blank=True, null=True, default="")
+    stripe_product_id = models.CharField(max_length=50, blank=False, null=False, default="")
     sku = models.CharField(max_length=50, blank=True, null=True, unique=True)
-    isbn = models.CharField(max_length=14, blank=True, null=True, unique=True)
     title = models.CharField(max_length=90, blank=False)
     description = models.TextField(max_length=300, blank=False)
-    quantity = models.IntegerField(default=0, blank=True, null=True)
+    quantity = models.IntegerField(default=0, blank=False, null=False)
     is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
+class ProductDimension(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="dimension")
+    length = models.FloatField(blank=False)
+    width = models.FloatField(blank=False)
+    height = models.FloatField(blank=False)
+    weight = models.FloatField(blank=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 

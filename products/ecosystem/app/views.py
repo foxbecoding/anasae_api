@@ -14,6 +14,15 @@ from pprint import pprint
 from utils.helpers import str_to_list
 import json
 
+class ProductListingViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def list(self, request):
+        print('test')
+        return Response(None, status=status.HTTP_200_OK)
+
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [ProductPermission]
