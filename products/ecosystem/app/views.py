@@ -12,7 +12,6 @@ from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
 from utils.helpers import str_to_list
-import json
 
 class ProductListingViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -20,8 +19,13 @@ class ProductListingViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def list(self, request):
-        print('test')
-        return Response(None, status=status.HTTP_200_OK)
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator = str(request.user.id)).exists(): 
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        brand_id = str(Brand.objects.get(creator = str(user_id)).id)
+        product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
+        data = ProductListingSerializer(product_listing_ins, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -134,6 +138,34 @@ class ProductImageViewSet(viewsets.ViewSet):
         instances.delete()
         return Response(None, status=status.HTTP_202_ACCEPTED)
     
+
+class ProductDimensionViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    @method_decorator(csrf_protect)
+    def create(self, request):
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator = user_id).exists(): 
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        # create_serializer = CreateProductPriceSerializer(data=request.data, many=True)
+        # if not create_serializer.is_valid(): return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # validated_data = create_serializer.validated_data
+        # data = BulkCreateProductPriceSerializer.create(validated_data)
+        return Response(None, status=status.HTTP_201_CREATED)
+        # return Response(data, status=status.HTTP_201_CREATED)
+    
+    # @method_decorator(csrf_protect)
+    # def update(self, request, pk=None):
+    #     self.check_object_permissions(request=request, obj={'product_price_pk': pk})
+    #     Product_Price_Instance = ProductPrice.objects.get(pk=pk)
+    #     edit_serializer = EditProductPriceSerializer(Product_Price_Instance, request.data)
+    #     if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    #     validated_data = edit_serializer.validated_data
+    #     data = edit_serializer.update(Product_Price_Instance, validated_data)
+    #     return Response(data, status=status.HTTP_202_ACCEPTED)
+        
 class BrandCenterProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated]

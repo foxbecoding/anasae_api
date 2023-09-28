@@ -12,13 +12,13 @@ class ProductSerializer(serializers.ModelSerializer):
             'pk',
             'uid',
             'title',
-            'group_id',
             'description',
             'sku',
             'stripe_product_id',
             'quantity',
             'is_active',
             'brand',
+            'listing',
             'category',
             'subcategory',
             'price',
@@ -33,18 +33,26 @@ class EditProductSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'sku',
-            'quantity'
+            'quantity',
+            'is_active'
         ]
 
 class BulkCreateProductSerializer(serializers.ListSerializer):
     def create(validated_data):
-        group_id = create_uid('gid-')
         products_objs = []
         
+        product_listing_ins = ProductListing.objects.create(
+            brand=validated_data[0]['brand'],
+            title=validated_data[0]['title'],
+            uid=create_uid('lid-')
+        )
+        
+        product_listing_ins.save()
+
         for data in validated_data: 
             products_objs.append(Product(
                 uid = create_uid('pro-'),
-                group_id = group_id,
+                listing = product_listing_ins,
                 brand = data['brand'],
                 category = data['category'],
                 subcategory = data['subcategory'],

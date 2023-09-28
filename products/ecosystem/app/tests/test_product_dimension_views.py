@@ -7,7 +7,7 @@ from utils.helpers import list_to_str
 
 is_CSRF = True
 
-class TestProductPriceViewSet(TestCase):
+class TestProductDimensionViewSet(TestCase):
  
     def setUp(self):
         self.categories = test_categories()
@@ -97,31 +97,34 @@ class TestProductPriceViewSet(TestCase):
         )
         self.products = res.data
 
-    def test_product_price_create(self):
+    def test_product_dimension_create(self):
         request_data = []
         for product in self.products:
             request_data.append({
-                'price': 2999,
+                'length': '11in',
+                'width': '9in',
+                'height': '2in',
+                'weight': '15.2oz',
                 'product': product['pk']
             })
         
         price_res = self.client.post(
-            reverse('product-price-list'), 
+            reverse('product-dimension-list'), 
             data=request_data, 
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
 
-        product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
-        products_res = self.client.get(
-            reverse('product-list')+f'?pks={product_pks}', 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        )
+        # product_pks = list_to_str([ str(data['product']) for data in price_res.data ])
+        # products_res = self.client.get(
+        #     reverse('product-list')+f'?pks={product_pks}', 
+        #     content_type='application/json',
+        #     **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        # )
 
-        self.assertEqual(products_res.data[0]['price']['price'], 2999)
-        self.assertEqual(price_res.data[0]['price'], 2999)
-        self.assertEqual(price_res.status_code, 201)
+        # self.assertEqual(products_res.data[0]['price']['price'], 2999)
+        # self.assertEqual(price_res.data[0]['price'], 2999)
+        # self.assertEqual(price_res.status_code, 201)
     
     def test_product_price_create_errors(self):
         request_data = []

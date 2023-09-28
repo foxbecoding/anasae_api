@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
+from pprint import pprint
 
 is_CSRF = True
 
@@ -72,7 +73,7 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 20,
             'sku': None,
-            'isbn': None
+            'is_active': True
         }
         
         product_res = self.client.post(
@@ -104,7 +105,7 @@ class TestProductViewSet(TestCase):
                 'description': data['description'],
                 'quantity': 20,
                 'sku': None,
-                'isbn': None
+                'is_active': True
             }
 
             request_data.append(product)
@@ -115,6 +116,8 @@ class TestProductViewSet(TestCase):
             content_type='application/json',
             **{'HTTP_X_CSRFTOKEN': self.csrftoken}
         ) 
+
+        pprint(res.data[0])
 
         self.assertGreater(len(res.data), 1)
         self.assertEqual(res.status_code, 201)
@@ -128,7 +131,7 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': None,
-            'isbn': None,
+            'is_active': True
         }
         
         res = self.client.post(
@@ -149,7 +152,7 @@ class TestProductViewSet(TestCase):
             'description': 'Business casual navy blue chinos for men',
             'quantity': 20,
             'sku': None,
-            'isbn': None,
+            'is_active': True
         }
         
         res = self.client.post(
@@ -174,7 +177,7 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 25,
             'sku': None,
-            'isbn': None
+            'is_active': True
         }
         res = self.client.put(
             reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),
@@ -192,7 +195,7 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 25,
             'sku': None,
-            'isbn': None
+            'is_active': True
         }
         res = self.client.put(
             reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),

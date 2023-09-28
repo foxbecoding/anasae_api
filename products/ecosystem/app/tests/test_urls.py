@@ -1,6 +1,16 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 
+class TestProductListingUrls(SimpleTestCase):
+    
+    def test_product__listing_list_url_resolves(self):
+        url = reverse('product-listing-list')
+        self.assertEqual(resolve(url).view_name, 'product-listing-list')
+    
+    # def test_product__listing_detail_url_resolves(self):
+    #     url = reverse('product-listing-detail', kwargs={'pk': 1})
+    #     self.assertEqual(resolve(url).view_name, 'product-listing-detail')
+
 class TestProductUrls(SimpleTestCase):
     
     def test_product_list_url_resolves(self):
@@ -20,6 +30,16 @@ class TestProductPriceUrls(SimpleTestCase):
     def test_product_price_detail_url_resolves(self):
         url = reverse('product-price-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'product-price-detail')
+
+class TestProductDimensionUrls(SimpleTestCase):
+    
+    def test_product_dimension_list_url_resolves(self):
+        url = reverse('product-dimension-list')
+        self.assertEqual(resolve(url).view_name, 'product-dimension-list')
+    
+    def test_product_dimension_detail_url_resolves(self):
+        url = reverse('product-dimension-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'product-dimension-detail')
 
 class TestProductSpecificationUrls(SimpleTestCase):
     

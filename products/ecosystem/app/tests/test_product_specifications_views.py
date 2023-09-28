@@ -85,7 +85,7 @@ class TestProductSpecificationViewSet(TestCase):
                 'description': data['description'],
                 'quantity': 20,
                 'sku': None,
-                'isbn': None
+                'is_active': True
             }
 
             request_data.append(product)

@@ -6,7 +6,7 @@ from datetime import datetime
 
 is_CSRF = True
 
-class TestProductViewSet(TestCase):
+class TestProductListingViewSet(TestCase):
  
     def setUp(self):
         self.categories = test_categories()
@@ -72,7 +72,7 @@ class TestProductViewSet(TestCase):
             'description': 'Black chinos dress pants for men',
             'quantity': 20,
             'sku': None,
-            'isbn': None
+            'is_active': True
         }
         
         product_res = self.client.post(
@@ -83,39 +83,8 @@ class TestProductViewSet(TestCase):
         ) 
         self.product_data = product_res.data
 
-    def test_product_create(self):
-        request_data = []
-        product_data = [
-            {
-                'title': "Business casual navy blue chinos for men 34",
-                'description': 'Business casual navy blue chinos for men'
-            },
-            {
-                'title': "Business casual navy blue chinos for men 36",
-                'description': 'Business casual navy blue chinos for men '
-            }
-        ]
-        for data in product_data:
-            product = {
-                'brand': self.brand_data['pk'],
-                'category': self.categories['category_data']['pk'],
-                'subcategory': self.categories['subcategory_data']['pk'],
-                'title': data['title'],
-                'description': data['description'],
-                'quantity': 20,
-                'sku': None,
-                'isbn': None
-            }
-
-            request_data.append(product)
-
-        res = self.client.post(
-            reverse('product-list'), 
-            data=request_data, 
-            content_type='application/json',
-            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-        ) 
-
-        self.assertGreater(len(res.data), 1)
-        self.assertEqual(res.status_code, 201)
+    def test_product_listing_list(self):
+        res = self.client.get(reverse('product-listing-list')) 
+        self.assertGreater(len(res.data), 0)
+        self.assertEqual(res.status_code, 200)
 
