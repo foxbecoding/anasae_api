@@ -29,5 +29,9 @@ class CategoryProductSpecificationViewSet(viewsets.ViewSet):
         instance = CategoryProductSpecification.objects.get(pk=pk)
         serializer_data = CategoryProductSpecificationSerializer(instance).data
         instances = CategoryProductSpecificationItem.objects.filter(pk__in=serializer_data['items'])
-        specifications_serializer_data = CategoryProductSpecificationItemSerializer(instances, many=True).data
-        return Response(specifications_serializer_data, status=status.HTTP_200_OK)
+        specifications = CategoryProductSpecificationItemSerializer(instances, many=True).data
+        for spec in specifications:
+            options_ins = CategoryProductSpecificationItemOption.objects.filter(pk__in=spec['options'])
+            options = [item['option'] for item in CategoryProductSpecificationItemOptionSerializer(options_ins, many=True).data]
+            spec['options'] = options
+        return Response(specifications, status=status.HTTP_200_OK)

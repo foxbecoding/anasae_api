@@ -42,7 +42,18 @@ class CategoryProductSpecificationItemSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'item',
-            'is_required'
+            'is_required',
+            'options'
+        ]
+
+class CategoryProductSpecificationItemOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryProductSpecificationItemOption
+        fields = [
+            'pk',
+            'is_active',
+            'category_product_specification_item',
+            'option'
         ]
 
 class SubcategorySerializer(serializers.ModelSerializer):
