@@ -87,4 +87,11 @@ class TestProductListingViewSet(TestCase):
         res = self.client.get(reverse('product-listing-list')) 
         self.assertGreater(len(res.data), 0)
         self.assertEqual(res.status_code, 200)
+    
+    def test_product_listing_retrieve(self):
+        res = self.client.get(reverse('product-listing-list')) 
+        uid = res.data[0]['uid']
+        res = self.client.get(reverse('product-listing-detail', kwargs={'uid': uid})) 
+        self.assertEqual(res.data['uid'], uid)
+        self.assertEqual(res.status_code, 200)
 

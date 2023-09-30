@@ -20,14 +20,28 @@ class ProductListingViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
     
     def retrieve(self, request, uid=None):
-        print(uid)
-        return Response(None, status=status.HTTP_200_OK)
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator=user_id).exists(): 
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        brand_id = str(Brand.objects.get(creator=user_id).id)
+        if not ProductListing.objects.filter(uid=uid).filter(brand_id=brand_id).exists():
+            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        instance = ProductListing.objects.get(uid=uid)
+        data = ProductListingSerializer(instance).data
+        prod_ins = Product.objects.filter(pk__in=data['products'])
+        prod_pks = [str(prod.id) for prod in prod_ins]
+        products = ProductData(prod_pks, many=True).products
+        active_products = [prod for prod in products if prod['is_active']]
+        inactive_products = [prod for prod in products if not prod['is_active']]
+        data['active_products'] = active_products
+        data['inactive_products'] = inactive_products
+        return Response(data, status=status.HTTP_200_OK)
 
     def list(self, request):
         user_id = str(request.user.id)
-        if not Brand.objects.filter(creator = str(request.user.id)).exists(): 
+        if not Brand.objects.filter(creator=user_id).exists(): 
             return Response(None, status=status.HTTP_403_FORBIDDEN)
-        brand_id = str(Brand.objects.get(creator = str(user_id)).id)
+        brand_id = str(Brand.objects.get(creator=user_id).id)
         product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
         listings = ProductListingSerializer(product_listing_ins, many=True).data
         for listing in listings:
@@ -35,9 +49,12 @@ class ProductListingViewSet(viewsets.ViewSet):
             prod_data = ProductSerializer(prod_ins, many=True).data
             active_prod = [prod for prod in prod_data if prod['is_active']]
             inactive_prod = [prod for prod in prod_data if not prod['is_active']]
-            prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
-            prod_img_data = ProductImageSerializer(prod_image_ins).data
-            listing['image'] = prod_img_data['image']
+            listing_image = ''
+            if len(prod_data[0]['images']) > 0:
+                prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
+                prod_img_data = ProductImageSerializer(prod_image_ins).data
+                listing_image = prod_img_data['image']
+            listing['image'] = listing_image
             listing['active_products'] = len(active_prod)
             listing['inactive_products'] = len(inactive_prod)
         return Response(listings, status=status.HTTP_200_OK)
