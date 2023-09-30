@@ -14,18 +14,33 @@ from pprint import pprint
 from utils.helpers import str_to_list
 
 class ProductListingViewSet(viewsets.ViewSet):
+    lookup_field = 'uid'
     def get_permissions(self):
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
     
+    def retrieve(self, request, uid=None):
+        print(uid)
+        return Response(None, status=status.HTTP_200_OK)
+
     def list(self, request):
         user_id = str(request.user.id)
         if not Brand.objects.filter(creator = str(request.user.id)).exists(): 
             return Response(None, status=status.HTTP_403_FORBIDDEN)
         brand_id = str(Brand.objects.get(creator = str(user_id)).id)
         product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
-        data = ProductListingSerializer(product_listing_ins, many=True).data
-        return Response(data, status=status.HTTP_200_OK)
+        listings = ProductListingSerializer(product_listing_ins, many=True).data
+        for listing in listings:
+            prod_ins = Product.objects.filter(pk__in=listing['products'])
+            prod_data = ProductSerializer(prod_ins, many=True).data
+            active_prod = [prod for prod in prod_data if prod['is_active']]
+            inactive_prod = [prod for prod in prod_data if not prod['is_active']]
+            prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
+            prod_img_data = ProductImageSerializer(prod_image_ins).data
+            listing['image'] = prod_img_data['image']
+            listing['active_products'] = len(active_prod)
+            listing['inactive_products'] = len(inactive_prod)
+        return Response(listings, status=status.HTTP_200_OK)
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -168,17 +183,3 @@ class ProductDimensionViewSet(viewsets.ViewSet):
         data =  ProductDimensionSerializer(edit_serializer.save()).data
         return Response(data, status=status.HTTP_202_ACCEPTED)
         
-class BrandCenterProductViewSet(viewsets.ViewSet):
-    def get_permissions(self):
-        permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
-    
-    def list(self, request):
-        user_id = str(request.user.id)
-        if not Brand.objects.filter(creator = str(request.user.id)).exists(): 
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
-        brand_id = str(Brand.objects.get(creator = str(user_id)).id)
-        product_ins = Product.objects.filter(brand_id=brand_id)
-        product_pks = [ str(prod.id) for prod in product_ins]
-        data = ProductData(product_pks, many=True).products
-        return Response(data, status=status.HTTP_200_OK)

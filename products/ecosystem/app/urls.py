@@ -8,5 +8,4 @@ router.register(r"product-dimension", ProductDimensionViewSet, basename="product
 router.register(r"product-price", ProductPriceViewSet, basename="product-price")
 router.register(r"product-image", ProductImageViewSet, basename="product-image")
 router.register(r"product-specification", ProductSpecificationViewSet, basename="product-specification")
-router.register(r"brand-center-product", BrandCenterProductViewSet, basename="brand-center-product")
 urlpatterns = router.urls

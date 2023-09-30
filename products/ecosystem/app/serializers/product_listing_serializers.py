@@ -12,5 +12,7 @@ class ProductListingSerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'brand',
-            'products'
+            'products',
+            'created',
+            'updated'
         ]
