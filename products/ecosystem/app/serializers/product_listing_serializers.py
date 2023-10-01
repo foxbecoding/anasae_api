@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from products.models import ProductListing
 import os
+from pprint import pprint
 
 env = os.getenv
 
@@ -14,6 +15,7 @@ class ProductListingSerializer(serializers.ModelSerializer):
             'brand',
             'image',
             'products',
+            'category',
             'created',
             'updated'
         ]

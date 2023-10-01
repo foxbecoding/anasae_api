@@ -42,15 +42,15 @@ class ProductListingViewSet(viewsets.ViewSet):
     def retrieve(self, request, uid=None):
         self.check_object_permissions(request, obj={'uid': uid})
         instance = ProductListing.objects.get(uid=uid)
-        data = ProductListingSerializer(instance).data
-        prod_ins = Product.objects.filter(pk__in=data['products'])
+        serialized_data = ProductListingSerializer(instance).data
+        prod_ins = Product.objects.filter(pk__in=serialized_data['products'])
         prod_pks = [str(prod.id) for prod in prod_ins]
         products = ProductData(prod_pks, many=True).products
         active_products = [prod for prod in products if prod['is_active']]
         inactive_products = [prod for prod in products if not prod['is_active']]
-        data['active_products'] = self.set_listing_products_data(active_products)
-        data['inactive_products'] = self.set_listing_products_data(inactive_products)
-        return Response(data, status=status.HTTP_200_OK)
+        serialized_data['active_products'] = self.set_listing_products_data(active_products)
+        serialized_data['inactive_products'] = self.set_listing_products_data(inactive_products)
+        return Response(serialized_data, status=status.HTTP_200_OK)
 
     @method_decorator(csrf_protect)
     def partial_update(self, request, uid=None):
@@ -62,7 +62,7 @@ class ProductListingViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
     def set_listing_products_data(self, products):
-        for prod in products[0:1]:
+        for prod in products:
             prod['price_int'] = prod['price']['price'] if prod['price'] else None
             prod['stock_status'] = 'in stock'
             if prod['quantity'] == 0:
