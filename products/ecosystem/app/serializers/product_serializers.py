@@ -25,6 +25,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'dimension',
             'specifications',
             'images',
+            'created',
+            'updated'
         ]
 
 class EditProductSerializer(serializers.ModelSerializer):

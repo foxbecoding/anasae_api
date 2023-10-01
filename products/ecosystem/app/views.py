@@ -33,10 +33,20 @@ class ProductListingViewSet(viewsets.ViewSet):
         products = ProductData(prod_pks, many=True).products
         active_products = [prod for prod in products if prod['is_active']]
         inactive_products = [prod for prod in products if not prod['is_active']]
-        data['active_products'] = active_products
-        data['inactive_products'] = inactive_products
+        data['active_products'] = self.set_listing_products_data(active_products)
+        data['inactive_products'] = self.set_listing_products_data(inactive_products)
         return Response(data, status=status.HTTP_200_OK)
 
+    def set_listing_products_data(self, products):
+        for prod in products:
+            prod['price_int'] = prod['price']['price']
+            prod['stock_status'] = 'in stock'
+            if prod['quantity'] == 0:
+                prod['stock_status'] = 'out of stock'
+            prod['color'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Color'][0].upper()
+            prod['size'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Size'][0].upper()
+        return products
+    
     def list(self, request):
         user_id = str(request.user.id)
         if not Brand.objects.filter(creator=user_id).exists(): 
