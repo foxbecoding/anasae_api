@@ -122,6 +122,22 @@ class ProductDimensionPermission(BasePermission):
         if not is_brand_product(request, [data['product']]): return False
         return True
         
+
+class ProductListingPermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_permission(self, request, view):
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator=user_id).exists(): return False
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        uid = obj['uid']
+        user_id = str(request.user.id)
+        brand_id = str(Brand.objects.get(creator=user_id).id)
+        if not ProductListing.objects.filter(uid=uid).filter(brand_id=brand_id).exists(): return False
+        return True
+
 def is_brand_product(request, product_pks):
     Brand_Owner_Instances = BrandOwner.objects.filter(user_id=str(request.user.id))
     brand_owner_data = BrandOwnerSerializer(Brand_Owner_Instances, many=True).data

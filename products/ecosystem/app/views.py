@@ -11,21 +11,36 @@ from products.permissions import *
 from products.ecosystem.classes import ProductData
 from categories.ecosystem.methods import *
 from pprint import pprint
-from utils.helpers import str_to_list
+from utils.helpers import str_to_list, key_exists
 
 class ProductListingViewSet(viewsets.ViewSet):
     lookup_field = 'uid'
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, ProductListingPermission]
         return [permission() for permission in permission_classes]
     
-    def retrieve(self, request, uid=None):
+    def list(self, request):
         user_id = str(request.user.id)
-        if not Brand.objects.filter(creator=user_id).exists(): 
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
         brand_id = str(Brand.objects.get(creator=user_id).id)
-        if not ProductListing.objects.filter(uid=uid).filter(brand_id=brand_id).exists():
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
+        product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
+        listings = ProductListingSerializer(product_listing_ins, many=True).data
+        for listing in listings:
+            prod_ins = Product.objects.filter(pk__in=listing['products'])
+            prod_data = ProductSerializer(prod_ins, many=True).data
+            active_prod = [prod for prod in prod_data if prod['is_active']]
+            inactive_prod = [prod for prod in prod_data if not prod['is_active']]
+            listing_image = listing['image']
+            if not listing_image and len(prod_data[0]['images']) > 0:
+                prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
+                prod_img_data = ProductImageSerializer(prod_image_ins).data
+                listing_image = prod_img_data['image']
+            listing['image'] = listing_image
+            listing['active_products'] = len(active_prod)
+            listing['inactive_products'] = len(inactive_prod)
+        return Response(listings, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, uid=None):
+        self.check_object_permissions(request, obj={'uid': uid})
         instance = ProductListing.objects.get(uid=uid)
         data = ProductListingSerializer(instance).data
         prod_ins = Product.objects.filter(pk__in=data['products'])
@@ -37,37 +52,30 @@ class ProductListingViewSet(viewsets.ViewSet):
         data['inactive_products'] = self.set_listing_products_data(inactive_products)
         return Response(data, status=status.HTTP_200_OK)
 
+    @method_decorator(csrf_protect)
+    def partial_update(self, request, uid=None):
+        self.check_object_permissions(request, obj={'uid': uid})
+        instance = ProductListing.objects.get(uid=uid)
+        serializer = EditProductListingSerializer(instance, request.data)
+        if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+
     def set_listing_products_data(self, products):
-        for prod in products:
-            prod['price_int'] = prod['price']['price']
+        for prod in products[0:1]:
+            prod['price_int'] = prod['price']['price'] if prod['price'] else None
             prod['stock_status'] = 'in stock'
             if prod['quantity'] == 0:
                 prod['stock_status'] = 'out of stock'
-            prod['color'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Color'][0].upper()
-            prod['size'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Size'][0].upper()
+            if len(prod['specifications']) > 0:
+                prod['color'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Color'][0].upper()
+                prod['size'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Size'][0].upper()
+            else: 
+                prod['color'] = ''
+                prod['size']  = ''
         return products
     
-    def list(self, request):
-        user_id = str(request.user.id)
-        if not Brand.objects.filter(creator=user_id).exists(): 
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
-        brand_id = str(Brand.objects.get(creator=user_id).id)
-        product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
-        listings = ProductListingSerializer(product_listing_ins, many=True).data
-        for listing in listings:
-            prod_ins = Product.objects.filter(pk__in=listing['products'])
-            prod_data = ProductSerializer(prod_ins, many=True).data
-            active_prod = [prod for prod in prod_data if prod['is_active']]
-            inactive_prod = [prod for prod in prod_data if not prod['is_active']]
-            listing_image = ''
-            if len(prod_data[0]['images']) > 0:
-                prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
-                prod_img_data = ProductImageSerializer(prod_image_ins).data
-                listing_image = prod_img_data['image']
-            listing['image'] = listing_image
-            listing['active_products'] = len(active_prod)
-            listing['inactive_products'] = len(inactive_prod)
-        return Response(listings, status=status.HTTP_200_OK)
+    
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):

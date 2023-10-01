@@ -94,4 +94,17 @@ class TestProductListingViewSet(TestCase):
         res = self.client.get(reverse('product-listing-detail', kwargs={'uid': uid})) 
         self.assertEqual(res.data['uid'], uid)
         self.assertEqual(res.status_code, 200)
+    
+    def test_product_listing_partial_update(self):
+        res = self.client.get(reverse('product-listing-list')) 
+        uid = res.data[0]['uid']
+        res = self.client.patch(
+            reverse('product-listing-detail', kwargs={'uid': uid}),
+            data={'title': 'FOX'},
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+
+        self.assertEqual(res.data['title'], 'FOX')
+        self.assertEqual(res.status_code, 202)
 

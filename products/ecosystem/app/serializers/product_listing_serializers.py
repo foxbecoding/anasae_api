@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from products.models import ProductListing
-import stripe, os
+import os
 
 env = os.getenv
 
@@ -12,7 +12,16 @@ class ProductListingSerializer(serializers.ModelSerializer):
             'uid',
             'title',
             'brand',
+            'image',
             'products',
             'created',
             'updated'
+        ]
+
+class EditProductListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductListing
+        fields = [
+            'image',
+            'title',
         ]

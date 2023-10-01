@@ -5,8 +5,10 @@ from brands.models import Brand
 
 class ProductListing(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="product_listings")
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="product_listings", null=True)
     title = models.CharField(max_length=90, blank=False, default='')
     uid = models.CharField(max_length=20, blank=False, unique=True)
+    image = models.CharField(max_length=200, blank=False, default='')
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)

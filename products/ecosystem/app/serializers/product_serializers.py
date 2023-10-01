@@ -46,6 +46,7 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
         
         product_listing_ins = ProductListing.objects.create(
             brand=validated_data[0]['brand'],
+            category = validated_data[0]['category'],
             title=validated_data[0]['title'],
             uid=create_uid('lid-')
         )
