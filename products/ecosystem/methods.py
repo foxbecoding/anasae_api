@@ -1,5 +1,4 @@
 from django.test import Client
 from django.urls import reverse
-from users.models import UserGender
+from products.models import *
 from datetime import datetime
-

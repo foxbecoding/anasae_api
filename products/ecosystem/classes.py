@@ -55,3 +55,60 @@ class ProductData:
         for x in zip(self.products, rel_data):
             product, data = x
             product[key] = data
+
+class ProductListingView:
+    def __init__(self):
+        pass
+
+    def listView(self, user_id):
+        brand_id = str(Brand.objects.get(creator=user_id).id)
+        product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
+        listings = ProductListingSerializer(product_listing_ins, many=True).data
+        cat_pks = [str(listing['category']) for listing in listings]
+        category_ins = Category.objects.filter(pk__in = cat_pks)
+        Categories = CategorySerializer(category_ins, many=True).data
+        for listing in listings:
+            prod_ins = Product.objects.filter(pk__in=listing['products'])
+            prod_data = ProductSerializer(prod_ins, many=True).data
+            active_prod = [prod for prod in prod_data if prod['is_active']]
+            inactive_prod = [prod for prod in prod_data if not prod['is_active']]
+            listing_image = listing['image']
+            if not listing_image and len(prod_data[0]['images']) > 0:
+                prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
+                prod_img_data = ProductImageSerializer(prod_image_ins).data
+                listing_image = prod_img_data['image']
+                listing_ins = ProductListing.objects.get(pk=listing['pk'])
+                listing_ins.image = listing_image
+                listing_ins.save()
+            listing['image'] = listing_image
+            listing['category'] = [cat for cat in Categories if str(cat['pk']) == str(listing['category'])][0]['title']
+            listing['active_products'] = len(active_prod)
+            listing['inactive_products'] = len(inactive_prod)
+        return listings
+    
+    def retrieveView(self, uid):
+        instance = ProductListing.objects.get(uid=uid)
+        serialized_data = ProductListingSerializer(instance).data
+        prod_ins = Product.objects.filter(pk__in=serialized_data['products'])
+        prod_pks = [str(prod.id) for prod in prod_ins]
+        products = ProductData(prod_pks, many=True).products
+        active_products = [prod for prod in products if prod['is_active']]
+        inactive_products = [prod for prod in products if not prod['is_active']]
+        serialized_data['active_products'] = self.__set_listing_products_data(active_products)
+        serialized_data['inactive_products'] = self.__set_listing_products_data(inactive_products)
+        serialized_data['category'] = Category.objects.get(pk=serialized_data['category']).title
+        return serialized_data
+
+    def __set_listing_products_data(self, products):
+        for prod in products:
+            prod['price_int'] = prod['price']['price'] if prod['price'] else None
+            prod['stock_status'] = 'in stock'
+            if prod['quantity'] == 0:
+                prod['stock_status'] = 'out of stock'
+            if len(prod['specifications']) > 0:
+                prod['color'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Color'][0].upper()
+                prod['size'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Size'][0].upper()
+            else: 
+                prod['color'] = ''
+                prod['size']  = ''
+        return products
