@@ -28,6 +28,12 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
 
+class ProductListingBaseVariant(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="listing_base_variant")
+    product_listing = models.OneToOneField(ProductListing, on_delete=models.CASCADE, related_name="base_variant")
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now_add=True, null=True)
+
 class ProductDimension(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="dimension")
     length = models.CharField(max_length=20, blank=False, null=False, default="")

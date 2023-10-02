@@ -38,6 +38,20 @@ class ProductListingViewSet(viewsets.ViewSet):
         data = ProductListingView().listView(user_id)
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
+class ProductListingBaseVariantViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, ProductListingPermission]
+        return [permission() for permission in permission_classes]
+    
+    def create(self, request):
+        return Response(None, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None):
+        return Response(None, status=status.HTTP_200_OK)
+    
+    def update(self, request, pk=None):
+        return Response(None, status=status.HTTP_202_ACCEPTED)
+
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [ProductPermission]
