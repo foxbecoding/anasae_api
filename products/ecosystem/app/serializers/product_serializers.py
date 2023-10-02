@@ -19,6 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'is_active',
             'brand',
             'listing',
+            'listing_base_variant',
             'category',
             'subcategory',
             'price',

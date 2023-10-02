@@ -12,9 +12,10 @@ class ProductListingSerializer(serializers.ModelSerializer):
             'pk',
             'uid',
             'title',
-            'brand',
             'image',
             'products',
+            'brand',
+            'base_variant',
             'category',
             'created',
             'updated'
