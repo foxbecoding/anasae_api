@@ -163,7 +163,6 @@ class ProductImageViewSet(viewsets.ViewSet):
         instances.delete()
         return Response(None, status=status.HTTP_202_ACCEPTED)
     
-
 class ProductDimensionViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated, ProductDimensionPermission]
@@ -192,4 +191,3 @@ class ProductDimensionViewSet(viewsets.ViewSet):
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
         data =  ProductDimensionSerializer(edit_serializer.save()).data
         return Response(data, status=status.HTTP_202_ACCEPTED)
-        
