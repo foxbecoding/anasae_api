@@ -3,6 +3,7 @@ from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
 from datetime import datetime
+from pprint import pprint
 
 is_CSRF = True
 
@@ -83,24 +84,31 @@ class TestProductListingBaseVariantViewSet(TestCase):
         ) 
         self.product_data = product_res.data
     
-    def test_product_listing_base_variant_retrieve(self):
-        pass
-        # res = self.client.get(reverse('product-listing-list')) 
-        # uid = res.data[0]['uid']
-        # res = self.client.get(reverse('product-listing-detail', kwargs={'uid': uid})) 
-        # self.assertEqual(res.data['uid'], uid)
-        # self.assertEqual(res.status_code, 200)
     
-    # def test_product_listing_base_variant_partial_update(self):
-    #     res = self.client.get(reverse('product-listing-list')) 
-    #     uid = res.data[0]['uid']
-    #     res = self.client.patch(
-    #         reverse('product-listing-detail', kwargs={'uid': uid}),
-    #         data={'title': 'FOX'},
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+    def test_product_listing_base_variant_partial_update(self):
+        product_request_data = {
+            'brand': self.brand_data['pk'],
+            'category': self.categories['category_data']['pk'],
+            'subcategory': self.categories['subcategory_data']['pk'],
+            'title': "Blue chinos dress pants for men",
+            'description': 'Blue chinos dress pants for men',
+            'quantity': 20,
+            'sku': None,
+            'is_active': True
+        }
+        
+        product_res = self.client.post(
+            reverse('product-list'), 
+            data=[product_request_data], 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
+        pk = product_res.data[0]['listing_base_variant']
+        res = self.client.put(
+            reverse('product-listing-base-variant-detail', kwargs={'pk': pk}),
+            data={'product': product_res.data[0]['pk']},
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
 
-    #     # self.assertEqual(res.data['title'], 'FOX')
-    #     self.assertEqual(res.status_code, 202)
-
+        self.assertEqual(res.status_code, 202)

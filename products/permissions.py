@@ -1,8 +1,8 @@
 from rest_framework.permissions import BasePermission
 from products.models import *
-from products.serializers import ProductSerializer, ProductDimensionSerializer
+from products.serializers import *
 from brands.models import BrandOwner
-from brands.serializers import BrandOwnerSerializer
+from brands.serializers import BrandOwnerSerializer, BrandSerializer
 from utils.helpers import key_exists
 import re
 from pprint import pprint
@@ -136,6 +136,29 @@ class ProductListingPermission(BasePermission):
         user_id = str(request.user.id)
         brand_id = str(Brand.objects.get(creator=user_id).id)
         if not ProductListing.objects.filter(uid=uid).filter(brand_id=brand_id).exists(): return False
+        return True
+
+class ProductListingBaseVariantPermission(BasePermission):
+    message = "Access Denied!"   
+
+    def has_permission(self, request, view):
+        user_id = str(request.user.id)
+        if not Brand.objects.filter(creator=user_id).exists(): return False
+        return True
+    
+    def has_object_permission(self, request, view, obj):
+        base_variant_pk = obj['pk']
+        product_pk = request.data['product']
+        user_id = str(request.user.id)
+        brand_id = Brand.objects.get(creator=user_id).id
+
+        if 'product' not in request.data: return False
+        if not Product.objects.filter(pk=product_pk).filter(brand_id=brand_id).exists(): return False
+
+        product_data = ProductSerializer(Product.objects.get(pk=product_pk)).data
+        if not ProductListing.objects.filter(pk=product_data['listing']).filter(brand_id=brand_id).exists(): return False
+        # if str(product_data['listing_base_variant']) != str(base_variant_pk): return False
+
         return True
 
 def is_brand_product(request, product_pks):

@@ -40,17 +40,18 @@ class ProductListingViewSet(viewsets.ViewSet):
 
 class ProductListingBaseVariantViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated, ProductListingPermission]
+        permission_classes = [IsAuthenticated, ProductListingBaseVariantPermission]
         return [permission() for permission in permission_classes]
     
-    def create(self, request):
-        return Response(None, status=status.HTTP_201_CREATED)
-    
-    def retrieve(self, request, pk=None):
-        return Response(None, status=status.HTTP_200_OK)
-    
     def update(self, request, pk=None):
-        return Response(None, status=status.HTTP_202_ACCEPTED)
+        self.check_object_permissions(request, obj = {'pk': pk})
+        user_id = str(request.user.id)
+        instance = ProductListingBaseVariant.objects.get(pk=pk)
+        edit_serializer = EditProductListingBaseVariantSerializer(instance, request.data)
+        if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        edit_serializer.save()
+        data = ProductListingView().listView(user_id)
+        return Response(data, status=status.HTTP_202_ACCEPTED)
 
 class ProductViewSet(viewsets.ViewSet):
     def get_permissions(self):

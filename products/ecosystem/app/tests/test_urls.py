@@ -13,10 +13,6 @@ class TestProductListingUrls(SimpleTestCase):
 
 class TestProductListingBaseVariantUrls(SimpleTestCase):
     
-    def test_product_listing_base_variant_list_url_resolves(self):
-        url = reverse('product-listing-base-variant-list')
-        self.assertEqual(resolve(url).view_name, 'product-listing-base-variant-list')
-    
     def test_product_listing_base_variant_detail_url_resolves(self):
         url = reverse('product-listing-base-variant-detail', kwargs={'pk': 1})
         self.assertEqual(resolve(url).view_name, 'product-listing-base-variant-detail')
