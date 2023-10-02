@@ -69,6 +69,11 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
         
         instances = Product.objects.bulk_create(products_objs)
         
+        ProductListingBaseVariant.objects.create(
+            product = instances[0],
+            product_listing = product_listing_ins
+        ).save()
+
         for ins in instances:        
             stripe_product = stripe.Product.create(
                 name=ins.title,

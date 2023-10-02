@@ -3,13 +3,23 @@ from django.urls import reverse, resolve
 
 class TestProductListingUrls(SimpleTestCase):
     
-    def test_product__listing_list_url_resolves(self):
+    def test_product_listing_list_url_resolves(self):
         url = reverse('product-listing-list')
         self.assertEqual(resolve(url).view_name, 'product-listing-list')
     
-    # def test_product__listing_detail_url_resolves(self):
-    #     url = reverse('product-listing-detail', kwargs={'pk': 1})
-    #     self.assertEqual(resolve(url).view_name, 'product-listing-detail')
+    def test_product_listing_detail_url_resolves(self):
+        url = reverse('product-listing-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'product-listing-detail')
+
+class TestProductListingBaseVariantUrls(SimpleTestCase):
+    
+    def test_product_listing_base_variant_list_url_resolves(self):
+        url = reverse('product-listing-base-variant-list')
+        self.assertEqual(resolve(url).view_name, 'product-listing-base-variant-list')
+    
+    def test_product_listing_base_variant_detail_url_resolves(self):
+        url = reverse('product-listing-base-variant-detail', kwargs={'pk': 1})
+        self.assertEqual(resolve(url).view_name, 'product-listing-base-variant-detail')
 
 class TestProductUrls(SimpleTestCase):
     
