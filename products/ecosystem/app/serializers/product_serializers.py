@@ -69,9 +69,10 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
             ))
         
         instances = Product.objects.bulk_create(products_objs)
-        
+        active_prods = [ins for ins in instances if ins.is_active]
+
         ProductListingBaseVariant.objects.create(
-            product = instances[0],
+            product = active_prods[0],
             product_listing = product_listing_ins
         ).save()
 

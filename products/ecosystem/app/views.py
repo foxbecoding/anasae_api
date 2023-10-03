@@ -50,6 +50,13 @@ class ProductListingBaseVariantViewSet(viewsets.ViewSet):
         edit_serializer = EditProductListingBaseVariantSerializer(instance, request.data)
         if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         edit_serializer.save()
+        product_pk = request.data['product']
+        prod_img_ins = ProductImage.objects.filter(product_id=product_pk)
+        image = prod_img_ins[0].image
+        serialized_base_variant = ProductListingBaseVariantSerializer(instance).data
+        listing_ins = ProductListing.objects.get(pk=serialized_base_variant['product_listing'])
+        listing_ins.image = image
+        listing_ins.save()
         data = ProductListingView().listView(user_id)
         return Response(data, status=status.HTTP_202_ACCEPTED)
 

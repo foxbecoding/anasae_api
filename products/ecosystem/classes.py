@@ -4,6 +4,7 @@ from categories.models import Category, Subcategory
 from categories.serializers import *
 from products.models import *
 from products.serializers import *
+from utils.helpers import list_to_str
 from pprint import pprint
 
 class ProductData:
@@ -68,20 +69,22 @@ class ProductListingView:
         category_ins = Category.objects.filter(pk__in = cat_pks)
         Categories = CategorySerializer(category_ins, many=True).data
         for listing in listings:
-            prod_ins = Product.objects.filter(pk__in=listing['products'])
-            prod_data = ProductSerializer(prod_ins, many=True).data
-            active_prod = [prod for prod in prod_data if prod['is_active']]
-            inactive_prod = [prod for prod in prod_data if not prod['is_active']]
+            products = ProductData(listing['products'], many=True).products
+            active_prod = [prod for prod in products if prod['is_active']]
+            inactive_prod = [prod for prod in products if not prod['is_active']]
+            base_variant = [prod for prod in products if str(prod['listing_base_variant']) == str(listing['base_variant'])][0]
+            listing['base_variant'] = base_variant
+            listing['base_variant_text'] = list_to_str([spec['value'].upper() for spec in base_variant['specifications'] if spec['label'] == 'Color' or spec['label'] == 'Size'])
+            listing['base_variant_images'] = [ img['image'] for img in base_variant['images'] ]
             listing_image = listing['image']
-            if not listing_image and len(prod_data[0]['images']) > 0:
-                prod_image_ins = ProductImage.objects.get(pk=prod_data[0]['images'][0])
-                prod_img_data = ProductImageSerializer(prod_image_ins).data
-                listing_image = prod_img_data['image']
+            if not listing_image and len(listing['base_variant_images']) > 0:
+                listing_image = listing['base_variant_images'][0]
                 listing_ins = ProductListing.objects.get(pk=listing['pk'])
                 listing_ins.image = listing_image
                 listing_ins.save()
             listing['image'] = listing_image
             listing['category'] = [cat for cat in Categories if str(cat['pk']) == str(listing['category'])][0]['title']
+            listing['active_products_list'] = self.__set_listing_products_data(active_prod)
             listing['active_products'] = len(active_prod)
             listing['inactive_products'] = len(inactive_prod)
         return listings
@@ -108,6 +111,7 @@ class ProductListingView:
             if len(prod['specifications']) > 0:
                 prod['color'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Color'][0].upper()
                 prod['size'] = [spec['value'] for spec in prod['specifications'] if spec['label'] == 'Size'][0].upper()
+                prod['variants'] = f"{prod['color']},{prod['size']}"
             else: 
                 prod['color'] = ''
                 prod['size']  = ''
