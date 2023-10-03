@@ -42,17 +42,19 @@ class EditProductSerializer(serializers.ModelSerializer):
         ]
 
 class BulkCreateProductSerializer(serializers.ListSerializer):
-    def create(validated_data):
+    def create(validated_data, listing_id=None):
         products_objs = []
         
-        product_listing_ins = ProductListing.objects.create(
-            brand=validated_data[0]['brand'],
-            category = validated_data[0]['category'],
-            title=validated_data[0]['title'],
-            uid=create_uid('lid-')
-        )
-        
-        product_listing_ins.save()
+        if listing_id: 
+            product_listing_ins = ProductListing.objects.get(uid=listing_id)
+        else:
+            product_listing_ins = ProductListing.objects.create(
+                brand=validated_data[0]['brand'],
+                category = validated_data[0]['category'],
+                title=validated_data[0]['title'],
+                uid=create_uid('lid-')
+            )
+            product_listing_ins.save()
 
         for data in validated_data: 
             products_objs.append(Product(
