@@ -84,13 +84,20 @@ class ProductViewSet(viewsets.ViewSet):
     @method_decorator(csrf_protect)
     def create(self, request):
         self.check_object_permissions(request=request, obj={})
+        
+        lid = None
+        if 'lid' in request.query_params:
+            lid = request.query_params['lid']
+            brand_id = str(Brand.objects.get(creator=str(request.user.id)).id)
+            if not ProductListing.objects.filter(uid=lid).filter(brand_id=brand_id).exists():return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
         create_serializer = CreateProductSerializer(data=request.data, many=True)
         
         if not create_serializer.is_valid(): 
             return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         validated_data = create_serializer.validated_data
-        pks = BulkCreateProductSerializer.create(validated_data)
+        pks = BulkCreateProductSerializer.create(validated_data, lid)
         data = ProductData(pks, many=True).products
         return Response(data, status=status.HTTP_201_CREATED)
     
