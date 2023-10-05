@@ -65,6 +65,7 @@ class ProductListingView:
         brand_id = str(Brand.objects.get(creator=user_id).id)
         product_listing_ins = ProductListing.objects.filter(brand_id=brand_id)
         listings = ProductListingSerializer(product_listing_ins, many=True).data
+        listings.sort(key=lambda x: x['pk'])
         cat_pks = [str(listing['category']) for listing in listings]
         category_ins = Category.objects.filter(pk__in = cat_pks)
         Categories = CategorySerializer(category_ins, many=True).data
@@ -95,6 +96,7 @@ class ProductListingView:
         prod_ins = Product.objects.filter(pk__in=serialized_data['products'])
         prod_pks = [str(prod.id) for prod in prod_ins]
         products = ProductData(prod_pks, many=True).products
+        products.sort(key=lambda x: x['pk'])
         active_products = [prod for prod in products if prod['is_active']]
         inactive_products = [prod for prod in products if not prod['is_active']]
         serialized_data['active_products'] = self.__set_listing_products_data(active_products)

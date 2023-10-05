@@ -31,7 +31,7 @@ class ProductListingViewSet(viewsets.ViewSet):
     def partial_update(self, request, uid=None):
         self.check_object_permissions(request, obj={'uid': uid})
         instance = ProductListing.objects.get(uid=uid)
-        serializer = EditProductListingSerializer(instance, request.data)
+        serializer = EditProductListingSerializer(instance, request.data, partial=True)
         if not serializer.is_valid(): return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         user_id = str(request.user.id)
@@ -111,6 +111,16 @@ class ProductViewSet(viewsets.ViewSet):
         data = ProductData([str(pk)]).products
         return Response(data, status=status.HTTP_202_ACCEPTED)
     
+    @method_decorator(csrf_protect)
+    def partial_update(self, request, pk=None):
+        self.check_object_permissions(request=request, obj={'product_pk': pk})
+        Product_Instance = Product.objects.get(pk=pk)
+        edit_serializer = EditProductSerializer(Product_Instance, data=request.data, partial=True)
+        if not edit_serializer.is_valid(): return Response(edit_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        edit_serializer.save()
+        data = ProductData([str(pk)]).products
+        return Response(data, status=status.HTTP_202_ACCEPTED)
+    
 class ProductPriceViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [IsAuthenticated, ProductPricePermission]
@@ -158,8 +168,8 @@ class ProductSpecificationViewSet(viewsets.ViewSet):
     
 class ProductImageViewSet(viewsets.ViewSet):
     def get_permissions(self):
-        permission_classes = [IsAuthenticated]
-        # permission_classes = [IsAuthenticated, ProductImagePermission]
+        # permission_classes = [IsAuthenticated]
+        permission_classes = [IsAuthenticated, ProductImagePermission]
         return [permission() for permission in permission_classes]
 
     @method_decorator(csrf_protect)
