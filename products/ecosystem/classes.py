@@ -21,16 +21,17 @@ class ProductData:
         subcategory_data = self.__get_rel_data('subcategory', Subcategory, SubcategoryProductPageSerializer)
         price_data = self.__get_rel_data('price', ProductPrice, ProductPagePriceSerializer)
         spec_data = self.__get_rel_data('specifications', ProductSpecification, ProductSpecificationSerializer)
+        dimension_data = self.__get_rel_data('dimension', ProductDimension, ProductDimensionSerializer)
         images_data = self.__get_rel_data('images', ProductImage, ProductImageSerializer)
-
         for product in self.products:
             product['brand'] = self.__set_rel_data(product['brand'], brand_data)
             product['category'] = self.__set_rel_data(product['category'], category_data)
             product['subcategory'] = self.__set_rel_data(product['subcategory'], subcategory_data)
             product['price'] = self.__set_rel_data(product['price'], price_data)
+            product['dimension'] = self.__set_rel_data(product['dimension'], dimension_data)
         self.__set_rel_multi_data('specifications', spec_data)
         self.__set_rel_multi_data('images', images_data)
-
+        
         if not self.many: self.products = self.products[0]
 
     def __get_rel_data(self, key, model, serializer):
