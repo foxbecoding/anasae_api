@@ -72,6 +72,7 @@ class ProductListingView:
         Categories = CategorySerializer(category_ins, many=True).data
         for listing in listings:
             products = ProductData(listing['products'], many=True).products
+            products.sort(key=lambda x: x['pk'])
             active_prod = [prod for prod in products if prod['is_active']]
             inactive_prod = [prod for prod in products if not prod['is_active']]
             base_variant = [prod for prod in products if str(prod['listing_base_variant']) == str(listing['base_variant'])][0]
