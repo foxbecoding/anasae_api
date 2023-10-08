@@ -16,6 +16,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'sku',
             'stripe_product_id',
             'quantity',
+            'variant_order',
             'is_active',
             'brand',
             'listing',
@@ -67,6 +68,7 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
                 description = data['description'],
                 quantity = data['quantity'],
                 sku = data['sku'],
+                variant_order = data['variant_order'],
                 is_active = data['is_active']
             ))
         

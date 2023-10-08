@@ -106,6 +106,7 @@ class TestProductViewSet(TestCase):
     #             'description': data['description'],
     #             'quantity': 20,
     #             'sku': None,
+    #             'variant_order': 1,
     #             'is_active': True
     #         }
 
@@ -143,6 +144,7 @@ class TestProductViewSet(TestCase):
                 'description': data['description'],
                 'quantity': 20,
                 'sku': None,
+                'variant_order': 1,
                 'is_active': True
             }
 
@@ -167,6 +169,7 @@ class TestProductViewSet(TestCase):
     #         'description': 'Business casual navy blue chinos for men',
     #         'quantity': 20,
     #         'sku': None,
+    #         'variant_order': 1,
     #         'is_active': True
     #     }
         
@@ -207,37 +210,39 @@ class TestProductViewSet(TestCase):
     #     self.assertEqual(res.data['title'], 'Black chinos dress pants for men')
     #     self.assertEqual(res.status_code, 200)
     
-    # def test_product_update(self):
-    #     request_data = {
-    #         'title': "Black chinos dress pants for men",
-    #         'description': 'Black chinos dress pants for men',
-    #         'quantity': 25,
-    #         'sku': None,
-    #         'is_active': True
-    #     }
-    #     res = self.client.put(
-    #         reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),
-    #         request_data,
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+    def test_product_update(self):
+        request_data = {
+            'title': "Black chinos dress pants for men",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 25,
+            'sku': None,
+            'variant_order': 1,
+            'is_active': True
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
         
-    #     self.assertEqual(res.data['quantity'], 25)
-    #     self.assertEqual(res.status_code, 202)
+        self.assertEqual(res.data['quantity'], 25)
+        self.assertEqual(res.status_code, 202)
     
-    # def test_product_update_errors(self):
-    #     request_data = {
-    #         'title': "",
-    #         'description': 'Black chinos dress pants for men',
-    #         'quantity': 25,
-    #         'sku': None,
-    #         'is_active': True
-    #     }
-    #     res = self.client.put(
-    #         reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),
-    #         request_data,
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     ) 
+    def test_product_update_errors(self):
+        request_data = {
+            'title': "",
+            'description': 'Black chinos dress pants for men',
+            'quantity': 25,
+            'sku': None,
+            'variant_order': 1,
+            'is_active': True
+        }
+        res = self.client.put(
+            reverse('product-detail', kwargs={'pk': self.product_data[0]['pk']}),
+            request_data,
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        ) 
         
-    #     self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.status_code, 400)

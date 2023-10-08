@@ -24,6 +24,7 @@ class Product(models.Model):
     title = models.CharField(max_length=90, blank=False)
     description = models.TextField(max_length=300, blank=False)
     quantity = models.IntegerField(default=0, blank=False, null=False)
+    variant_order = models.IntegerField(default=1, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now_add=True, null=True)
