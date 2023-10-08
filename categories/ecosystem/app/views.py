@@ -45,4 +45,5 @@ class CategoryHomePageViewSet(viewsets.ViewSet):
     def list(self, request):
         instances = Category.objects.all()
         serializer_data = CategorySerializer(instances, many=True).data
-        return Response(serializer_data, status=status.HTTP_200_OK)
+        print(serializer_data)
+        return Response(None, status=status.HTTP_200_OK)
