@@ -16,7 +16,8 @@ class CategorySerializer(serializers.ModelSerializer):
             'description',
             'subcategories',
             'product_specification',
-            'products'
+            'products',
+            'product_listings'
         ]
 
 class CategoryProductPageSerializer(serializers.ModelSerializer):

@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from categories.models import *
 from categories.serializers import *
 from pprint import pprint
+import random 
 
 class CategoryViewSet(viewsets.ViewSet):
     def get_permissions(self):
@@ -35,3 +36,13 @@ class CategoryProductSpecificationViewSet(viewsets.ViewSet):
             options = [item['option'] for item in CategoryProductSpecificationItemOptionSerializer(options_ins, many=True).data]
             spec['options'] = options
         return Response(specifications, status=status.HTTP_200_OK)
+    
+class CategoryHomePageViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        instances = Category.objects.all()
+        serializer_data = CategorySerializer(instances, many=True).data
+        return Response(serializer_data, status=status.HTTP_200_OK)

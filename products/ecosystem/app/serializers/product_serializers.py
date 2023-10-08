@@ -58,6 +58,7 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
             product_listing_ins.save()
 
         for data in validated_data: 
+            # print(data)
             products_objs.append(Product(
                 uid = create_uid('pro-'),
                 listing = product_listing_ins,
@@ -104,5 +105,6 @@ class CreateProductSerializer(serializers.ModelSerializer):
             'description',
             'sku',
             'quantity',
+            'variant_order',
             'is_active'
         ]
