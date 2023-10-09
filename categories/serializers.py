@@ -20,6 +20,16 @@ class CategorySerializer(serializers.ModelSerializer):
             'product_listings'
         ]
 
+class CategoryHomePageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = [
+            'pk',
+            'uid',
+            'title',
+            'product_listings'
+        ]
+
 class CategoryProductPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category

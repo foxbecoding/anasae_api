@@ -1,3 +1,4 @@
 from categories.ecosystem.app.test.test_urls import TestCategoryUrls
-from categories.ecosystem.app.test.test_categories_views import TestCategoryViewSet
-from categories.ecosystem.app.test.test_categories_product_specification_views import TestCategoryProductSpecificationViewSet
+# from categories.ecosystem.app.test.test_categories_views import TestCategoryViewSet
+from categories.ecosystem.app.test.test_categories_home_page_views import TestCategoryHomePageViewSet
+# from categories.ecosystem.app.test.test_categories_product_specification_views import TestCategoryProductSpecificationViewSet
