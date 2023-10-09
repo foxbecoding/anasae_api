@@ -8,4 +8,9 @@ router.register(
     CategoryProductSpecificationViewSet, 
     basename="category-product-specification"
 )
+router.register(
+    r"category-home-page", 
+    CategoryHomePageViewSet, 
+    basename="category-home-page"
+)
 urlpatterns = router.urls

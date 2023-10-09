@@ -58,7 +58,6 @@ class BulkCreateProductSerializer(serializers.ListSerializer):
             product_listing_ins.save()
 
         for data in validated_data: 
-            # print(data)
             products_objs.append(Product(
                 uid = create_uid('pro-'),
                 listing = product_listing_ins,

@@ -90,6 +90,7 @@ class ProductListingView:
             listing['active_products_list'] = self.__set_listing_products_data(active_prod)
             listing['active_products'] = len(active_prod)
             listing['inactive_products'] = len(inactive_prod)
+        # pprint(listings[-1])
         return listings
     
     def retrieveView(self, uid):

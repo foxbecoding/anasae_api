@@ -45,9 +45,9 @@ class CreateSliderImageSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         image = attrs.get('upload')
         img = Image.open(image)
-        valid_formats = ['PNG', 'JPEG']
+        valid_formats = ['PNG','JPEG','JPG','AVIF']
         if img.format not in valid_formats:
-            msg = 'Image must be in PNG or JPEG format'
+            msg = 'Image must be in .png, .avif, or .jpg format'
             raise serializers.ValidationError({"image": msg}, code='authorization')
         return attrs
     

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 from dotenv import load_dotenv
 from pathlib import Path
-import stripe, os
+import stripe, os, pillow_avif
 
 
 load_dotenv()

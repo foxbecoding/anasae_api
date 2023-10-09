@@ -29,9 +29,9 @@ class CreateProductImageSerializer(serializers.ModelSerializer):
         images = attrs.get('images')
         for image in images:
             img = Image.open(image)
-            valid_formats = ['PNG','JPEG','JPG']
+            valid_formats = ['PNG','JPEG','JPG','AVIF']
             if img.format not in valid_formats:
-                msg = 'Image must be in .png, or .jpg format'
+                msg = 'Image must be in .png, .avif, or .jpg format'
                 raise serializers.ValidationError({"image": msg}, code='authorization')
             
         return attrs

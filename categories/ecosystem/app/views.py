@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from categories.models import *
 from categories.serializers import *
+from categories.ecosystem.classes import *
 from pprint import pprint
 import random 
 
@@ -43,7 +44,5 @@ class CategoryHomePageViewSet(viewsets.ViewSet):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        instances = Category.objects.all()
-        serializer_data = CategorySerializer(instances, many=True).data
-        print(serializer_data)
-        return Response(None, status=status.HTTP_200_OK)
+        data = CategoryHomePageView().listView()
+        return Response(data, status=status.HTTP_200_OK)

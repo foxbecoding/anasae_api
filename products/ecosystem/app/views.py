@@ -99,6 +99,7 @@ class ProductViewSet(viewsets.ViewSet):
         validated_data = create_serializer.validated_data
         pks = BulkCreateProductSerializer.create(validated_data, lid)
         data = ProductData(pks, many=True).products
+        data.sort(key=lambda x: x['variant_order'])
         return Response(data, status=status.HTTP_201_CREATED)
     
     @method_decorator(csrf_protect)

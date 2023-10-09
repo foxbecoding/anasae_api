@@ -85,6 +85,7 @@ class TestProductImageViewSet(TestCase):
                 'description': data['description'],
                 'quantity': 20,
                 'sku': None,
+                'variant_order': 1,
                 'is_active': True
             }
 
@@ -100,7 +101,7 @@ class TestProductImageViewSet(TestCase):
 
     def test_product_image_create(self):
         request_data = []
-        images = [ tmp_image('png') for i in range(7) ]
+        images = [ tmp_image('avif') for i in range(7) ]
         for product in self.products:
             request_data.append({'images': images, 'product': product['pk']})
 
