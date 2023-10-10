@@ -38,6 +38,17 @@ class CategoryProductSpecificationViewSet(viewsets.ViewSet):
             spec['options'] = options
         return Response(specifications, status=status.HTTP_200_OK)
     
+class CategoryPageViewSet(viewsets.ViewSet):
+    lookup_field = 'uid'
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def retrieve(self, request, uid=None):
+        if not Category.objects.filter(uid=uid): return Response(None, status=status.HTTP_404_NOT_FOUND)
+        data = CategoryPageView().retrieveView(uid)
+        return Response(data, status=status.HTTP_200_OK)
+
 class CategoryHomePageViewSet(viewsets.ViewSet):
     def get_permissions(self):
         permission_classes = [AllowAny]

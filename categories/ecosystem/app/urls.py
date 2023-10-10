@@ -9,6 +9,11 @@ router.register(
     basename="category-product-specification"
 )
 router.register(
+    r"category-page", 
+    CategoryPageViewSet, 
+    basename="category-page"
+)
+router.register(
     r"category-home-page", 
     CategoryHomePageViewSet, 
     basename="category-home-page"
