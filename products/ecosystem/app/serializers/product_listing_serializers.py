@@ -28,3 +28,17 @@ class EditProductListingSerializer(serializers.ModelSerializer):
             'image',
             'title',
         ]
+
+class ProductListingPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductListing
+        fields = [
+            'pk',
+            'uid',
+            'title',
+            'image',
+            'products',
+            'brand',
+            'base_variant',
+            'category'
+        ]

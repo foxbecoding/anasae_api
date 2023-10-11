@@ -1,10 +1,10 @@
-from brands.models import Brand
+from brands.models import Brand, BrandLogo
 from brands.serializers import *
 from categories.models import Category, Subcategory
 from categories.serializers import *
 from products.models import *
 from products.serializers import *
-from utils.helpers import list_to_str
+from utils.helpers import list_to_str, filter_obj
 from pprint import pprint
 
 class ProductData:
@@ -90,7 +90,6 @@ class ProductListingView:
             listing['active_products_list'] = self.__set_listing_products_data(active_prod)
             listing['active_products'] = len(active_prod)
             listing['inactive_products'] = len(inactive_prod)
-        # pprint(listings[-1])
         return listings
     
     def retrieveView(self, uid):
@@ -121,3 +120,42 @@ class ProductListingView:
                 prod['color'] = ''
                 prod['size']  = ''
         return products
+    
+
+class ProductListingPageView:
+    def __init__(self):
+        pass
+    
+    def retrieveView(self, uid):
+        products = []
+        print('fox')
+        instance = ProductListing.objects.get(uid=uid)
+        listing = ProductListingPageSerializer(instance).data
+        product_data = ProductData(listing['products'], many=True).products
+        product_data.sort(key=lambda x: x['variant_order'])
+
+        for product in product_data:
+            products.append({
+                'pk': product['pk'],
+                'uid': product['uid'],
+                'title': product['title'],
+                'description': product['description'],
+                'quantity': product['quantity'],
+                'is_active': product['is_active'],
+                'brand': product['brand']['pk'],
+                'listing': product['listing'],
+                'listing_base_variant': product['listing_base_variant'],
+                'price': product['price']['price'],
+                'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
+                'images': [image['image'] for image in product['images']]
+            })
+
+        brand_ins = Brand.objects.get(pk=listing['brand'])
+        brand_data = BrandSerializer(brand_ins).data
+        brand_data['logo'] = BrandLogo.objects.get(pk=brand_data['logo']).image
+        listing['products'] = products
+        listing['brand'] = filter_obj(brand_data, ['name','pk','uid','logo'])
+        listing['base_variant'] = [prod for prod in products if str(prod['listing_base_variant']) == str(listing['base_variant'])][0]
+        return listing
+
+   

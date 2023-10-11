@@ -8,7 +8,7 @@ from products.models import *
 from brands.models import Brand
 from products.serializers import *
 from products.permissions import *
-from products.ecosystem.classes import ProductData, ProductListingView
+from products.ecosystem.classes import ProductData, ProductListingView, ProductListingPageView
 from utils.helpers import str_to_list
 
 class ProductListingViewSet(viewsets.ViewSet):
@@ -37,6 +37,18 @@ class ProductListingViewSet(viewsets.ViewSet):
         user_id = str(request.user.id)
         data = ProductListingView().listView(user_id)
         return Response(data, status=status.HTTP_202_ACCEPTED)
+
+class ProductListingPageViewSet(viewsets.ViewSet):
+    lookup_field = 'uid'
+    def get_permissions(self):
+        permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def retrieve(self, request, uid=None):
+        if not ProductListing.objects.filter(uid=uid).exists(): 
+            return Response(None, status=status.HTTP_200_OK)
+        listing = ProductListingPageView().retrieveView(uid)
+        return Response(listing, status=status.HTTP_200_OK)
 
 class ProductListingBaseVariantViewSet(viewsets.ViewSet):
     def get_permissions(self):
