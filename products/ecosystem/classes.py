@@ -128,13 +128,16 @@ class ProductListingPageView:
     
     def retrieveView(self, uid):
         products = []
-        print('fox')
         instance = ProductListing.objects.get(uid=uid)
         listing = ProductListingPageSerializer(instance).data
         product_data = ProductData(listing['products'], many=True).products
         product_data.sort(key=lambda x: x['variant_order'])
 
         for product in product_data:
+            color = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Color'][0].upper()
+            size = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Size'][0].upper()
+            variant = f"{color},{size}"
+            
             products.append({
                 'pk': product['pk'],
                 'uid': product['uid'],
@@ -147,7 +150,8 @@ class ProductListingPageView:
                 'listing_base_variant': product['listing_base_variant'],
                 'price': product['price']['price'],
                 'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
-                'images': [image['image'] for image in product['images']]
+                'images': [image['image'] for image in product['images']],
+                'variant': variant
             })
 
         brand_ins = Brand.objects.get(pk=listing['brand'])
