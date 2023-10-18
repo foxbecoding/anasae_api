@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users.apps.UsersConfig',
     'brands.apps.BrandsConfig',
+    'cart.apps.CartConfig',
     'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
     'sliders.apps.SlidersConfig'
