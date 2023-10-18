@@ -38,25 +38,25 @@ if env('ENVIRONMENT') == 'production':
     DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '192.168.1.235',
-    'anasae.local'
+    env('ALLOWED_HOSTS1'),
+    env('ALLOWED_HOSTS2'),
+    env('ALLOWED_HOSTS3')
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:3000',  
-    'http://192.168.1.235:3000',
-    'http://192.168.1.235',
-    'http://anasae.local'  
+    env('CSRF_TRUSTED_ORIGINS1'),  
+    env('CSRF_TRUSTED_ORIGINS2'),
+    env('CSRF_TRUSTED_ORIGINS3'),
+    env('CSRF_TRUSTED_ORIGINS4')
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:3000', 
-    'http://192.168.1.235:3000',
-    'http://192.168.1.235:8000',
-    'http://anasae.local'  
+    env('CORS_ORIGIN_WHITELIST1'), 
+    env('CORS_ORIGIN_WHITELIST2'),
+    env('CORS_ORIGIN_WHITELIST3'),
+    env('CORS_ORIGIN_WHITELIST4'),
 )
 
 
