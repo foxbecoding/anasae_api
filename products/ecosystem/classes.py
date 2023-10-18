@@ -127,32 +127,33 @@ class ProductListingPageView:
         pass
     
     def retrieveView(self, uid):
-        products = []
         instance = ProductListing.objects.get(uid=uid)
         listing = ProductListingPageSerializer(instance).data
-        product_data = ProductData(listing['products'], many=True).products
-        product_data.sort(key=lambda x: x['variant_order'])
+        
+        products = self.getProducts(listing['products'])
+        # product_data = ProductData(listing['products'], many=True).products
+        # product_data.sort(key=lambda x: x['variant_order'])
 
-        for product in product_data:
-            color = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Color'][0].upper()
-            size = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Size'][0].upper()
-            variant = f"{color},{size}"
+        # for product in product_data:
+        #     color = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Color'][0].upper()
+        #     size = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Size'][0].upper()
+        #     variant = f"{color},{size}"
             
-            products.append({
-                'pk': product['pk'],
-                'uid': product['uid'],
-                'title': product['title'],
-                'description': product['description'],
-                'quantity': product['quantity'],
-                'is_active': product['is_active'],
-                'brand': product['brand']['pk'],
-                'listing': product['listing'],
-                'listing_base_variant': product['listing_base_variant'],
-                'price': product['price']['price'],
-                'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
-                'images': [image['image'] for image in product['images']],
-                'variant': variant
-            })
+        #     products.append({
+        #         'pk': product['pk'],
+        #         'uid': product['uid'],
+        #         'title': product['title'],
+        #         'description': product['description'],
+        #         'quantity': product['quantity'],
+        #         'is_active': product['is_active'],
+        #         'brand': product['brand']['pk'],
+        #         'listing': product['listing'],
+        #         'listing_base_variant': product['listing_base_variant'],
+        #         'price': product['price']['price'],
+        #         'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
+        #         'images': [image['image'] for image in product['images']],
+        #         'variant': variant
+        #     })
 
         brand_ins = Brand.objects.get(pk=listing['brand'])
         brand_data = BrandSerializer(brand_ins).data
@@ -161,5 +162,34 @@ class ProductListingPageView:
         listing['brand'] = filter_obj(brand_data, ['name','pk','uid','logo'])
         listing['base_variant'] = [prod for prod in products if str(prod['listing_base_variant']) == str(listing['base_variant'])][0]
         return listing
+    
+    def getProducts(self, pks):
+        products = []
+        product_data = ProductData(pks, many=True).products
+        if product_data:
+            product_data.sort(key=lambda x: x['variant_order'])
 
-   
+            for product in product_data:
+                variant = ''
+                if len(product['specifications']) > 0:
+                    color = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Color'][0].upper()
+                    size = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Size'][0].upper()
+                    variant = f"{color},{size}"
+                
+                products.append({
+                    'pk': product['pk'],
+                    'uid': product['uid'],
+                    'title': product['title'],
+                    'description': product['description'],
+                    'quantity': product['quantity'],
+                    'is_active': product['is_active'],
+                    'brand': product['brand']['pk'],
+                    'listing': product['listing'],
+                    'listing_base_variant': product['listing_base_variant'],
+                    'price': product['price']['price'] if product['price'] else '',
+                    'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
+                    'images': [image['image'] for image in product['images']],
+                    'variant': variant
+                })
+
+        return products

@@ -2,8 +2,6 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from users.models import UserGender
 from categories.ecosystem.methods import test_categories
-from cart.models import Cart, CartItem
-from products.models import Product
 from pprint import pprint
 
 is_CSRF = True
@@ -87,12 +85,63 @@ class TestCartViewSet(TestCase):
         self.product_data = product_res.data
 
         cart_res = self.client.get(reverse('cart-list'))
-        CartItem.objects.create(
-            cart=Cart.objects.get(pk=cart_res.data['pk']),
-            item=Product.objects.get(pk=self.product_data[0]['pk'])
-        ).save()
+        request_data = {
+            'cart': cart_res.data['pk'],
+            'item': self.product_data[0]['pk'],
+            'quantity': 1
+        }
 
-    def test_cart_retrieve(self):
+        res = self.client.post(
+            reverse('cart-item-list'),
+            request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        
+
+    def test_cart_list(self):
         res = self.client.get(reverse('cart-list'))
-        pprint(res.data)
         self.assertEqual(res.status_code, 200)
+
+    # def test_cart_item_create(self):
+    #     cart_res = self.client.get(reverse('cart-list'))
+    #     request_data = {
+    #         'cart': cart_res.data['pk'],
+    #         'item': self.product_data[0]['pk'],
+    #         'quantity': 3
+    #     }
+
+    #     res = self.client.post(
+    #         reverse('cart-item-list'),
+    #         request_data, 
+    #         content_type='application/json',
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+
+    #     cart_res = self.client.get(reverse('cart-list'))
+    #     self.assertGreater(len(cart_res.data['items']), 0)
+    #     self.assertEqual(res.status_code, 201)
+
+    # def test_cart_update(self):
+    #     cart_res = self.client.get(reverse('cart-list'))
+    #     cart_item_pk = cart_res.data['items'][0]['pk']
+    #     res = self.client.put(
+    #         reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
+    #         {'quantity': 9}, 
+    #         content_type='application/json',
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+    #     self.assertGreater(res.data['items'][0]['quantity'], cart_res.data['items'][0]['quantity'])
+    #     self.assertEqual(res.status_code, 202)
+    
+    # def test_cart_delete(self):
+    #     cart_res = self.client.get(reverse('cart-list'))
+    #     cart_item_pk = cart_res.data['items'][0]['pk']
+    #     res = self.client.delete(
+    #         reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
+    #         content_type='application/json',
+    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+    #     )
+
+    #     self.assertEqual(len(res.data['items']), 0)
+    #     self.assertEqual(res.status_code, 202)
