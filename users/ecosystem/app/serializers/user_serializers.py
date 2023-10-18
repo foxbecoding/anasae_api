@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from users.models import *
+from cart.models import Cart
 from utils.helpers import create_uid
 import stripe, os, re
 
@@ -29,7 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
             'payment_methods',
             'owned_brands',
             'followers',
-            'followed_users'
+            'followed_users',
+            'cart'
         ]
 
 class EditUserSerializer(serializers.ModelSerializer):
@@ -154,6 +156,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
             user = User_Instance
         )
         User_Gender_Choice_Instance.save()
+
+        Cart_Instance = Cart.objects.create(
+            uid = create_uid('cart-'),
+            user = User_Instance
+        )
+        Cart_Instance.save()
 
         attrs['user'] = User_Instance
         return attrs  
