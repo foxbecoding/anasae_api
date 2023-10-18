@@ -129,32 +129,7 @@ class ProductListingPageView:
     def retrieveView(self, uid):
         instance = ProductListing.objects.get(uid=uid)
         listing = ProductListingPageSerializer(instance).data
-        
         products = self.getProducts(listing['products'])
-        # product_data = ProductData(listing['products'], many=True).products
-        # product_data.sort(key=lambda x: x['variant_order'])
-
-        # for product in product_data:
-        #     color = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Color'][0].upper()
-        #     size = [spec['value'] for spec in product['specifications'] if spec['label'] == 'Size'][0].upper()
-        #     variant = f"{color},{size}"
-            
-        #     products.append({
-        #         'pk': product['pk'],
-        #         'uid': product['uid'],
-        #         'title': product['title'],
-        #         'description': product['description'],
-        #         'quantity': product['quantity'],
-        #         'is_active': product['is_active'],
-        #         'brand': product['brand']['pk'],
-        #         'listing': product['listing'],
-        #         'listing_base_variant': product['listing_base_variant'],
-        #         'price': product['price']['price'],
-        #         'specifications': [filter_obj(spec, ['label', 'value', 'is_required']) for spec in product['specifications']],
-        #         'images': [image['image'] for image in product['images']],
-        #         'variant': variant
-        #     })
-
         brand_ins = Brand.objects.get(pk=listing['brand'])
         brand_data = BrandSerializer(brand_ins).data
         brand_data['logo'] = BrandLogo.objects.get(pk=brand_data['logo']).image
