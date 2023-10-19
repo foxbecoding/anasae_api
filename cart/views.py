@@ -61,5 +61,5 @@ def getCart(request):
     serialized_cart_data['items'] = CartItemSerializer(cart_items_ins, many=True).data
     product_pks =[ str(item['item']) for item in serialized_cart_data['items'] ]
     products = ProductListingPageView().getProducts(product_pks)
-    print(products)
+    serialized_cart_data['items'] = products
     return serialized_cart_data

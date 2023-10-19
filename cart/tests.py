@@ -103,24 +103,24 @@ class TestCartViewSet(TestCase):
         res = self.client.get(reverse('cart-list'))
         self.assertEqual(res.status_code, 200)
 
-    # def test_cart_item_create(self):
-    #     cart_res = self.client.get(reverse('cart-list'))
-    #     request_data = {
-    #         'cart': cart_res.data['pk'],
-    #         'item': self.product_data[0]['pk'],
-    #         'quantity': 3
-    #     }
+    def test_cart_item_create(self):
+        cart_res = self.client.get(reverse('cart-list'))
+        request_data = {
+            'cart': cart_res.data['pk'],
+            'item': self.product_data[0]['pk'],
+            'quantity': 3
+        }
 
-    #     res = self.client.post(
-    #         reverse('cart-item-list'),
-    #         request_data, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+        res = self.client.post(
+            reverse('cart-item-list'),
+            request_data, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     cart_res = self.client.get(reverse('cart-list'))
-    #     self.assertGreater(len(cart_res.data['items']), 0)
-    #     self.assertEqual(res.status_code, 201)
+        cart_res = self.client.get(reverse('cart-list'))
+        self.assertGreater(len(cart_res.data['items']), 0)
+        self.assertEqual(res.status_code, 201)
 
     # def test_cart_update(self):
     #     cart_res = self.client.get(reverse('cart-list'))
