@@ -7,7 +7,6 @@ class CartSerializer(serializers.ModelSerializer):
         fields = [
             'pk',
             'uid',
-            'user',
             'items'
         ]
 

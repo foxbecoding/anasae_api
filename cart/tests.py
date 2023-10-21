@@ -122,26 +122,26 @@ class TestCartViewSet(TestCase):
         self.assertGreater(len(cart_res.data['items']), 0)
         self.assertEqual(res.status_code, 201)
 
-    # def test_cart_update(self):
-    #     cart_res = self.client.get(reverse('cart-list'))
-    #     cart_item_pk = cart_res.data['items'][0]['pk']
-    #     res = self.client.put(
-    #         reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
-    #         {'quantity': 9}, 
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
-    #     self.assertGreater(res.data['items'][0]['quantity'], cart_res.data['items'][0]['quantity'])
-    #     self.assertEqual(res.status_code, 202)
+    def test_cart_update(self):
+        cart_res = self.client.get(reverse('cart-list'))
+        cart_item_pk = cart_res.data['items'][0]['pk']
+        res = self.client.put(
+            reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
+            {'quantity': 9}, 
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
+        self.assertGreater(res.data['items'][0]['quantity'], cart_res.data['items'][0]['quantity'])
+        self.assertEqual(res.status_code, 202)
     
-    # def test_cart_delete(self):
-    #     cart_res = self.client.get(reverse('cart-list'))
-    #     cart_item_pk = cart_res.data['items'][0]['pk']
-    #     res = self.client.delete(
-    #         reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
-    #         content_type='application/json',
-    #         **{'HTTP_X_CSRFTOKEN': self.csrftoken}
-    #     )
+    def test_cart_delete(self):
+        cart_res = self.client.get(reverse('cart-list'))
+        cart_item_pk = cart_res.data['items'][0]['pk']
+        res = self.client.delete(
+            reverse('cart-item-detail', kwargs={'pk': cart_item_pk}),
+            content_type='application/json',
+            **{'HTTP_X_CSRFTOKEN': self.csrftoken}
+        )
 
-    #     self.assertEqual(len(res.data['items']), 0)
-    #     self.assertEqual(res.status_code, 202)
+        self.assertEqual(len(res.data['items']), 0)
+        self.assertEqual(res.status_code, 202)

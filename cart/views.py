@@ -56,10 +56,14 @@ class CartItemViewSet(viewsets.ViewSet):
 
 def getCart(request):
     cart_ins = Cart.objects.get(user_id=str(request.user.id))
-    serialized_cart_data =  CartSerializer(cart_ins).data
+    serialized_cart_data = CartSerializer(cart_ins).data
     cart_items_ins = CartItem.objects.filter(pk__in=serialized_cart_data['items'])
-    serialized_cart_data['items'] = CartItemSerializer(cart_items_ins, many=True).data
-    product_pks =[ str(item['item']) for item in serialized_cart_data['items'] ]
+    serialized_cart_items_data = CartItemSerializer(cart_items_ins, many=True).data
+    product_pks = [ str(item['item']) for item in serialized_cart_items_data ]
     products = ProductListingPageView().getProducts(product_pks)
-    serialized_cart_data['items'] = products
+    
+    for item in serialized_cart_items_data:
+        item['item'] = [ prod for prod in products if str(prod['pk']) == str(item['item']) ][0]
+
+    serialized_cart_data['items'] = serialized_cart_items_data
     return serialized_cart_data
